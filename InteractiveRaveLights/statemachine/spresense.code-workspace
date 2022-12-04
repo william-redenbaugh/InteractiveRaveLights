@@ -1,0 +1,26 @@
+{
+	"folders": [
+		{
+			"name": "spresense",
+			"path": "../../../../../spresense"
+		},
+		{
+			"name": "led_matrix_spressense",
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"spresense.sdk.path": "/Users/wredenba/spresense",
+		"spresense.sdk.tools.path": "/Users/wredenba/spresense/sdk/tools",
+		"terminal.integrated.env.osx": {
+			"PATH": "/Users/wredenba/spresenseenv/usr/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Users/wredenba/.cargo/bin"
+		},
+		"spresense.env.toolchain.path": "/Users/wredenba/spresenseenv/usr/bin",
+		"cortex-debug.armToolchainPath": "/Users/wredenba/spresenseenv/usr/bin",
+		"cortex-debug.openocdPath": "/Users/wredenba/spresenseenv/usr/bin/openocd",
+		"files.associations": {
+			"rgbmatrix.h": "c",
+			"errno.h": "c"
+		}
+	}
+}
