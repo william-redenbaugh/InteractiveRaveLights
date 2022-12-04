@@ -6,7 +6,6 @@
 #include <errno.h>
 #include <debug.h>
 #include <nuttx/i2c/i2c_master.h>
-#include "rgbMatrixI2CDriver/rgbMatrix.h"
 #include <pthread.h>
 #include "pubsub-c/pubsub.h"
 #include "statemachine.h"
