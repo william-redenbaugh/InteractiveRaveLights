@@ -1,0 +1,29 @@
+{
+    "env": {
+        "mySpresenseSdkPath": "/Users/wredenba/spresense"
+    },
+    "configurations": [
+        {
+            "name": "Spresense SDK",
+            "intelliSenseMode": "${default}",
+            "includePath": [
+                "${workspaceFolder}/.vscode/include",
+                "${mySpresenseSdkPath}/sdk/apps/include",
+                "${mySpresenseSdkPath}/sdk/modules/include",
+                "${mySpresenseSdkPath}/sdk/modules/asmp/worker",
+                "${mySpresenseSdkPath}/sdk/system/include",
+                "${mySpresenseSdkPath}/sdk/bsp/include",
+                "${mySpresenseSdkPath}/nuttx/include",
+                "${workspaceFolder}/**"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "compilerPath": "${config:spresense.env.toolchain.path}/arm-none-eabi-gcc",
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ]
+        }
+    ],
+    "version": 4
+}

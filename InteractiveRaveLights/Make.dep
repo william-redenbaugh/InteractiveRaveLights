@@ -1,0 +1,49 @@
+InteractiveRaveLights_main.c.Users.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
+ InteractiveRaveLights_main.c \
+ /Users/wredenba/spresense/nuttx/include/nuttx/config.h \
+ /Users/wredenba/spresense/nuttx/include/stdio.h \
+ /Users/wredenba/spresense/nuttx/include/sys/types.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/compiler.h \
+ /Users/wredenba/spresense/nuttx/include/stdint.h \
+ /Users/wredenba/spresense/nuttx/include/arch/types.h \
+ /Users/wredenba/spresense/nuttx/include/arch/inttypes.h \
+ /Users/wredenba/spresense/nuttx/include/limits.h \
+ /Users/wredenba/spresense/nuttx/include/arch/limits.h \
+ /Users/wredenba/spresenseenv/usr/lib/gcc/arm-none-eabi/9.2.1/include/stdarg.h \
+ /Users/wredenba/spresense/nuttx/include/time.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/fs/fs.h \
+ /Users/wredenba/spresense/nuttx/include/stdbool.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/semaphore.h \
+ /Users/wredenba/spresense/nuttx/include/errno.h \
+ /Users/wredenba/spresense/nuttx/include/semaphore.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/clock.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/sched.h \
+ /Users/wredenba/spresense/nuttx/include/queue.h \
+ /Users/wredenba/spresense/nuttx/include/sched.h \
+ /Users/wredenba/spresense/nuttx/include/strings.h \
+ /Users/wredenba/spresense/nuttx/include/string.h \
+ /Users/wredenba/spresense/nuttx/include/stddef.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/b2c.h \
+ /Users/wredenba/spresense/nuttx/include/queue.h \
+ /Users/wredenba/spresense/nuttx/include/signal.h \
+ /Users/wredenba/spresense/nuttx/include/pthread.h \
+ /Users/wredenba/spresense/nuttx/include/sys/prctl.h \
+ /Users/wredenba/spresense/nuttx/include/unistd.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/irq.h \
+ /Users/wredenba/spresense/nuttx/include/arch/irq.h \
+ /Users/wredenba/spresense/nuttx/include/arch/chip/irq.h \
+ /Users/wredenba/spresense/nuttx/include/arch/armv7-m/irq.h \
+ /Users/wredenba/spresense/nuttx/include/arch/armv7-m/nvicpri.h \
+ /Users/wredenba/spresense/nuttx/include/arch/chip/chip.h \
+ /Users/wredenba/spresense/nuttx/include/arch/armv7-m/irq_cmnvector.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/wdog.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/mm/shm.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/mm/gran.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/net/net.h \
+ /Users/wredenba/spresense/nuttx/include/sys/socket.h \
+ /Users/wredenba/spresense/nuttx/include/sys/uio.h \
+ /Users/wredenba/spresense/nuttx/include/arch/arch.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/pgalloc.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/addrenv.h
+# No files specified for dependency generation
+# No files specified for dependency generation
