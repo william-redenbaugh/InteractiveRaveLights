@@ -1,0 +1,6 @@
+[submodule "InteractiveRaveLights/HSV-RGB-Conversion"]
+	path = InteractiveRaveLights/HSV-RGB-Conversion
+	url = git@github.com:william-redenbaugh/HSV-RGB-Conversion.git
+[submodule "InteractiveRaveLights/pubsub-c"]
+	path = InteractiveRaveLights/pubsub-c
+	url = git@github.com:william-redenbaugh/pubsub-c.git
