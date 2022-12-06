@@ -94,6 +94,44 @@ int send_byte_device(const uint8_t device, const uint8_t reg, const uint8_t data
     return send_spi_data(matrix->fd, matrix->out_buffer, (size_t)matrix->number_of_devices * 2);
 }
 
+void set_pixel(uint8_t x, uint8_t y, led_matrix_t *matrix)
+{
+    int matrix_x = 7 - (x % 8);
+    int matrix_y = y % 8;
+    int which_matrix = x / 8;
+    int new_x = (7 - matrix_y) + (which_matrix * 8);
+    int new_y = matrix_x;
+
+    uint8_t n = matrix->cols[new_x];
+
+    // Set pixel
+    n |= (1 >> new_y);
+    matrix->cols[new_x] = n;
+}
+
+void clear_pixel(uint8_t x, uint8_t y, led_matrix_t *matrix)
+{
+    int matrix_x = 7 - (x % 8);
+    int matrix_y = y % 8;
+    int which_matrix = x / 8;
+    int new_x = (7 - matrix_y) + (which_matrix * 8);
+    int new_y = matrix_x;
+
+    uint8_t n = matrix->cols[new_x];
+
+    // Set pixel
+    n |= (0 >> new_y);
+    matrix->cols[new_x] = n;
+}
+
+void set_column(int column, uint8_t value, led_matrix_t *matrix)
+{
+    if (column < 0 || column >= matrix->number_of_devices * 8)
+        return;
+
+    matrix->cols[column] = value;
+}
+
 int init_spi_device(void)
 {
     int fd = open("/dev/spi5", O_WRONLY);
