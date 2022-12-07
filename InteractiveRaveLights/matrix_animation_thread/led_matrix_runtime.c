@@ -1,3 +1,4 @@
+#include "led_matrix_runtime.h"
 #include <nuttx/config.h>
 #include <stdio.h>
 #include "thread_init/threads_init.h"
@@ -5,10 +6,8 @@
 #include "pubsub-c/pubsub.h"
 #include "max7219_led_driver/max7219_led_driver.h"
 
-int main(int argc, char *argv[])
-{
-
-  led_matrix_t matrix;
+void led_matrix_runtime(void *ptr){
+    led_matrix_t matrix;
 
     printf("LED Matrix!\n");
 
@@ -21,11 +20,7 @@ int main(int argc, char *argv[])
     matrix_commit(&matrix);
 
     printf("LED Matrix!\n");
-  ps_init();
-  threads_list_init();
-  while(true)
-  {
-    usleep(10000000);
-  }
-  return 0;
+    for(;;){
+        usleep(100000);
+    }
 }

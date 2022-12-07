@@ -177,3 +177,9 @@ int send_spi_data(int fd, uint8_t *buffer, size_t buff_size)
 
     return ret;
 }
+
+void matrix_commit(led_matrix_t *matrix){
+    for(uint8_t col = 0; col < matrix->number_of_devices; col++){
+        send_byte_device(col/8, col % 8 + 1, matrix->cols[col], matrix);
+    }
+}

@@ -22,14 +22,15 @@
 #include <arch/chip/scu.h>
 #include <arch/chip/adc.h>
 
-#define CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH "/dev/lpadc0"
+#define CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH "/dev/hpadc0"
 
 int fd = -1;
 
 int init_adc_reading(void)
 {
+    char str[] = CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH;
     int errval, errno;
-    fd = open(CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH, O_RDONLY);
+    fd = open(str, O_RDONLY);
     if (fd < 0)
     {
         printf("open %s failed: %d\n", CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH, errno);
@@ -37,7 +38,8 @@ int init_adc_reading(void)
         return errval;
     }
 
-    /* SCU FIFO overwrite */
+    printf("Opened ADC module\n");
+
     int ret = ioctl(fd, SCUIOC_SETFIFOMODE, 1);
     if (ret < 0)
     {
@@ -45,15 +47,18 @@ int init_adc_reading(void)
         printf("ioctl(SETFIFOMODE) failed: %d\n", errval);
         close(fd);
     }
+    printf("Set FIFMODE complete...\n");
+
+    printf("Handled ID: %d\n", fd);
 
     ret = ioctl(fd, ANIOC_CXD56_START, 0);
     if (ret < 0)
     {
         errval = errno;
         printf("ioctl(START) failed: %d\n", errval);
-        return errval;
     }
 
+   printf("Completed ADC init.\n");
     return 0;
 }
 
@@ -73,13 +78,11 @@ int close_adc_reading(void)
     return 0;
 }
 
-#define BUFF_SIZE 16
-uint8_t buffer[BUFF_SIZE];
 void test_read(void)
 {
     int errval, errno;
-
-    int nbytes = read(fd, buffer, BUFF_SIZE);
+    uint8_t data[2];
+    int nbytes = read(fd, data, 2);
     if (nbytes < 0)
     {
         errval = errno;
@@ -92,17 +95,23 @@ void test_read(void)
     }
     else
     {
-        printf("Data: %d", buffer[0]);
+        printf("Data: %d\n", data[1]);
     }
 }
 
 void rave_light_runtime_main(void *ptr)
 {
     init_adc_reading();
-    test_read();
-    close_adc_reading();
-    for (;;)
-    {
-        usleep(1000);
+    up_mdelay(1000);
+    while(true){
+        //test_read();
+        usleep(10000);
     }
+    close_adc_reading();
+    printf("ADC init complete.\n");
+
+    for(;;){
+        usleep(10000);
+    }
+
 }
