@@ -7,20 +7,6 @@
 
 int main(int argc, char *argv[])
 {
-
-  led_matrix_t matrix;
-
-    printf("LED Matrix!\n");
-
-    int ret = init_led_matrix(&matrix, 4);
-    if (ret < 0){
-        printf("Error setting up MAX7219\n");
-    }
-
-    set_pixel(0, 0, &matrix);
-    matrix_commit(&matrix);
-
-    printf("LED Matrix!\n");
   ps_init();
   threads_list_init();
   while(true)

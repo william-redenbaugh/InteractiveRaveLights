@@ -8,7 +8,7 @@
 #include <debug.h>
 #include <nuttx/spi/spi_transfer.h>
 
-#define SPI_MODE SPIDEV_MODE1
+#define SPI_MODE SPIDEV_MODE0
 #define SPI_FREQUENCY 800000
 
 // max7219 registers
@@ -134,10 +134,10 @@ void set_column(int column, uint8_t value, led_matrix_t *matrix)
 
 int init_spi_device(void)
 {
-    int fd = open("/dev/spi5", O_WRONLY);
+    int fd = open("/dev/spi4", O_WRONLY);
     if (fd < 0)
     {
-        printf("ERROR: failed to open /dev/spi5: %d\n", fd);
+        printf("ERROR: failed to open /dev/spi4: %d\n", fd);
         return ERROR;
     }
 
@@ -160,15 +160,15 @@ int send_spi_data(int fd, uint8_t *buffer, size_t buff_size)
         printf("Buffer size paramter is not valid\n");
     }
 
-    seq.dev = 0;
+    seq.dev = SPIDEV_ID(SPIDEVTYPE_USER, 0u);
     seq.mode = SPI_MODE;
     seq.nbits = 8;
     seq.frequency = SPI_FREQUENCY;
     seq.ntrans = 1;
     seq.trans = trans;
 
-    trans[0].deselect = false;
-    trans[0].delay = 10;
+    trans[0].deselect = true;
+    trans[0].delay = 0;
     trans[0].nwords = buff_size;
     trans[0].rxbuffer = NULL;
     trans[0].txbuffer = buffer;

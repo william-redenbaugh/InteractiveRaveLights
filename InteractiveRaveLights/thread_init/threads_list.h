@@ -1,11 +1,11 @@
 #ifndef THREADS_LIST_H
 #define THREADS_LIST_H
 #include "pthread.h"
-#include "RaveLightsRuntime/rave_lights_runtime.h"
+#include "adc_runtime/adc_runtime_main.h"
 #include "matrix_animation_thread/led_matrix_runtime.h"
 #define THREAD_LIST                                                 \
     {                                                               \
-        {rave_light_runtime_main, "Rave Light runtime main", NULL}, \
+        {adc_runtime_thread, "Rave Light runtime main", NULL}, \
         {led_matrix_runtime, "LED matrix runtime", NULL }\
     }
 
