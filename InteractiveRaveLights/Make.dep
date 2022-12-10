@@ -56,7 +56,108 @@ adc_runtime_main.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights
  /home/wredenba/spresense/nuttx/include/nuttx/fs/ioctl.h \
  /home/wredenba/spresense/nuttx/include/nuttx/serial/tioctl.h \
  /home/wredenba/spresense/nuttx/include/arch/chip/adc.h \
- /home/wredenba/spresense/nuttx/include/nuttx/analog/ioctl.h
+ /home/wredenba/spresense/nuttx/include/nuttx/analog/ioctl.h \
+ shared_constants/shared_constants.h
+fft_runtime.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
+ fft_runtime/fft_runtime.c fft_runtime/fft_runtime.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/spresense/nuttx/include/stdio.h \
+ /home/wredenba/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/spresense/nuttx/include/stdint.h \
+ /home/wredenba/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/spresense/nuttx/include/limits.h \
+ /home/wredenba/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/spresenseenv/usr/lib/gcc/arm-none-eabi/9.2.1/include/stdarg.h \
+ /home/wredenba/spresense/nuttx/include/time.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/fs/fs.h \
+ /home/wredenba/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/semaphore.h \
+ /home/wredenba/spresense/nuttx/include/errno.h \
+ /home/wredenba/spresense/nuttx/include/semaphore.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/clock.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/sched.h \
+ /home/wredenba/spresense/nuttx/include/queue.h \
+ /home/wredenba/spresense/nuttx/include/sched.h \
+ /home/wredenba/spresense/nuttx/include/strings.h \
+ /home/wredenba/spresense/nuttx/include/string.h \
+ /home/wredenba/spresense/nuttx/include/stddef.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/b2c.h \
+ /home/wredenba/spresense/nuttx/include/queue.h \
+ /home/wredenba/spresense/nuttx/include/signal.h \
+ /home/wredenba/spresense/nuttx/include/pthread.h \
+ /home/wredenba/spresense/nuttx/include/sys/prctl.h \
+ /home/wredenba/spresense/nuttx/include/unistd.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/irq.h \
+ /home/wredenba/spresense/nuttx/include/arch/irq.h \
+ /home/wredenba/spresense/nuttx/include/arch/chip/irq.h \
+ /home/wredenba/spresense/nuttx/include/arch/armv7-m/irq.h \
+ /home/wredenba/spresense/nuttx/include/arch/armv7-m/nvicpri.h \
+ /home/wredenba/spresense/nuttx/include/arch/chip/chip.h \
+ /home/wredenba/spresense/nuttx/include/arch/armv7-m/irq_cmnvector.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/wdog.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/mm/shm.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/mm/gran.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/net/net.h \
+ /home/wredenba/spresense/nuttx/include/sys/socket.h \
+ /home/wredenba/spresense/nuttx/include/sys/uio.h \
+ /home/wredenba/spresense/nuttx/include/arch/arch.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/pgalloc.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/addrenv.h \
+ thread_init/threads_init.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/_stdint.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/machine/_default_types.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/features.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/_newlib_version.h \
+ pubsub-c/pubsub.h /home/wredenba/spresense/nuttx/include/stdlib.h \
+ /home/wredenba/spresense/nuttx/include/fcntl.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_math.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_math_types.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/Core/Include/cmsis_compiler.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/Core/Include/cmsis_gcc.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/math.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/reent.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/_ansi.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/newlib.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/config.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/machine/ieeefp.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/_types.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/machine/_types.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/lock.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/cdefs.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/_ansi.h \
+ /home/wredenba/spresenseenv/usr/lib/gcc/arm-none-eabi/9.2.1/include/float.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_math_memory.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/none.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_math_types.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/utils.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/basic_math_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_math_memory.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/none.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/utils.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/interpolation_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/bayes_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/statistics_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/basic_math_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/fast_math_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/matrix_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/complex_math_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/statistics_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/controller_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/support_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/distance_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/svm_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/svm_defines.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/fast_math_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/transform_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/complex_math_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/filtering_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/support_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/quaternion_math_functions.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_const_structs.h \
+ /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_common_tables.h \
+ adc_runtime/adc_runtime_main.h shared_constants/shared_constants.h
 hsv.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  HSV-RGB-Conversion/hsv.c HSV-RGB-Conversion/hsv.h \
  /home/wredenba/spresense/nuttx/include/stdio.h \
@@ -488,7 +589,7 @@ thread_init.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  /home/wredenba/spresense/nuttx/include/arch/arch.h \
  /home/wredenba/spresense/nuttx/include/nuttx/pgalloc.h \
  /home/wredenba/spresense/nuttx/include/nuttx/addrenv.h \
- matrix_animation_thread/led_matrix_runtime.h
+ fft_runtime/fft_runtime.h matrix_animation_thread/led_matrix_runtime.h
 InteractiveRaveLights_main.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  InteractiveRaveLights_main.c \
  /home/wredenba/spresense/nuttx/include/nuttx/config.h \

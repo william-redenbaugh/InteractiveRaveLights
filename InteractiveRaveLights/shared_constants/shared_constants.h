@@ -1,0 +1,6 @@
+#ifndef _SHARED_CONTENTS_H
+#define _SHARED_CONTENTS
+
+#define ADC_FFT_BUFFER_SIZE 512
+
+#endif

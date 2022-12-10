@@ -14,9 +14,9 @@
 #include "pthread.h"
 #include <arch/chip/scu.h>
 #include <arch/chip/adc.h>
+#include "shared_constants/shared_constants.h"
 
 #define CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH "/dev/hpadc0"
-#define BUFFER_SIZE 512
 #define EXPONENTIAL_FILTER_WEIGHT .3
 
 /**
@@ -26,7 +26,7 @@ typedef struct adc_struct{
     int fd;
     uint16_t *data;
     size_t data_size;
-    float *filtered_data;
+    uint16_t *filtered_data;
     pthread_mutex_t lock;
 }adc_struct_t;
 
@@ -45,7 +45,7 @@ adc_struct_t *new_adc_struct(size_t data_size){
 }
 
 /**
- * @brief Applies an exponential filter to the adc data, smoothens out the curves while maintaining some level of precision
+ * @brief just copies data for now, may do more filterng moving forward..
  * @param adc_struct_t pointer to the adc structure containing
 */
 void filter_adc_data(adc_struct_t *adc){
@@ -53,9 +53,7 @@ void filter_adc_data(adc_struct_t *adc){
     float filter_weight = EXPONENTIAL_FILTER_WEIGHT;
 
     pthread_mutex_lock(&adc->lock);
-    for(int n = 1; n < adc->data_size; n++){
-        adc->filtered_data[n-1] = (((float)adc->data[n]) * filter_weight) + ((1 - filter_weight) * adc->data[n-1]);
-    }
+    memcpy(adc->filtered_data, adc->data, adc->data_size);
     pthread_mutex_unlock(&adc->lock);
 }
 
@@ -150,19 +148,11 @@ void read_adc_data(adc_struct_t *adc)
 }
 
 /**
- * @brief Helper function that will print our data if we need to debug
-*/
-void print_filtered_data(adc_struct_t *adc){
-    for(int n = 0; n < adc->data_size; n++)
-        printf("Filtered Data: %f\n", adc->filtered_data[n]);
-}
-
-/**
  * @brief Runtime thread for handling adc data
 */
 void adc_runtime_thread(void *ptr)
 {
-    adc = new_adc_struct(BUFFER_SIZE);
+    adc = new_adc_struct(ADC_FFT_BUFFER_SIZE);
     init_adc_reading(adc);
     up_mdelay(100);
 
@@ -180,7 +170,10 @@ void adc_runtime_thread(void *ptr)
  * @brief Gets the size of the ADC buffer to copy the data into
 */
 size_t adc_filtered_data_size(void){
-    return adc->data_size;
+    pthread_mutex_lock(&adc->lock);
+    size_t adc_size = adc->data_size;
+    pthread_mutex_unlock(&adc->lock);
+    return adc_size;
 }
 
 /**
@@ -188,7 +181,7 @@ size_t adc_filtered_data_size(void){
  * @param float* pointer to the buffer we are copying the data into
  * @param size_t size of the buffer that we are copying the data into
 */
-void adc_copy_filtered_data(float *input_buffer, size_t input_buffer_size){
+void adc_copy_filtered_data(int16_t *input_buffer, size_t input_buffer_size){
     pthread_mutex_lock(&adc->lock);
     memcpy(input_buffer, adc->filtered_data, input_buffer_size);
     pthread_mutex_unlock(&adc->lock);
