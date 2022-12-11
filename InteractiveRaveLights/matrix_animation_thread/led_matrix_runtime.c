@@ -6,6 +6,10 @@
 #include "pubsub-c/pubsub.h"
 #include "max7219_led_driver/max7219_led_driver.h"
 
+void led_matrix_init(void *ptr){
+    
+}
+
 void led_matrix_runtime(void *ptr){
     led_matrix_t matrix;
 

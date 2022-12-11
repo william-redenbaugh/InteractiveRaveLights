@@ -18,17 +18,34 @@
 #include "adc_runtime/adc_runtime_main.h"
 #include "shared_constants/shared_constants.h"
 
-void fft_primary_task(void *ptr){
+static arm_rfft_instance_q15 fft_instance;
+static q15_t output[ADC_FFT_BUFFER_SIZE * 2];
+static arm_status status;
+static uint16_t input_buffer[ADC_FFT_BUFFER_SIZE];
+
+/**
+ * @brief When 
+*/
+void wait_new_mic_audio_data(void){
+    block_until_new_adc_data();
+}
+
+void fft_module_init(void){
     printf("CMSIS init start\n");
-    static arm_rfft_instance_q15 fft_instance;
-    static q15_t output[ADC_FFT_BUFFER_SIZE * 2];
-
-    arm_status status;
     status = arm_rfft_init_q15(&fft_instance, ADC_FFT_BUFFER_SIZE, 0, 1);
-    uint16_t input_buffer[ADC_FFT_BUFFER_SIZE];
-
     printf("CMSIS fft init complete.\n");
+    
+}
+
+/**
+ * @brief Primary task thread handling most FFT operations
+ * 
+*/
+void fft_primary_task(void *ptr){
     for(;;){
+        
+        wait_new_mic_audio_data();
+        
         // Copy data into our own buffer
         adc_copy_filtered_data(input_buffer, ADC_FFT_BUFFER_SIZE);
 
@@ -36,6 +53,6 @@ void fft_primary_task(void *ptr){
         arm_rfft_q15(&fft_instance, (q15_t*)input_buffer, output);
 
         printf("CMSIS FFT completed computation\n");
-        usleep(10000);
+        usleep(5000);
     }
 }

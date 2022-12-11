@@ -9,6 +9,7 @@
  */
 typedef struct {
     void(*task_fun)(void *task_params);
+    void(*task_init_fun)(void *params);
     const char *task_name;
     void *param;
 }task_init_descriptor_t;

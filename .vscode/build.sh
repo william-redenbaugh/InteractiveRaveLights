@@ -105,7 +105,7 @@ function build_sdk (){
     fi
 
     cd ${SDK_PATH}/sdk
-    make -j16
+    make -j48
 
     # Check exit status
     check_exit_status
@@ -205,7 +205,7 @@ function clean_worker (){
         do
             if [ -f ${dirname}/.worker ]; then
                 WORKERDIR=${SPRESENSE_HOME}/${dirname}
-                make -C ${WORKERDIR} SDKDIR=${SDKDIR} TOPDIR=${TOPDIR} APPDIR=${APPDIR} OUTDIR=${OUTDIR} clean
+                make -C ${WORKERDIR} SDKDIR=${SDKDIR} TOPDIR=${TOPDIR} APPDIR=${APPDIR} OUTDIR=${OUTDIR} clean -j48
 
                 # Check exit status
                 check_exit_status

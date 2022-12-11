@@ -28,6 +28,8 @@ typedef struct adc_struct{
     size_t data_size;
     uint16_t *filtered_data;
     pthread_mutex_t lock;
+    pthread_mutex_t signal_mt;
+    pthread_cond_t signal_cv;
 }adc_struct_t;
 
 static adc_struct_t *adc;
@@ -41,6 +43,10 @@ adc_struct_t *new_adc_struct(size_t data_size){
     adc->data = malloc(sizeof(uint16_t) * data_size);
     adc->filtered_data = malloc(sizeof(float) * data_size);
     printf("Data size: %d\n", adc->data_size);
+
+    pthread_mutex_init(&adc->lock, NULL);
+    pthread_mutex_init(&adc->signal_mt, NULL);
+    pthread_cond_init(&adc->signal_cv, NULL);
     return adc;
 }
 
@@ -148,18 +154,29 @@ void read_adc_data(adc_struct_t *adc)
 }
 
 /**
+ * @brief broadcasts to all blocked threads that new adc data is available to be processed
+*/
+static inline void signal_adc_newdata(adc_struct_t *adc){
+    pthread_cond_broadcast(&adc->signal_cv);
+}
+
+void adc_init_func(void *ptr){
+    adc = new_adc_struct(ADC_FFT_BUFFER_SIZE);
+    init_adc_reading(adc);
+}
+
+/**
  * @brief Runtime thread for handling adc data
 */
 void adc_runtime_thread(void *ptr)
 {
-    adc = new_adc_struct(ADC_FFT_BUFFER_SIZE);
-    init_adc_reading(adc);
     up_mdelay(100);
 
     // All the important stuff in this thread
     while(true){
         read_adc_data(adc);
         filter_adc_data(adc);
+        signal_adc_newdata(adc);
         usleep(10000);
     }
 
@@ -185,4 +202,11 @@ void adc_copy_filtered_data(int16_t *input_buffer, size_t input_buffer_size){
     pthread_mutex_lock(&adc->lock);
     memcpy(input_buffer, adc->filtered_data, input_buffer_size);
     pthread_mutex_unlock(&adc->lock);
+}
+
+/**
+ * @brief Blocking function for external threads to wait until new adc data is available
+*/
+void block_until_new_adc_data(void){
+    pthread_cond_wait(&adc->signal_cv, &adc->signal_mt);
 }
