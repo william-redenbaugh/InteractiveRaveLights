@@ -15,6 +15,7 @@
 #include <arch/chip/scu.h>
 #include <arch/chip/adc.h>
 #include "shared_constants/shared_constants.h"
+#include "matrix_animation_thread/led_matrix_runtime.h"
 
 #define CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH "/dev/hpadc0"
 #define EXPONENTIAL_FILTER_WEIGHT .3
@@ -157,7 +158,9 @@ void read_adc_data(adc_struct_t *adc)
  * @brief broadcasts to all blocked threads that new adc data is available to be processed
 */
 static inline void signal_adc_newdata(adc_struct_t *adc){
+    pthread_mutex_unlock(&adc->signal_mt);
     pthread_cond_broadcast(&adc->signal_cv);
+    pthread_mutex_lock(&adc->signal_cv);
 }
 
 void adc_init_func(void *ptr){
@@ -177,7 +180,8 @@ void adc_runtime_thread(void *ptr)
         read_adc_data(adc);
         filter_adc_data(adc);
         signal_adc_newdata(adc);
-        usleep(10000);
+        //wait_matrix_complete();
+        usleep(1000);
     }
 
     close_adc_reading(adc);
@@ -208,5 +212,7 @@ void adc_copy_filtered_data(int16_t *input_buffer, size_t input_buffer_size){
  * @brief Blocking function for external threads to wait until new adc data is available
 */
 void block_until_new_adc_data(void){
+    pthread_mutex_lock(&adc->signal_mt);
     pthread_cond_wait(&adc->signal_cv, &adc->signal_mt);
+    pthread_mutex_unlock(&adc->signal_mt);
 }

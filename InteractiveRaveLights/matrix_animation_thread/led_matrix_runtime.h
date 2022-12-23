@@ -3,4 +3,5 @@
 
 void led_matrix_runtime(void *ptr);
 void led_matrix_init(void *ptr);
+void wait_matrix_complete(void);
 #endif

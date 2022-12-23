@@ -7,6 +7,8 @@
 #include <errno.h>
 #include <debug.h>
 #include <nuttx/spi/spi_transfer.h>
+#include <arch/board/board.h>
+#include <arch/chip/pin.h>
 
 #define SPI_MODE SPIDEV_MODE0
 #define SPI_FREQUENCY 800000
@@ -32,6 +34,12 @@
 #define TEXT_ALIGN_RIGHT 2     // End of text is aligned to the right of the display
 #define TEXT_ALIGN_RIGHT_END 3 // End of text is just outside the left side of the display
 
+#define MAX7219_SPI_CS PIN_PWM0
+#define SETUP_PIN_OUTPUT(pin) do{ \
+  board_gpio_write(pin, -1); \
+  board_gpio_config(pin, 0, false, true, PIN_PULLDOWN); \
+}while(0)
+
 int send_spi_data(int fd, uint8_t *buffer, size_t buff_size);
 int init_spi_device(void);
 static int init_matrix(led_matrix_t *matrix);
@@ -44,6 +52,7 @@ int init_led_matrix(led_matrix_t *matrix, int num_deivces)
     matrix->fd = fd;
     matrix->cols = malloc(num_deivces * 8 * sizeof(uint8_t));
 
+    SETUP_PIN_OUTPUT(MAX7219_SPI_CS);
     init_matrix(matrix);
 }
 
@@ -91,7 +100,9 @@ int send_byte_device(const uint8_t device, const uint8_t reg, const uint8_t data
     }
 
     // Send out matrix data through the SPI interface.
-    return send_spi_data(matrix->fd, matrix->out_buffer, (size_t)matrix->number_of_devices * 2);
+    int ret = send_spi_data(matrix->fd, matrix->out_buffer, (size_t)matrix->number_of_devices * 2);
+
+    return ret;
 }
 
 void set_pixel(uint8_t x, uint8_t y, led_matrix_t *matrix)
@@ -151,6 +162,8 @@ int send_spi_data(int fd, uint8_t *buffer, size_t buff_size)
     struct spi_trans_s trans[1];
     struct spi_sequence_s seq;
 
+    uint8_t in_buff[buff_size];
+
     if (!buffer)
     {
         printf("Buffer is not valid!\n");
@@ -160,7 +173,7 @@ int send_spi_data(int fd, uint8_t *buffer, size_t buff_size)
         printf("Buffer size paramter is not valid\n");
     }
 
-    seq.dev = SPIDEV_ID(SPIDEVTYPE_USER, 0u);
+    seq.dev = 0;
     seq.mode = SPI_MODE;
     seq.nbits = 8;
     seq.frequency = SPI_FREQUENCY;
@@ -168,12 +181,15 @@ int send_spi_data(int fd, uint8_t *buffer, size_t buff_size)
     seq.trans = trans;
 
     trans[0].deselect = true;
-    trans[0].delay = 0;
+    trans[0].delay = 50;
     trans[0].nwords = buff_size;
-    trans[0].rxbuffer = NULL;
+    trans[0].rxbuffer = in_buff;
     trans[0].txbuffer = buffer;
 
+    board_gpio_write(MAX7219_SPI_CS, 0);
+
     ret = ioctl(fd, SPIIOC_TRANSFER, (unsigned long)(uintptr_t)&seq);
+    board_gpio_write(MAX7219_SPI_CS, 1);
 
     return ret;
 }
