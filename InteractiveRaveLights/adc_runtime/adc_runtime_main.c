@@ -137,20 +137,11 @@ int close_adc_reading(adc_struct_t *adc)
 void read_adc_data(adc_struct_t *adc)
 {
     int errval, errno;
-    int nbytes = read(adc->fd, adc->data, adc->data_size * 2);
-    if (nbytes < 0)
-    {
-        errval = errno;
-        printf("read failed:%d\n", errval);
-        return errval;
-    }
-    else if (nbytes == 0)
-    {
-        printf("read data size = 0\n");
-    }
-    else
-    {
-        return;
+
+    for(int n = 0; n < adc->data_size; n++){
+        uint16_t data;
+        read(adc->fd, &data, 2);
+        adc->data[n] = data;
     }
 }
 
@@ -181,7 +172,7 @@ void adc_runtime_thread(void *ptr)
         filter_adc_data(adc);
         signal_adc_newdata(adc);
         //wait_matrix_complete();
-        usleep(1000);
+        usleep(10000);
     }
 
     close_adc_reading(adc);

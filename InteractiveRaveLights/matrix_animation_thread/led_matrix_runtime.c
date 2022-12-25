@@ -10,6 +10,8 @@
 #include "arm_math.h"
 #include "dsp/fast_math_functions.h"
 #include "arm_const_structs.h"
+#include "ws2812b/ws2812b.h"
+#include "ws2812b/hsv2rgb.h"
 
 /* I2C settings */
 
@@ -69,9 +71,13 @@ static q15_t log_fft_data[ADC_FFT_BUFFER_SIZE];
 int decrement = 0;
 void led_matrix_runtime(void *ptr){
 
+    rgb_color col = {100, 100, 0};
+    WS2812B_t *strip = setup_ws2812b_strip(96);
+
+    update_ws2812b_strip(strip);
+
     for(;;){
         fft_copy_data(fft_data, sizeof(fft_data));
-        arm_vlog_q15(fft_data, log_fft_data, sizeof(fft_data));
 
         decrement++;
         if(decrement == 2){
@@ -82,8 +88,27 @@ void led_matrix_runtime(void *ptr){
             decrement = 0;
         }
 
+        for(int x = 0; x < 96; x++){
+            int value = fft_data[x];
+            value = value / 2;
+            if(value > 120)
+                value = 120;
+            if( value < 0){
+                value = 0;
+            }
+            hsv_color col;
+            col.h = value;
+            col.v = value;
+            col.s = 255;
+            set_ws2812b_strip_hsv(strip, x, col);
+        }
+
+        update_ws2812b_strip(strip);
+
         for(int x = 0; x <  8; x++){
-            int value = log_fft_data[x * 16 + 20];
+            int value = fft_data[x * 16 + 20];
+            if(value < 0)
+                value = 0;
             value = value / 55;
             if(value > 7)
                 value = 7;
@@ -108,6 +133,6 @@ void led_matrix_runtime(void *ptr){
         pthread_mutex_unlock(&signal_mt);
         pthread_cond_broadcast(&signal_matrix_complate);
         pthread_mutex_lock(&signal_mt);
-        usleep(5000);
+        usleep(10000);
     }
 }
