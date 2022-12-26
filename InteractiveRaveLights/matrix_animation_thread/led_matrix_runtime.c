@@ -66,7 +66,7 @@ void wait_matrix_complete(void){
 }
 
 static int values[8];
-
+static int values_matrix[12];
 static q15_t log_fft_data[ADC_FFT_BUFFER_SIZE];
 int decrement = 0;
 void led_matrix_runtime(void *ptr){
@@ -88,28 +88,42 @@ void led_matrix_runtime(void *ptr){
             decrement = 0;
         }
 
-        for(int x = 0; x < 96; x++){
-            int value = fft_data[x];
-            value = value / 2;
-            if(value > 120)
-                value = 120;
-            if( value < 0){
-                value = 0;
-            }
-            hsv_color col;
-            col.h = value;
-            col.v = value;
-            col.s = 255;
-            set_ws2812b_strip_hsv(strip, x, col);
+        for(int x = 0; x <  12; x++){
+            if(values_matrix[x] > 0)
+                values_matrix[x]--;
         }
 
+        for(int x = 0; x < 96; x++){
+            set_ws2812b_strip_rgb(strip, x, (rgb_color){0, 0, 0});
+        }
+        for(int k = 0; k < 12; k++){
+            int value = fft_data[k * 8];
+            value = value;
+            hsv_color col;
+            col.h = value/2;
+            col.v = 80;
+            col.s = 255;
+
+            value = value/15;
+            
+            if(value > 7)
+                value = 7;
+            
+            if(values_matrix[k] < value)
+                values_matrix[k] = value;
+
+            for(int y = 0; y < values_matrix[k]; y++){
+                set_ws2812b_strip_hsv(strip, k * 8 + y, col);
+            }
+        }
+        
         update_ws2812b_strip(strip);
 
         for(int x = 0; x <  8; x++){
             int value = fft_data[x * 16 + 20];
             if(value < 0)
                 value = 0;
-            value = value / 55;
+            value = value / 20;
             if(value > 7)
                 value = 7;
 
@@ -117,9 +131,15 @@ void led_matrix_runtime(void *ptr){
                 values[x] = value;
             }
 
+            hsv_color hsv_col;
+            hsv_col.h = value * 15;
+            hsv_col.s = 255;
+            hsv_col.v = 255;
+
+            rgb_color rgb_col = hsv2rgb(hsv_col);    
             for(int y = 0; y < values[x]; y++){
                 uint8_t pos[2] = {y, x};
-                draw_point_color(&handle, pos, 20, 20, 20);
+                draw_point_color(&handle, pos, rgb_col.r, rgb_col.g, rgb_col.b);
             }
 
             for(int y = values[x]; y < 8; y++){
@@ -133,6 +153,6 @@ void led_matrix_runtime(void *ptr){
         pthread_mutex_unlock(&signal_mt);
         pthread_cond_broadcast(&signal_matrix_complate);
         pthread_mutex_lock(&signal_mt);
-        usleep(10000);
+        usleep(1000);
     }
 }

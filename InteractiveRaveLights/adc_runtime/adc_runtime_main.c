@@ -138,10 +138,15 @@ void read_adc_data(adc_struct_t *adc)
 {
     int errval, errno;
 
+    read(adc->fd, adc->data, adc->data_size * 2);
+    
     for(int n = 0; n < adc->data_size; n++){
-        uint16_t data;
-        read(adc->fd, &data, 2);
-        adc->data[n] = data;
+        uint16_t data = adc->data[n];
+        int out = data - 44000;
+
+        if(out < 0)
+            out = 0;
+        adc->data[n] = out;
     }
 }
 
@@ -172,7 +177,7 @@ void adc_runtime_thread(void *ptr)
         filter_adc_data(adc);
         signal_adc_newdata(adc);
         //wait_matrix_complete();
-        usleep(10000);
+        usleep(1000);
     }
 
     close_adc_reading(adc);
