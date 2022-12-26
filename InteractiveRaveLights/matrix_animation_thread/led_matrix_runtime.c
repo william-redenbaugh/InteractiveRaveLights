@@ -66,12 +66,11 @@ void wait_matrix_complete(void){
 }
 
 static int values[8];
-
+static int values_matrix[12];
 static q15_t log_fft_data[ADC_FFT_BUFFER_SIZE];
 int decrement = 0;
 void led_matrix_runtime(void *ptr){
 
-    rgb_color col = {100, 100, 0};
     WS2812B_t *strip = setup_ws2812b_strip(96);
 
     update_ws2812b_strip(strip);
@@ -88,25 +87,36 @@ void led_matrix_runtime(void *ptr){
             decrement = 0;
         }
 
-        for(int x = 0; x < 96; x++){
-            int value = fft_data[x];
-            value = value / 2;
-            if(value > 120)
-                value = 120;
-            if( value < 0){
-                value = 0;
+        for(int n = 0; n < 12; n++){
+            values_matrix[n]--;
+        }
+        for(int n = 0; n < 96; n++){
+            set_ws2812b_strip_rgb(strip, n, (rgb_color){0, 0, 0});
+        }
+
+        for(int x = 0; x < 12; x++){
+            int value = fft_data[x * 8];
+            int value_y = value/20;
+            int hue = value/2;
+            if(value_y > 7)
+                value_y = 7;
+            if(values_matrix[x] < value_y){
+                values_matrix[x] = value_y;
             }
             hsv_color col;
-            col.h = value;
-            col.v = value;
+            col.h = hue;
             col.s = 255;
-            set_ws2812b_strip_hsv(strip, x, col);
+            col.v = 100;
+            for(int y = 0; y < values_matrix[x]; y++){
+                set_ws2812b_strip_hsv(strip, 8 * x + y, col);
+            }
         }
 
         update_ws2812b_strip(strip);
 
+
         for(int x = 0; x <  8; x++){
-            int value = fft_data[x * 16 + 20];
+            int value = fft_data[x * 14 + 20];
             if(value < 0)
                 value = 0;
             value = value / 55;
@@ -129,10 +139,6 @@ void led_matrix_runtime(void *ptr){
         }
 
         image_test(&handle);
-
-        pthread_mutex_unlock(&signal_mt);
-        pthread_cond_broadcast(&signal_matrix_complate);
-        pthread_mutex_lock(&signal_mt);
         usleep(10000);
     }
 }

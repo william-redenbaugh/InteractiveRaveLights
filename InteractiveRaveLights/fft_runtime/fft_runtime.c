@@ -60,7 +60,7 @@ void fft_primary_task(void *ptr){
         arm_rfft_q15(&fft_instance, (q15_t*)input_buffer, output);
         pthread_mutex_unlock(&fft_mt);
 
-        usleep(5000);
+        usleep(10000);
     }
 }
 

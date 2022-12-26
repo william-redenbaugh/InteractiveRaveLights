@@ -137,11 +137,32 @@ int close_adc_reading(adc_struct_t *adc)
 void read_adc_data(adc_struct_t *adc)
 {
     int errval, errno;
+    int nbytes = read(adc->fd, adc->data, adc->data_size * 2);
 
+    // Low Volume pass
     for(int n = 0; n < adc->data_size; n++){
-        uint16_t data;
-        read(adc->fd, &data, 2);
+        int data = adc->data[n] - 44500;
+        if(data < 0)
+            data = 0;
         adc->data[n] = data;
+    }
+
+    if(nbytes != adc->data_size * 2){
+        printf("didn't get all the bytes we wanted\n");
+    }
+    if (nbytes < 0)
+    {
+        errval = errno;
+        printf("read failed:%d\n", errval);
+        return errval;
+    }
+    else if (nbytes == 0)
+    {
+        printf("read data size = 0\n");
+    }
+    else
+    {
+        return;
     }
 }
 
