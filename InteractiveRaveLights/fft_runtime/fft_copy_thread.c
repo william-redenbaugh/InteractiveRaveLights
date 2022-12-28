@@ -29,7 +29,9 @@ void init_fft_copy_mod(void *params){
 }
 
 void fft_copy_buffer(q15_t *buff, size_t size){
-    memcpy(buff, shared_buffer, size);
+   pthread_mutex_lock(&shared_buffer_mtx);
+   memcpy(buff, shared_buffer, size);
+   pthread_mutex_unlock(&shared_buffer_mtx);
 }
 
 void fft_copy_thread(void *params){
@@ -37,8 +39,9 @@ void fft_copy_thread(void *params){
     for(;;){
         fft_copy_data(fft_data, sizeof(fft_data));
 
+
         pthread_mutex_lock(&shared_buffer_mtx);
-        memcpy(shared_buffer, fft_data, sizeof(q15_t) * ADC_FFT_BUFFER_SIZE * 2);
+        arm_abs_q15(shared_buffer, fft_data, sizeof(shared_buffer));
         pthread_mutex_unlock(&shared_buffer_mtx);
 
         usleep(10000);

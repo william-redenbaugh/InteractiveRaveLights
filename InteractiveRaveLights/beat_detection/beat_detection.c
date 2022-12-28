@@ -22,16 +22,23 @@
 
 static q15_t fft_data[ADC_FFT_BUFFER_SIZE];
 static struct work_s beat_checks_worker;
-static uint16_t interval = 5000;
+
+int num_increment = 0;
+
+#define BEAT_DETECTION_WHICH_SAMPLE 30
+#define BEAT_DETECTION_THRESHOLD 300
+#define BEAT_DETECTION_INTERVAL 5000
 
 static void beat_checks_wq(int argc, char *argv[]){
-    printf("hello world\n");
-    int ret = work_queue(LPWORK, &beat_checks_worker, (worker_t)beat_checks_wq, NULL, MSEC2TICK(interval));
+    int ave_bpm = num_increment * 12;
+    num_increment = 0;
+
+    printf("Average BPM %d\n", ave_bpm);
+    int ret = work_queue(LPWORK, &beat_checks_worker, (worker_t)beat_checks_wq, NULL, MSEC2TICK(BEAT_DETECTION_INTERVAL));
 }
 
 void beat_detection_module_init(void *params){
-    printf("init module\n");
-    //int ret = work_queue(LPWORK, &beat_checks_worker, (worker_t)beat_checks_wq, NULL, MSEC2TICK(interval));
+    int ret = work_queue(LPWORK, &beat_checks_worker, (worker_t)beat_checks_wq, NULL, MSEC2TICK(BEAT_DETECTION_INTERVAL));
 }
 
 void beat_detection_thread(void *params){
@@ -39,6 +46,10 @@ void beat_detection_thread(void *params){
     for(;;){
         fft_copy_buffer(fft_data, sizeof(fft_data));
 
-        usleep(10000);
+        if(fft_data[BEAT_DETECTION_WHICH_SAMPLE] >  BEAT_DETECTION_THRESHOLD){
+            num_increment++;
+        }
+
+        usleep(200000);
     }
 }

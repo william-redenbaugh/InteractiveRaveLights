@@ -54,6 +54,7 @@ void fft_primary_task(void *ptr){
         // CMSIS FFT copy
         pthread_mutex_lock(&fft_mt);
         arm_rfft_q15(&fft_instance, (q15_t*)input_buffer, output);
+
         pthread_mutex_unlock(&fft_mt);
     }
 }

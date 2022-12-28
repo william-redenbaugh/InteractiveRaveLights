@@ -44,7 +44,7 @@ void led_strip_thread_one(void *params){
             col.v = 80;
             col.s = 255;
 
-            value = value/10;
+            value = value/30;
 
             if(value > 7)
                 value = 7;

@@ -38,7 +38,7 @@ static void draw_bitmap_red(uint8_t image[8][8])
 
 void led_matrix_init(void *ptr){
     memset(&handle, 0, sizeof(handle));
-    RGBMatrixInit(&handle);
+    //RGBMatrixInit(&handle);
 }
 
 void led_matrix_runtime(void *ptr){
@@ -84,7 +84,7 @@ void led_matrix_runtime(void *ptr){
             }
         }
 
-        image_test(&handle);
+        //image_test(&handle);
         usleep(10000);
     }
 }
