@@ -4,7 +4,7 @@
 #include "arm_const_structs.h"
 
 void fft_primary_task(void *ptr);
-void fft_module_init(void);
+void fft_module_init(void *params);
 void block_until_new_fft_data(void);
 void fft_copy_data(q15_t *data_ptr, size_t size);
 

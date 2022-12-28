@@ -542,7 +542,7 @@ void write_cmd(struct I2C1735 *handle, uint8_t reg, uint8_t cmd)
   i2c_msg.buffer = tx_buff;
   i2c_msg.length = 2;
   i2c_msg.flags = I2C_M_NOSTART;
-  i2c_msg.frequency = I2C_SPEED_HIGH;
+  i2c_msg.frequency = I2C_SPEED_FAST_PLUS;
 
   i2c_transfer.msgv = &i2c_msg;
   i2c_transfer.msgc = 1;
@@ -663,7 +663,7 @@ void image(struct I2C1735 *handle)
     i2c_msg.buffer = out_buff;
     i2c_msg.length = data_lenth + 3;
     i2c_msg.flags = I2C_M_NOSTART;
-    i2c_msg.frequency = I2C_SPEED_HIGH;
+    i2c_msg.frequency = I2C_SPEED_FAST_PLUS;
 
     i2c_transfer.msgv = &i2c_msg;
     i2c_transfer.msgc = 1;

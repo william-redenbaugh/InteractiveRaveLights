@@ -29,8 +29,7 @@ typedef struct adc_struct{
     size_t data_size;
     uint16_t *filtered_data;
     pthread_mutex_t lock;
-    pthread_mutex_t signal_mt;
-    pthread_cond_t signal_cv;
+    pthread_cond_t data_cond;
 }adc_struct_t;
 
 static adc_struct_t *adc;
@@ -46,8 +45,7 @@ adc_struct_t *new_adc_struct(size_t data_size){
     printf("Data size: %d\n", adc->data_size);
 
     pthread_mutex_init(&adc->lock, NULL);
-    pthread_mutex_init(&adc->signal_mt, NULL);
-    pthread_cond_init(&adc->signal_cv, NULL);
+    pthread_cond_init(&adc->data_cond, NULL);
     return adc;
 }
 
@@ -60,7 +58,9 @@ void filter_adc_data(adc_struct_t *adc){
     float filter_weight = EXPONENTIAL_FILTER_WEIGHT;
 
     pthread_mutex_lock(&adc->lock);
-    memcpy(adc->filtered_data, adc->data, adc->data_size);
+    for(int n = 1; n < adc->data_size; n++){
+        adc->filtered_data[n-1] = (((float)adc->data[n]) * filter_weight) + ((1 - filter_weight) * adc->data[n-1]);
+    }
     pthread_mutex_unlock(&adc->lock);
 }
 
@@ -139,7 +139,7 @@ void read_adc_data(adc_struct_t *adc)
     int errval, errno;
 
     read(adc->fd, adc->data, adc->data_size * 2);
-    
+
     for(int n = 0; n < adc->data_size; n++){
         uint16_t data = adc->data[n];
         int out = data - 44000;
@@ -150,18 +150,13 @@ void read_adc_data(adc_struct_t *adc)
     }
 }
 
-/**
- * @brief broadcasts to all blocked threads that new adc data is available to be processed
-*/
-static inline void signal_adc_newdata(adc_struct_t *adc){
-    pthread_mutex_unlock(&adc->signal_mt);
-    pthread_cond_broadcast(&adc->signal_cv);
-    pthread_mutex_lock(&adc->signal_cv);
-}
-
 void adc_init_func(void *ptr){
     adc = new_adc_struct(ADC_FFT_BUFFER_SIZE);
     init_adc_reading(adc);
+}
+
+void adc_copy_data_complete(adc_struct_t *adc){
+    pthread_cond_broadcast(&adc->data_cond);
 }
 
 /**
@@ -175,8 +170,7 @@ void adc_runtime_thread(void *ptr)
     while(true){
         read_adc_data(adc);
         filter_adc_data(adc);
-        signal_adc_newdata(adc);
-        //wait_matrix_complete();
+        adc_copy_data_complete(adc);
         usleep(1000);
     }
 
@@ -200,15 +194,9 @@ size_t adc_filtered_data_size(void){
 */
 void adc_copy_filtered_data(int16_t *input_buffer, size_t input_buffer_size){
     pthread_mutex_lock(&adc->lock);
+    pthread_cond_wait(&adc->data_cond, &adc->lock);
+
+    // Safely copy the memory over
     memcpy(input_buffer, adc->filtered_data, input_buffer_size);
     pthread_mutex_unlock(&adc->lock);
-}
-
-/**
- * @brief Blocking function for external threads to wait until new adc data is available
-*/
-void block_until_new_adc_data(void){
-    pthread_mutex_lock(&adc->signal_mt);
-    pthread_cond_wait(&adc->signal_cv, &adc->signal_mt);
-    pthread_mutex_unlock(&adc->signal_mt);
 }
