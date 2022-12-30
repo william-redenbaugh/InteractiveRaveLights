@@ -7,6 +7,3 @@
 [submodule "coprocessor_src/Coprocessor/lib/NeoPixelConnect"]
 	path = coprocessor_src/Coprocessor/lib/NeoPixelConnect
 	url = git@github.com:william-redenbaugh/NeoPixelConnect.git
-[submodule "stripCoProcessor/lib/FreeRTOS-Kernel"]
-	path = stripCoProcessor/lib/FreeRTOS-Kernel
-	url = git@github.com:FreeRTOS/FreeRTOS-Kernel.git
