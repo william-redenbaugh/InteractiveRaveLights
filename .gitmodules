@@ -7,3 +7,6 @@
 [submodule "coprocessor_src/Coprocessor/lib/NeoPixelConnect"]
 	path = coprocessor_src/Coprocessor/lib/NeoPixelConnect
 	url = git@github.com:william-redenbaugh/NeoPixelConnect.git
+[submodule "stripCoProcessor/lib/NeoPixelConnect"]
+	path = stripCoProcessor/lib/NeoPixelConnect
+	url = git@github.com:william-redenbaugh/NeoPixelConnect.git
