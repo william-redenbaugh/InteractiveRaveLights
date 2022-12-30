@@ -15,7 +15,6 @@
         {fft_copy_thread, init_fft_copy_mod, "FFT Processing Copy task", NULL},             \
         {beat_detection_thread, beat_detection_module_init, "Beat Detection task", NULL },  \
         {led_matrix_runtime, led_matrix_init, "LED matrix runtime", NULL },                 \
-
     }
 
 #define NUM_THREADS 6
