@@ -36,7 +36,29 @@ void led_strip_thread_one(void *params){
         for(int x = 0; x < 96; x++){
             set_ws2812b_strip_rgb(strip, x, (rgb_color){0, 0, 0});
         }
-        for(int k = 0; k < 12; k++){
+
+        for(int k = 0; k < 2; k++){
+            int value = fft_data[30 + k * 8];
+            value = value;
+            hsv_color col;
+            col.h = value/10;
+            col.v = 80;
+            col.s = 255;
+
+            value = value/190;
+
+            if(value > 7)
+                value = 7;
+
+            if(values_matrix[k] < value)
+                values_matrix[k] = value;
+
+            for(int y = 0; y < values_matrix[k]; y++){
+                set_ws2812b_strip_hsv(strip, k * 8 + y, col);
+            }
+        }
+
+        for(int k = 2; k < 12; k++){
             int value = fft_data[30 + k * 8];
             value = value;
             hsv_color col;
@@ -44,7 +66,7 @@ void led_strip_thread_one(void *params){
             col.v = 80;
             col.s = 255;
 
-            value = value/30;
+            value = value/35;
 
             if(value > 7)
                 value = 7;

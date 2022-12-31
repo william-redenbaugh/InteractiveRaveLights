@@ -3,11 +3,7 @@
 #include "stdio.h"
 #include "FreeRTOS.h"
 #include "event_groups.h"
-
-#define NUM_PIXELS_PER_STRIP 96
-#define NUM_COLS_PER_PIXEL 3
-#define NUM_STRIPS 3
-#define INPUT_BUFFER_SIZE NUM_PIXELS_PER_STRIP *NUM_COLS_PER_PIXEL *NUM_STRIPS
+#include "coprocessor_ipc_shared.h"
 
 typedef struct StripGeneric
 {

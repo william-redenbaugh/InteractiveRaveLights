@@ -26,7 +26,8 @@
 			"fft_copy_thread.h": "c",
 			"fft_runtime.h": "c",
 			"led_matrix_runtime.h": "c",
-			"threads_list.h": "c"
+			"threads_list.h": "c",
+			"coprocessor_ipc.h": "c"
 		}
 	}
 }
