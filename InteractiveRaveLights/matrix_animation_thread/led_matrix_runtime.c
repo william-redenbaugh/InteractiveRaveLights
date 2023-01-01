@@ -13,6 +13,9 @@
 #include "ws2812b/ws2812b.h"
 #include "ws2812b/hsv2rgb.h"
 
+/**
+ * @brief LOCAL VARIABLE DECLARAIONS
+ */
 static q15_t fft_data[ADC_FFT_BUFFER_SIZE];
 struct I2C1735 handle;
 
@@ -36,34 +39,41 @@ static void draw_bitmap_red(uint8_t image[8][8])
     image_test(&handle);
 }
 
-void led_matrix_init(void *ptr){
+void led_matrix_init(void *ptr)
+{
     memset(&handle, 0, sizeof(handle));
-    //RGBMatrixInit(&handle);
+    // RGBMatrixInit(&handle);
 }
 
-void led_matrix_runtime(void *ptr){
+void led_matrix_runtime(void *ptr)
+{
     memset(values, 0, sizeof(values));
-    for(;;){
+    for (;;)
+    {
 
-        fft_copy_buffer(fft_data,  sizeof(fft_data));
+        fft_copy_buffer(fft_data, sizeof(fft_data));
         decrement++;
-        if(decrement == 2){
-            for(int x = 0; x <  8; x++){
-                if(values[x] > 0)
+        if (decrement == 2)
+        {
+            for (int x = 0; x < 8; x++)
+            {
+                if (values[x] > 0)
                     values[x]--;
             }
             decrement = 0;
         }
 
-        for(int x = 0; x <  8; x++){
+        for (int x = 0; x < 8; x++)
+        {
             int value = fft_data[x * 16 + 20];
-            if(value < 0)
+            if (value < 0)
                 value = 0;
             value = value / 10;
-            if(value > 7)
+            if (value > 7)
                 value = 7;
 
-            if(values[x] < value){
+            if (values[x] < value)
+            {
                 values[x] = value;
             }
 
@@ -73,18 +83,20 @@ void led_matrix_runtime(void *ptr){
             hsv_col.v = 255;
 
             rgb_color rgb_col = hsv2rgb(hsv_col);
-            for(int y = 0; y < values[x]; y++){
+            for (int y = 0; y < values[x]; y++)
+            {
                 uint8_t pos[2] = {y, x};
                 draw_point_color(&handle, pos, rgb_col.r, rgb_col.g, rgb_col.b);
             }
 
-            for(int y = values[x]; y < 8; y++){
+            for (int y = values[x]; y < 8; y++)
+            {
                 uint8_t pos[2] = {y, x};
                 draw_point_color(&handle, pos, 0, 0, 0);
             }
         }
 
-        //image_test(&handle);
+        // image_test(&handle);
         usleep(10000);
     }
 }

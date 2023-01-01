@@ -24,6 +24,10 @@
 #define CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH "/dev/hpadc0"
 #define EXPONENTIAL_FILTER_WEIGHT .3
 
+/**
+ * @brief LOCAL VARIABLE DECLARAIONS
+ */
+
 // Automatic gain control algorithm:
 //
 static struct work_s adc_average_offset_calc;

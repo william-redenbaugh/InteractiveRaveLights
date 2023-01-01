@@ -8,9 +8,9 @@ int main(int argc, char *argv[])
 {
   ps_init();
   threads_list_init();
-  while(true)
+  while (true)
   {
     usleep(10000000);
   }
   return 0;
-  }
+}
