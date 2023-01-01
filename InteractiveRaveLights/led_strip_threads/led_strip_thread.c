@@ -93,8 +93,14 @@ void led_strip_thread_one(void *params)
             hsv_color col;
             col.h = value / 2;
             col.v = 80;
-            col.s = 255;
 
+            int saturation = 555 - value;
+            if (saturation > 255)
+                saturation = 255;
+            // Negative clipping
+            if (saturation < 0)
+                saturation = 0;
+            col.s = saturation;
             value = value / high_freq_divider;
 
             if (value > 7)
