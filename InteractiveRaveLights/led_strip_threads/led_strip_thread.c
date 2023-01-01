@@ -12,11 +12,24 @@
 #include "ws2812b/ws2812b.h"
 #include "ws2812b/hsv2rgb.h"
 
+/**
+ * @brief Localized Module Variables
+ */
 static q15_t fft_data[ADC_FFT_BUFFER_SIZE];
 static int values_matrix[12];
 WS2812B_t *strip;
 static int low_freq_divider = 190;
 static int high_freq_divider = 35;
+
+/**
+ * Localized declarations
+ */
+static const int LOW_FREQ_LOWER_BOUNDS = 10;
+static const int LOW_FREW_UPPER_BOUNDS = 450;
+static const int HIGH_FREQ_LOWER_BOUNDS = 5;
+static const int HIGH_FREQ_UPPER_BOUNDS = 100;
+static const int HIGH_FREQ_INCREMENT = 1;
+static const int LOW_FREQ_DECREMENT = 5;
 
 void led_strip_thread_one_init(void *params)
 {
@@ -52,7 +65,6 @@ void led_strip_thread_one(void *params)
             col.h = value / 10;
             col.v = 80;
             col.s = 255;
-
             value = value / low_freq_divider;
 
             if (value > 7)
@@ -64,15 +76,16 @@ void led_strip_thread_one(void *params)
             {
                 num_low_clips++;
             }
-
             if (num_low_clips >= 7)
             {
-                if (low_freq_divider >= 10)
-                    low_freq_divider -= 5;
+                if (low_freq_divider >= LOW_FREQ_LOWER_BOUNDS)
+                    low_freq_divider -= LOW_FREQ_DECREMENT;
             }
             if (num_high_clips >= 7)
             {
-                low_freq_divider += 5;
+                low_freq_divider += LOW_FREQ_DECREMENT;
+                if (low_freq_divider <= LOW_FREW_UPPER_BOUNDS)
+                    low_freq_divider = LOW_FREW_UPPER_BOUNDS;
             }
 
             if (values_matrix[k] < value)
@@ -91,10 +104,10 @@ void led_strip_thread_one(void *params)
             int value = fft_data[30 + k * 8];
             value = value;
             hsv_color col;
-            col.h = value / 2;
+            col.h = value / (2 * high_freq_divider / 35);
             col.v = 80;
 
-            int saturation = 555 - value;
+            int saturation = 555 - (value / (high_freq_divider / 35));
             if (saturation > 255)
                 saturation = 255;
             // Negative clipping
@@ -114,12 +127,16 @@ void led_strip_thread_one(void *params)
             }
             if (num_low_clips >= 7)
             {
-                if (high_freq_divider <= 5)
-                    high_freq_divider--;
+                if (high_freq_divider <= HIGH_FREQ_LOWER_BOUNDS)
+                    high_freq_divider -= HIGH_FREQ_INCREMENT;
             }
             if (num_high_clips >= 7)
             {
-                high_freq_divider++;
+                high_freq_divider += HIGH_FREQ_INCREMENT;
+                if (high_freq_divider >= HIGH_FREQ_UPPER_BOUNDS)
+                {
+                    high_freq_divider = HIGH_FREQ_UPPER_BOUNDS;
+                }
             }
 
             if (values_matrix[k] < value)
@@ -130,9 +147,7 @@ void led_strip_thread_one(void *params)
                 set_ws2812b_strip_hsv(strip, k * 8 + y, col);
             }
         }
-
         update_ws2812b_strip(strip);
-
         usleep(10000);
     }
 }
