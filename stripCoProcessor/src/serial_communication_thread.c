@@ -31,6 +31,7 @@ UpdateStripStruct_t *new_strip_struct(StripGeneric_t *strip, int num_leds)
 
 void serial_communication_setup(void *params)
 {
+    /*
     // Set up our UART with the required speed.
     uart_init(UART_ID, BAUD_RATE);
 
@@ -56,6 +57,8 @@ void serial_communication_setup(void *params)
                     1,
                     NULL);
     }
+
+    */
 }
 
 void uart_read_blocking_threadsafe(uart_inst_t *uart, uint8_t *dst, size_t len)
@@ -116,6 +119,8 @@ void serial_commuincation_thread(void *params)
 {
     for (;;)
     {
+        printf("hello world\n");
+        /*
         uart_read_blocking_threadsafe(UART_ID, input_buffer, INPUT_BUFFER_SIZE);
         int k_pos = 0;
         // Increment through strips
@@ -138,5 +143,8 @@ void serial_commuincation_thread(void *params)
             // Notify strip that it can push data now
             xEventGroupSetBits(strip_handler_list[n]->new_data_group, BIT_0);
         }
+        */
+
+       vTaskDelay(10000/portTICK_RATE_MS);
     }
 }

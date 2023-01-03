@@ -16,8 +16,6 @@ int main(void)
 
     // Start Scheduler
     vTaskStartScheduler();
-
-    // Initialized
     threads_list_init();
     vTaskSuspend(NULL);
 }
