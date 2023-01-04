@@ -1,2 +1,2 @@
 *.o
-
+/ml_training/creds.json

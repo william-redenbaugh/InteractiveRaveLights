@@ -4,6 +4,8 @@
 #include "FreeRTOS.h"
 #include "event_groups.h"
 #include "coprocessor_ipc_shared.h"
+#include "event_groups.h"
+#include "_freertos.h"
 
 typedef struct StripGeneric
 {

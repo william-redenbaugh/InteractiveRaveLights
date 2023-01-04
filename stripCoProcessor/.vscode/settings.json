@@ -1,11 +1,5 @@
 {
     "files.associations": {
-        "freertos.h": "c",
-        "portable.h": "c",
-        "freertosconfig.h": "c",
-        "task.h": "c",
-        "uart.h": "c",
-        "threads_init.h": "c",
-        "threads_list.h": "c"
+        "ostream": "cpp"
     }
 }

@@ -1,4 +1,4 @@
-#include "led_strip_thread.h"
+#include "strip_modules.h"
 #include <nuttx/config.h>
 #include <stdio.h>
 #include "thread_init/threads_init.h"
@@ -43,7 +43,7 @@ void led_strip_thread_one_init(void *params)
     strip_processing_thread = malloc(sizeof(led_strip_thread_processing_t));
 
     // Initialize strip
-    strip_processing_thread->strip = setup_ws2812b_strip(96);
+    strip_processing_thread->strip = setup_ws2812b_strip(96, "/dev/spi4");
     update_ws2812b_strip(strip_processing_thread->strip);
 
     // Initialize base animation values

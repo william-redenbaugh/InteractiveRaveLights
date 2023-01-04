@@ -17,7 +17,7 @@ typedef struct WS2812B
  * @param int num_leds to initialize
  * @return WS2812b struct pointer, or NULL otherwise
  */
-WS2812B_t *setup_ws2812b_strip(int num_leds);
+WS2812B_t *setup_ws2812b_strip(int num_leds, const char *bus);
 
 /**!
  * @brief Pushes the contents inside of the ws2812b buffer through the SPI interface

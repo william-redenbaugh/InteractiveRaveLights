@@ -6,8 +6,9 @@
 #include "fft_runtime/fft_copy_thread.h"
 #include "matrix_animation_thread/led_matrix_runtime.h"
 #include "beat_detection/beat_detection.h"
-#include "led_strip_threads/led_strip_thread.h"
+#include "led_strip_threads/strip_modules.h"
 #include "coprocessor_ipc/coprocessor_ipc.h"
+
 #define THREAD_LIST                                                                         \
     {                                                                                       \
         {adc_runtime_thread, adc_init_func, "Rave Light runtime main", NULL},               \

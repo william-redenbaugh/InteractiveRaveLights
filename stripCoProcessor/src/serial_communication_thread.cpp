@@ -1,11 +1,14 @@
+#include "Arduino.h"
 #include "serial_communication_thread.h"
 #include "FreeRTOS.h"
 #include "hardware/uart.h"
 #include "led_matrix_generic.h"
 #include "pico/stdlib.h"
 #include "stdio.h"
-#include "pico/malloc.h"
 #include "led_strip_management.h"
+#include "task.h"
+#include "event_groups.h"
+#include "semphr.h"
 
 #define UART_ID uart0
 #define BAUD_RATE 115200
@@ -27,11 +30,14 @@ UpdateStripStruct_t *new_strip_struct(StripGeneric_t *strip, int num_leds)
 
     // STRIP BUFFER
     new_strip->buffer = (uint8_t*)pvPortMalloc(sizeof(uint8_t) * num_leds * NUM_COLS_PER_PIXEL);
+
+    return new_strip;
 }
 
 void serial_communication_setup(void *params)
 {
     /*
+
     // Set up our UART with the required speed.
     uart_init(UART_ID, BAUD_RATE);
 
@@ -57,8 +63,8 @@ void serial_communication_setup(void *params)
                     1,
                     NULL);
     }
-
     */
+
 }
 
 void uart_read_blocking_threadsafe(uart_inst_t *uart, uint8_t *dst, size_t len)
@@ -119,8 +125,6 @@ void serial_commuincation_thread(void *params)
 {
     for (;;)
     {
-        printf("hello world\n");
-        /*
         uart_read_blocking_threadsafe(UART_ID, input_buffer, INPUT_BUFFER_SIZE);
         int k_pos = 0;
         // Increment through strips
@@ -143,8 +147,6 @@ void serial_commuincation_thread(void *params)
             // Notify strip that it can push data now
             xEventGroupSetBits(strip_handler_list[n]->new_data_group, BIT_0);
         }
-        */
-
-       vTaskDelay(10000/portTICK_RATE_MS);
+        vTaskDelay(1/portTICK_PERIOD_MS);
     }
 }

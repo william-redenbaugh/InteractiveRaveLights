@@ -35,7 +35,7 @@
 
 static uint8_t get_protocol_eq(uint8_t data, int pos);
 
-WS2812B_t *setup_ws2812b_strip(int num_leds)
+WS2812B_t *setup_ws2812b_strip(int num_leds, const char *bus)
 {
     WS2812B_t *strip = malloc(sizeof(WS2812B_t));
 
@@ -49,7 +49,7 @@ WS2812B_t *setup_ws2812b_strip(int num_leds)
         return NULL;
     }
 
-    strip->spi_fd = open("/dev/spi4", O_WRONLY);
+    strip->spi_fd = open(bus, O_WRONLY);
     if (strip->spi_fd < 0)
     {
         printf("There was an error opening up the SPI module: %d\n", strip->spi_fd);

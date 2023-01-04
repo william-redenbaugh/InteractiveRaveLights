@@ -6,7 +6,7 @@
 
 #define THREAD_LIST                                                                                        \
     {                                                                                                      \
-        {serial_commuincation_thread, serial_communication_setup, "Main Statemachine", 64, 1, NULL, NULL}, \
+        {serial_commuincation_thread, serial_communication_setup, "Main Statemachine", 2048, 1, NULL, NULL}, \
     }
 
 #define NUM_THREADS 1
