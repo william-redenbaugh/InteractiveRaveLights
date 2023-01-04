@@ -28,7 +28,8 @@ UpdateStripStruct_t *new_strip_struct(StripGeneric_t *strip, int num_leds)
 
     new_strip->mutex = xSemaphoreCreateMutex();
     new_strip->new_data_group = xEventGroupCreate();
-
+    new_strip->strip = strip;
+    new_strip->num_leds = num_leds;
     xEventGroupClearBits(new_strip->new_data_group, BIT_0);
 
     // STRIP BUFFER
@@ -59,16 +60,14 @@ void serial_communication_setup(void *params)
     // Launch threads that will help handle strip updates
     for (int n = 0; n < NUM_STRIPS; n++){
         strip_handler_list[n] = new_strip_struct(strips[n], NUM_PIXELS_PER_STRIP);
-    }
-        /*
+
         xTaskCreate(update_strip_thread,
                     "Strip threads",
-                    1024,
+                    256,
                     (void *)strip_handler_list[n],
                     1,
                     NULL);
     }
-    */
 
 }
 
@@ -87,12 +86,8 @@ void uart_read_blocking_threadsafe(uart_inst_t *uart, uint8_t *dst, size_t len)
  */
 void update_strip_thread(void *params)
 {
-    for (;;){
-        printf("Hello  from strip\n");
-        vTaskDelay(3000 / portTICK_RATE_MS);
-    }
-        // Get handler
-        UpdateStripStruct_t *strip_handler = (UpdateStripStruct_t *)params;
+    // Get handler
+    UpdateStripStruct_t *strip_handler = (UpdateStripStruct_t *)params;
 
     // Clear strip
     for (int n = 0; n < strip_handler->num_leds; n++)
@@ -104,6 +99,7 @@ void update_strip_thread(void *params)
     // Now wait for data from serial communication thread
     for (;;)
     {
+
         xEventGroupWaitBits(strip_handler->new_data_group,
                             BIT_0,
                             pdTRUE,
@@ -111,15 +107,19 @@ void update_strip_thread(void *params)
                             portMAX_DELAY);
 
         xSemaphoreTake(strip_handler->mutex, portMAX_DELAY);
+
         for (int n = 0; n < strip_handler->num_leds; n++)
         {
             size_t pos = n * 3;
             uint8_t r = strip_handler->buffer[pos];
             uint8_t g = strip_handler->buffer[pos + 1];
             uint8_t b = strip_handler->buffer[pos + 2];
-            strip_handler->strip->strip_set(n, r, g, b);
+            //strip_handler->strip->strip_set(n, r, g, b);
         }
+
         strip_handler->strip->strip_update();
+
+       vTaskDelay(5/portTICK_RATE_MS);
     }
 }
 

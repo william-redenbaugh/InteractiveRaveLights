@@ -9,4 +9,4 @@
 	url = git@github.com:william-redenbaugh/NeoPixelConnect.git
 [submodule "stripCoProcessor/lib/NeoPixelConnect"]
 	path = stripCoProcessor/lib/NeoPixelConnect
-	url = git@github.com:william-redenbaugh/NeoPixelConnect.git
+	url = git@github.com:MrYsLab/NeoPixelConnect.git
