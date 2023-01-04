@@ -25,7 +25,10 @@ void update_strip_thread(void *params);
 UpdateStripStruct_t *new_strip_struct(StripGeneric_t *strip, int num_leds)
 {
     UpdateStripStruct_t *new_strip = (UpdateStripStruct_t*)pvPortMalloc(sizeof(UpdateStripStruct_t));
+
     new_strip->mutex = xSemaphoreCreateMutex();
+    new_strip->new_data_group = xEventGroupCreate();
+
     xEventGroupClearBits(new_strip->new_data_group, BIT_0);
 
     // STRIP BUFFER
@@ -36,10 +39,10 @@ UpdateStripStruct_t *new_strip_struct(StripGeneric_t *strip, int num_leds)
 
 void serial_communication_setup(void *params)
 {
-    /*
 
     // Set up our UART with the required speed.
     uart_init(UART_ID, BAUD_RATE);
+
 
     // Set the TX and RX pins by using the function select on the GPIO
     // Set datasheet for more information on function select
@@ -56,6 +59,8 @@ void serial_communication_setup(void *params)
     // Launch threads that will help handle strip updates
     for (int n = 0; n < NUM_STRIPS; n++){
         strip_handler_list[n] = new_strip_struct(strips[n], NUM_PIXELS_PER_STRIP);
+    }
+        /*
         xTaskCreate(update_strip_thread,
                     "Strip threads",
                     1024,
