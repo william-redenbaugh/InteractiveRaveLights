@@ -33,6 +33,7 @@ void coprocessor_ipc_thread(void *params)
         pthread_cond_wait(&trigger_update, &output_buffer_mutex);
         // Write to serial buffer
         int ret = write(serial_fd, output_buffer, INPUT_BUFFER_SIZE);
+        printf("updated strip\n");
         pthread_mutex_unlock(&output_buffer_mutex);
         usleep(10000);
     }
@@ -57,3 +58,4 @@ void coprocesor_ipc_led_strip_set(led_strip_t strip, int n, uint8_t r, uint8_t g
     input_buffer[pos + 2] = b;
     pthread_mutex_unlock(&input_buffer_mutex);
 }
+

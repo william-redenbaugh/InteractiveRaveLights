@@ -7,5 +7,4 @@ void led_strip_thread_one_init(void *param);
 void led_strip_thread_two(void *params);
 void led_strip_thread_two_init(void *param);
 
-
 #endif

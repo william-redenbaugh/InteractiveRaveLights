@@ -11,6 +11,7 @@
 #include "arm_const_structs.h"
 #include "ws2812b/ws2812b.h"
 #include "ws2812b/hsv2rgb.h"
+#include "coprocessor_ipc/coprocessor_ipc.h"
 
 /**
  * Localized declarations
@@ -158,6 +159,7 @@ static inline void manage_peaks_high_fq(led_strip_thread_processing_t *strip_pro
         for (int y = 0; y < strip_process_mod->values_matrix[k]; y++)
         {
             set_ws2812b_strip_hsv(strip_process_mod->strip, k * 8 + y, col);
+            coprocesor_ipc_led_strip_set(LED_STRIP_ONE, 0, 0, 0, 0);
         }
     }
 }
@@ -178,6 +180,7 @@ void led_strip_thread_one(void *params)
 
         // Push frame to buffer
         update_ws2812b_strip(strip_processing_thread->strip);
+        coprocessor_ipc_led_strip_update_all_threads();
         usleep(10000);
     }
 }

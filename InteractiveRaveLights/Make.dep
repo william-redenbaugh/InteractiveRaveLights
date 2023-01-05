@@ -558,7 +558,9 @@ strip_one_module.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights
  shared_constants/shared_constants.h \
  /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_const_structs.h \
  /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_common_tables.h \
- ws2812b/ws2812b.h ws2812b/hsv2rgb.h ws2812b/hsv2rgb.h
+ ws2812b/ws2812b.h ws2812b/hsv2rgb.h ws2812b/hsv2rgb.h \
+ coprocessor_ipc/coprocessor_ipc.h \
+ ../stripCoProcessor/include/coprocessor_ipc_shared.h
 led_matrix_runtime.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  matrix_animation_thread/led_matrix_runtime.c \
  matrix_animation_thread/led_matrix_runtime.h \
