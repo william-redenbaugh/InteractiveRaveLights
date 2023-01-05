@@ -7,12 +7,12 @@
 // Create an instance of NeoPixelConnect and initialize it
 // to use GPIO pin 4 (D12) as the control pin, for a string
 // of 8 neopixels. Name the instance p
-NeoPixelConnect *strip_one;
+//NeoPixelConnect strip_one(5, 100, pio0, 0);
 
 // Create an instance of NeoPixelConnect and initialize it
 // to use GPIO pin 4 (D12) as the control pin, for a string
 // of 8 neopixels. Name the instance p
-NeoPixelConnect *strip_two;
+//NeoPixelConnect strip_two(4, 100, pio1, 1);
 
 
 int strip_one_set(int n, uint8_t r, uint8_t g, uint8_t b){

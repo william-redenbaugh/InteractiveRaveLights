@@ -92,7 +92,7 @@ void update_strip_thread(void *params)
     // Clear strip
     for (int n = 0; n < strip_handler->num_leds; n++)
     {
-        strip_handler->strip->strip_set(n, 0, 0, 0);
+        strip_handler->strip->strip_set(n, 30, 0, 0);
     }
     strip_handler->strip->strip_update();
 
