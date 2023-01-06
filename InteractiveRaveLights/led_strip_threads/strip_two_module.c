@@ -37,7 +37,7 @@ typedef struct led_strip_thread_processing
 
 static led_strip_thread_processing_t *strip_processing_thread;
 
-void led_strip_thread_one_init(void *params)
+void led_strip_thread_two_init(void *params)
 {
     // Allocate space for our thread processing module
     strip_processing_thread = malloc(sizeof(led_strip_thread_processing_t));
@@ -69,7 +69,7 @@ static inline void manage_peaks_low_fq(led_strip_thread_processing_t *strip_proc
     int num_high_clips = 0;
     for (int k = 0; k < 2; k++)
     {
-        int value = strip_process_mod->fft_data[30 + k * 8];
+        int value = strip_process_mod->fft_data[26 + k * 8];
         value = value;
         hsv_color col;
         col.h = value / 10;
@@ -103,7 +103,7 @@ static inline void manage_peaks_low_fq(led_strip_thread_processing_t *strip_proc
 
         for (int y = 0; y < strip_process_mod->values_matrix[k]; y++)
         {
-            strip_set_leds_hsv(k * 8 + y, col.h, col.s, col.v);
+            strip_set_leds_hsv(96 + k * 8 + y, col.h, col.s, col.v);
             //set_ws2812b_strip_hsv(strip_process_mod->strip, k * 8 + y, col);
         }
     }
@@ -115,7 +115,7 @@ static inline void manage_peaks_high_fq(led_strip_thread_processing_t *strip_pro
     int num_high_clips = 0;
     for (int k = 2; k < 12; k++)
     {
-        int value = strip_process_mod->fft_data[30 + k * 8];
+        int value = strip_process_mod->fft_data[26 + k * 8];
         value = value;
         hsv_color col;
         col.h = value / (2 * strip_process_mod->high_freq_divider / 35);
@@ -158,13 +158,13 @@ static inline void manage_peaks_high_fq(led_strip_thread_processing_t *strip_pro
 
         for (int y = 0; y < strip_process_mod->values_matrix[k]; y++)
         {
-            strip_set_leds_hsv(k * 8 + y, col.h, col.s, col.v);
+            strip_set_leds_hsv(96 + k * 8 + y, col.h, col.s, col.v);
             //set_ws2812b_strip_hsv(strip_process_mod->strip, k * 8 + y, col);
         }
     }
 }
 
-void led_strip_thread_one(void *params)
+void led_strip_thread_two(void *params)
 {
     for (;;)
     {
@@ -173,8 +173,9 @@ void led_strip_thread_one(void *params)
         strip_peak_drop_decrement(strip_processing_thread);
         // Clear contents of strip, clean slate protocol
         //clear_ws2812b_strip(strip_processing_thread->strip);
-        for(int n = 0; n < 96; n++)
+        for(int n = 96; n < 192; n++)
             strip_set_leds(n, 0, 0, 0);
+        //strip_clear();
         // Manage low and high peaks for the strip.
         manage_peaks_low_fq(strip_processing_thread);
         manage_peaks_high_fq(strip_processing_thread);

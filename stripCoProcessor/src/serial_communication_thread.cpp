@@ -11,7 +11,7 @@
 #include "semphr.h"
 
 #define UART_ID uart0
-#define BAUD_RATE 115200
+#define BAUD_RATE 921600
 
 // We are using pins 0 and 1, but see the GPIO function select table in the
 // datasheet for information on which other pins can be used.
@@ -42,13 +42,14 @@ void serial_communication_setup(void *params)
 {
 
     // Set up our UART with the required speed.
-    uart_init(UART_ID, BAUD_RATE);
+    //uart_init(UART_ID, BAUD_RATE);
 
 
     // Set the TX and RX pins by using the function select on the GPIO
     // Set datasheet for more information on function select
-    gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
-    gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+    //gpio_set_function(UART_TX_PIN, GPIO_FUNC_UART);
+    //gpio_set_function(UART_RX_PIN, GPIO_FUNC_UART);
+    Serial1.begin(115200);
 
     // Get all our generic strips
     // From our strip management module
@@ -73,12 +74,13 @@ void serial_communication_setup(void *params)
 
 void uart_read_blocking_threadsafe(uart_inst_t *uart, uint8_t *dst, size_t len)
 {
-    for (size_t i = 0; i < len; ++i)
-    {
-        while (!uart_is_readable(uart))
-            taskYIELD();
-        *dst++ = (uint8_t)uart_get_hw(uart)->dr;
-    }
+    // Wait until we have enough bytes in the buffer hah
+    while(Serial1.available() < len)
+        taskYIELD();
+    int n = Serial1.readBytes(dst, len);
+    if(n)
+        Serial.println("taskYield data");
+
 }
 
 /**
@@ -88,7 +90,6 @@ void update_strip_thread(void *params)
 {
     // Get handler
     UpdateStripStruct_t *strip_handler = (UpdateStripStruct_t *)params;
-
     // Clear strip
     for (int n = 0; n < strip_handler->num_leds; n++)
     {
@@ -131,12 +132,13 @@ void serial_commuincation_thread(void *params)
     for (;;)
     {
         uart_read_blocking_threadsafe(UART_ID, input_buffer, INPUT_BUFFER_SIZE);
+
         int k_pos = 0;
         // Increment through strips
         for (int n = 0; n < NUM_STRIPS; n++)
         {
             // Threadsafe copy operation
-            xSemaphoreTake(strip_handler_list[n]->mutex, portMAX_DELAY);
+            //xSemaphoreTake(strip_handler_list[n]->mutex, portMAX_DELAY);
             int x = 0;
             // Copy contents into buffer
             for (x; x < NUM_PIXELS_PER_STRIP * NUM_COLS_PER_PIXEL; x++)
@@ -144,7 +146,7 @@ void serial_commuincation_thread(void *params)
                 strip_handler_list[n]->buffer[x] = input_buffer[k_pos + x];
             }
             // Done doing thread sensitive copying
-            xSemaphoreGive(strip_handler_list[n]->mutex);
+            ///xSemaphoreGive(strip_handler_list[n]->mutex);
 
             // change pointer of input buffer for next strip
             k_pos += x;
@@ -152,6 +154,6 @@ void serial_commuincation_thread(void *params)
             // Notify strip that it can push data now
             xEventGroupSetBits(strip_handler_list[n]->new_data_group, BIT_0);
         }
-        vTaskDelay(1/portTICK_PERIOD_MS);
+        vTaskDelay(10/portTICK_PERIOD_MS);
     }
 }
