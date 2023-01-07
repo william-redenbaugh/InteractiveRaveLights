@@ -16,9 +16,9 @@
  * Localized declarations
  */
 static const int LOW_FREQ_LOWER_BOUNDS = 10;
-static const int LOW_FREW_UPPER_BOUNDS = 450;
+static const int LOW_FREW_UPPER_BOUNDS = 1000;
 static const int HIGH_FREQ_LOWER_BOUNDS = 5;
-static const int HIGH_FREQ_UPPER_BOUNDS = 100;
+static const int HIGH_FREQ_UPPER_BOUNDS = 700;
 static const int HIGH_FREQ_INCREMENT = 1;
 static const int LOW_FREQ_DECREMENT = 5;
 
@@ -58,7 +58,7 @@ static inline void strip_peak_drop_decrement(led_strip_thread_processing_t *stri
 {
     for (int x = 0; x < 12; x++)
     {
-        if (strip_process_mod->values_matrix[x] > 0)
+        if (strip_process_mod->values_matrix[x] > 1)
             strip_process_mod->values_matrix[x]--;
     }
 }

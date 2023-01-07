@@ -11,16 +11,21 @@
 #include "arm_const_structs.h"
 #include "ws2812b/ws2812b.h"
 #include "ws2812b/hsv2rgb.h"
+#include "nuttx/wqueue.h"
+#include "pthread.h"
 
 /**
  * Localized declarations
  */
 static const int LOW_FREQ_LOWER_BOUNDS = 10;
-static const int LOW_FREW_UPPER_BOUNDS = 450;
+static const int LOW_FREW_UPPER_BOUNDS = 1000;
 static const int HIGH_FREQ_LOWER_BOUNDS = 5;
-static const int HIGH_FREQ_UPPER_BOUNDS = 100;
+static const int HIGH_FREQ_UPPER_BOUNDS = 700;
 static const int HIGH_FREQ_INCREMENT = 1;
 static const int LOW_FREQ_DECREMENT = 5;
+
+#define PEAK_DETECTION_WQ_INTERVAL 6000
+static struct work_s peak_detection_calc;
 
 /**
  * @brief Localized Module Variables
@@ -36,6 +41,55 @@ typedef struct led_strip_thread_processing
 } led_strip_thread_processing_t;
 
 static led_strip_thread_processing_t *strip_processing_thread;
+static int high_peaks_low_freq = 0;
+static int low_peaks_low_freq = 0;
+static pthread_mutex_t low_freq_peak_mtx;
+
+static int high_peaks_high_freq = 0;
+static int low_peaks_high_freq = 0;
+static pthread_mutex_t high_freq_peak_mtx;
+
+static void peak_detection_offset_wq(int argc, char*argv[]){
+
+    pthread_mutex_lock(&low_freq_peak_mtx);
+    if (low_peaks_low_freq >= 1000)
+    {
+        if (strip_processing_thread->low_freq_divider >= LOW_FREQ_LOWER_BOUNDS)
+            strip_processing_thread->low_freq_divider -= LOW_FREQ_DECREMENT;
+    }
+    if (high_peaks_low_freq >= 1000)
+    {
+        strip_processing_thread->low_freq_divider += LOW_FREQ_DECREMENT;
+        if (strip_processing_thread->low_freq_divider <= LOW_FREW_UPPER_BOUNDS)
+            strip_processing_thread->low_freq_divider = LOW_FREW_UPPER_BOUNDS;
+    }
+
+    // Reset the peaks
+    high_peaks_low_freq = 0;
+    low_peaks_low_freq = 0;
+    pthread_mutex_unlock(&low_freq_peak_mtx);
+
+    pthread_mutex_lock(&high_freq_peak_mtx);
+    if (low_peaks_high_freq >= 1000)
+    {
+        if (strip_processing_thread->high_freq_divider <= HIGH_FREQ_LOWER_BOUNDS)
+            strip_processing_thread->high_freq_divider -= HIGH_FREQ_INCREMENT;
+    }
+    if (high_peaks_high_freq >= 1000)
+    {
+        if (strip_processing_thread->high_freq_divider >= HIGH_FREQ_UPPER_BOUNDS)
+        {
+            strip_processing_thread->high_freq_divider = HIGH_FREQ_UPPER_BOUNDS;
+        }
+    }
+
+    // Reset the peaks
+    high_peaks_high_freq = 0;
+    low_peaks_high_freq = 0;
+    pthread_mutex_unlock(&high_freq_peak_mtx);
+
+    int ret = work_queue(LPWORK, &peak_detection_calc, (worker_t)peak_detection_offset_wq, NULL, MSEC2TICK(PEAK_DETECTION_WQ_INTERVAL));
+}
 
 void led_strip_thread_one_init(void *params)
 {
@@ -52,13 +106,18 @@ void led_strip_thread_one_init(void *params)
     // Set baseline thresholds
     strip_processing_thread->high_freq_divider = 35;
     strip_processing_thread->low_freq_divider = 190;
+
+    pthread_mutex_init(&low_freq_peak_mtx, NULL);
+    pthread_mutex_init(&high_freq_peak_mtx, NULL);
+
+    int ret = work_queue(LPWORK, &peak_detection_calc, (worker_t)peak_detection_offset_wq, NULL, MSEC2TICK(PEAK_DETECTION_WQ_INTERVAL));
 }
 
 static inline void strip_peak_drop_decrement(led_strip_thread_processing_t *strip_process_mod)
 {
     for (int x = 0; x < 12; x++)
     {
-        if (strip_process_mod->values_matrix[x] > 0)
+        if (strip_process_mod->values_matrix[x] > 1)
             strip_process_mod->values_matrix[x]--;
     }
 }
@@ -77,26 +136,17 @@ static inline void manage_peaks_low_fq(led_strip_thread_processing_t *strip_proc
         col.s = 255;
         value = value / strip_process_mod->low_freq_divider;
 
+        pthread_mutex_lock(&low_freq_peak_mtx);
         if (value > 7)
         {
-            num_high_clips++;
+            high_peaks_low_freq++;
             value = 7;
         }
         if (value == 0)
         {
-            num_low_clips++;
+            low_peaks_low_freq++;
         }
-        if (num_low_clips >= 7)
-        {
-            if (strip_process_mod->low_freq_divider >= LOW_FREQ_LOWER_BOUNDS)
-                strip_process_mod->low_freq_divider -= LOW_FREQ_DECREMENT;
-        }
-        if (num_high_clips >= 7)
-        {
-            strip_process_mod->low_freq_divider += LOW_FREQ_DECREMENT;
-            if (strip_process_mod->low_freq_divider <= LOW_FREW_UPPER_BOUNDS)
-                strip_process_mod->low_freq_divider = LOW_FREW_UPPER_BOUNDS;
-        }
+        pthread_mutex_unlock(&low_freq_peak_mtx);
 
         if (strip_process_mod->values_matrix[k] < value)
             strip_process_mod->values_matrix[k] = value;
@@ -130,28 +180,18 @@ static inline void manage_peaks_high_fq(led_strip_thread_processing_t *strip_pro
         col.s = saturation;
         value = value / strip_process_mod->high_freq_divider;
 
+        pthread_mutex_lock(&high_freq_peak_mtx);
         if (value > 7)
         {
-            num_high_clips++;
+            high_peaks_high_freq++;
             value = 7;
         }
         if (value == 0)
         {
-            num_low_clips++;
+            low_peaks_high_freq++;
         }
-        if (num_low_clips >= 10)
-        {
-            if (strip_process_mod->high_freq_divider <= HIGH_FREQ_LOWER_BOUNDS)
-                strip_process_mod->high_freq_divider -= HIGH_FREQ_INCREMENT;
-        }
-        if (num_high_clips >= 10)
-        {
-            strip_process_mod->high_freq_divider += HIGH_FREQ_INCREMENT;
-            if (strip_process_mod->high_freq_divider >= HIGH_FREQ_UPPER_BOUNDS)
-            {
-                strip_process_mod->high_freq_divider = HIGH_FREQ_UPPER_BOUNDS;
-            }
-        }
+        pthread_mutex_unlock(&high_freq_peak_mtx);
+
 
         if (strip_process_mod->values_matrix[k] < value)
             strip_process_mod->values_matrix[k] = value;

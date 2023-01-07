@@ -509,7 +509,8 @@ strip_one_module.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights
  shared_constants/shared_constants.h \
  /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_const_structs.h \
  /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_common_tables.h \
- ws2812b/ws2812b.h ws2812b/hsv2rgb.h ws2812b/hsv2rgb.h
+ ws2812b/ws2812b.h ws2812b/hsv2rgb.h ws2812b/hsv2rgb.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/wqueue.h
 strip_two_module.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  led_strip_threads/strip_two_module.c led_strip_threads/strip_modules.h \
  /home/wredenba/spresense/nuttx/include/stdint.h \
