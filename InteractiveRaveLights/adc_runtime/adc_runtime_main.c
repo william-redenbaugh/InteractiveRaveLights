@@ -19,8 +19,8 @@
 #include "matrix_animation_thread/led_matrix_runtime.h"
 
 #define WEIGHTED_AVERAGE_INTERVAL 1000
-#define TARGET_BASELINE_AMPLITUDE 300
-#define INTRO_MIC_OFFSET 24300
+#define TARGET_BASELINE_AMPLITUDE 800
+#define INTRO_MIC_OFFSET 30000
 #define CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH "/dev/hpadc0"
 #define EXPONENTIAL_FILTER_WEIGHT .3
 
@@ -50,7 +50,7 @@ static adc_struct_t *adc;
 
 static void average_offset_wq(int argc, char *argv[])
 {
-    adc->offset = adc->average - TARGET_BASELINE_AMPLITUDE;
+    //adc->offset = adc->average - TARGET_BASELINE_AMPLITUDE;
     // Reschedule!
 
     printf("New offfset %d\n", adc->average);
@@ -115,7 +115,7 @@ int init_adc_reading(adc_struct_t *adc)
         return errval;
     }
     // Default offsetwxxuj
-    adc->offset = 42000;
+    adc->offset = 0;
     printf("Opened ADC module\n");
 
     int ret = ioctl(adc->fd, SCUIOC_SETFIFOMODE, 1);
@@ -183,7 +183,6 @@ void read_adc_data(adc_struct_t *adc)
     int errval, errno;
 
     read(adc->fd, adc->data, adc->data_size * 2);
-
     for (int n = 0; n < adc->data_size; n++)
     {
         int data = adc->data[n] - INTRO_MIC_OFFSET;

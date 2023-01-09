@@ -29,7 +29,9 @@
 			"threads_list.h": "c",
 			"coprocessor_ipc.h": "c",
 			"pubsub.h": "c",
-			"beat_detection.h": "c"
+			"beat_detection.h": "c",
+			"hsv2rgb.h": "c",
+			"pthread.h": "c"
 		}
 	}
 }
