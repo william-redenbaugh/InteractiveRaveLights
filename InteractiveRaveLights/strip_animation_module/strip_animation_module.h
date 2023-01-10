@@ -11,6 +11,7 @@ typedef enum strip_animaton_type{
 
 typedef struct strip_animation_mod{
     strip_animation_type_t current_animation;
+    void (*fft_copy_buffer)(q15_t *buff, size_t size);
     q15_t *fft_data;
     size_t fft_data_size;
     int *values_matrix;
@@ -21,6 +22,7 @@ typedef struct strip_animation_mod{
     int strip_pos_lower_bounds;
     int num_leds;
     int num_intervals;
+    uint8_t hue_offset;
     int interval_bar_size;
 }strip_animation_mod_t;
 
@@ -30,8 +32,11 @@ typedef struct{
     strip_update_thread_t *strip;
     strip_animation_type_t init_type;
     size_t fft_data_size;
-
+    uint8_t hue_offset;
     int num_intervals;
-}strip_animation_mod_init_t;
+    void (*fft_copy_buffer)(q15_t *buff, size_t size);
 
+}strip_animation_mod_init_t;
+void strip_processing_runtime(strip_animation_mod_t *mod);
+strip_animation_mod_t *new_strip_processing_mod(strip_animation_mod_init_t init);
 #endif
