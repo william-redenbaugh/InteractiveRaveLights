@@ -37,6 +37,8 @@ strip_animation_mod_t *setup_strip_processing_mode(int lower_bounds, int upper_b
     init_config.saturation_high = 255;
     init_config.saturation_low = 200;
 
+    init_config.delay_frametime_us = 10000;
+
     // Instanciate!
     strip_animation_mod_t *strip_one_animation = new_strip_processing_mod(init_config);
 

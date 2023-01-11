@@ -18,7 +18,6 @@
 #include "shared_constants/shared_constants.h"
 #include "matrix_animation_thread/led_matrix_runtime.h"
 
-#define WEIGHTED_AVERAGE_INTERVAL 1000
 #define TARGET_BASELINE_AMPLITUDE 800
 #define INTRO_MIC_OFFSET 30000
 #define CONFIG_EXAMPLES_ADC_MONITOR_DEVPATH "/dev/hpadc0"
@@ -28,9 +27,6 @@
  * @brief LOCAL VARIABLE DECLARAIONS
  */
 
-// Automatic gain control algorithm:
-//
-static struct work_s adc_average_offset_calc;
 /**
  * @brief Structure containing all relevant ADC structure information for capturing ADC data
  */
@@ -48,14 +44,6 @@ typedef struct adc_struct
 
 static adc_struct_t *adc;
 
-static void average_offset_wq(int argc, char *argv[])
-{
-    //adc->offset = adc->average - TARGET_BASELINE_AMPLITUDE;
-    // Reschedule!
-
-    printf("New offfset %d\n", adc->average);
-    int ret = work_queue(LPWORK, &adc_average_offset_calc, (worker_t)average_offset_wq, NULL, MSEC2TICK(WEIGHTED_AVERAGE_INTERVAL));
-}
 /**
  * @returns new adc structure with allocated filture and data sizes
  */
@@ -114,7 +102,7 @@ int init_adc_reading(adc_struct_t *adc)
         errval = 4;
         return errval;
     }
-    // Default offsetwxxuj
+    // Default offset
     adc->offset = 0;
     printf("Opened ADC module\n");
 
@@ -147,12 +135,6 @@ int init_adc_reading(adc_struct_t *adc)
 
     printf("Completed ADC init.\n");
 
-    ret = work_queue(LPWORK, &adc_average_offset_calc, (worker_t)average_offset_wq, NULL, MSEC2TICK(WEIGHTED_AVERAGE_INTERVAL));
-    if (ret < 0)
-    {
-        printf("Couldn't initialize average weighted offset calulation workqueue\n");
-        errval = errno;
-    }
     return errval;
 }
 

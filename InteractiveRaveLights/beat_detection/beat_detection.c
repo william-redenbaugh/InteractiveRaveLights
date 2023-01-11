@@ -36,7 +36,7 @@ static void beat_checks_wq(int argc, char *argv[])
     int ave_bpm = num_increment * 12;
     num_increment = 0;
 
-    printf("Average BPM %d\n", ave_bpm);
+    //printf("Average BPM %d\n", ave_bpm);
     int ret = work_queue(LPWORK, &beat_checks_worker, (worker_t)beat_checks_wq, NULL, MSEC2TICK(BEAT_DETECTION_INTERVAL));
 }
 
