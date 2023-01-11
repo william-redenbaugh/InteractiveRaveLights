@@ -612,7 +612,8 @@ strip_two_module.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights
  shared_constants/shared_constants.h \
  /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_const_structs.h \
  /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/arm_common_tables.h \
- /home/wredenba/spresense/nuttx/include/nuttx/wqueue.h
+ /home/wredenba/spresense/nuttx/include/nuttx/wqueue.h \
+ strip_animation_module/strip_animation_module.h
 strip_update_thread.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  led_strip_threads/strip_update_thread.c \
  led_strip_threads/strip_modules.h \
@@ -1345,6 +1346,7 @@ strip_animation_module.c.home.wredenba.git.InteractiveRaveLights.InteractiveRave
  /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/filtering_functions.h \
  /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/support_functions.h \
  /home/wredenba/spresense/sdk/../externals/cmsis/CMSIS_5/CMSIS/DSP/Include/dsp/quaternion_math_functions.h \
+ /home/wredenba/spresense/nuttx/include/nuttx/wqueue.h \
  led_strip_threads/strip_modules.h fft_runtime/fft_copy_thread.h
 strip_update_module.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  strip_update_module/strip_update_module.c \

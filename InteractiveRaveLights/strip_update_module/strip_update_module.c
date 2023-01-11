@@ -49,10 +49,13 @@ strip_update_thread_t *new_strip_update_thread(int num_leds, char *spi_path){
     head->strip = setup_ws2812b_strip(num_leds, spi_path);
     head->num_leds = num_leds;
     head->strip_cols = malloc(sizeof(rgb_color) * num_leds);
+    // Zero out the data.
+    memset(head->strip_cols, 0, sizeof(rgb_color) * num_leds);
     head->runtime_func = strip_update_mod_thread_runtime;
 
     // Initialize the mutex.
     pthread_mutex_init(&head->muttx, NULL);
+
 
     return head;
 }

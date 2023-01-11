@@ -17,17 +17,25 @@
 
 static strip_animation_mod_t *ani_mod;
 
-strip_animation_mod_t *setup_strip_processing_mode(int upper_bounds, int lower_bounds){
+strip_animation_mod_t *setup_strip_processing_mode(int lower_bounds, int upper_bounds){
     strip_animation_mod_init_t init_config;
 
-    // Populate configuration variables
+    init_config.fft_data_size = 128 * sizeof(q15_t);
     init_config.num_intervals = 12;
     init_config.strip = strip_mod;
     init_config.init_type = STRIP_ANIMATION_TYPE_ONE;
     init_config.fft_copy_buffer = fft_copy_buffer;
     init_config.strip_upper_bounds = upper_bounds;
     init_config.strip_lower_bounds = lower_bounds;
-    init_config.fft_data_size = 128;
+
+    init_config.hue_high = 120;
+    init_config.hue_low = 80;
+
+    init_config.brightness_high = 30;
+    init_config.brightness_low = 30;
+
+    init_config.saturation_high = 255;
+    init_config.saturation_low = 200;
 
     // Instanciate!
     strip_animation_mod_t *strip_one_animation = new_strip_processing_mod(init_config);
@@ -37,9 +45,8 @@ strip_animation_mod_t *setup_strip_processing_mode(int upper_bounds, int lower_b
 
 void led_strip_thread_one_init(void *params)
 {
-   ani_mod = setup_strip_processing_mode(0, 96);
+    ani_mod = setup_strip_processing_mode(0, 96);
 }
-
 
 void led_strip_thread_one(void *params)
 {

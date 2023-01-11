@@ -1,61 +1,96 @@
 #include "strip_animation_module.h"
 #include "led_strip_threads/strip_modules.h"
 #include "fft_runtime/fft_copy_thread.h"
+#include "strip_update_module/strip_update_module.h"
+#include "nuttx/wqueue.h"
 
+#define PEAK_MANAGEMENT_INTERVAL_MS 5000
+
+static void peak_management_wq(int argc, char *argv[]){
+    strip_animation_mod_t *mod = (strip_animation_mod_t*)argv;
+    printf("Got this far\n");
+    //int ret = work_queue(LPWORK, &mod->peak_management_wq_handle, (worker_t)peak_management_wq, arg, MSEC2TICK(PEAK_MANAGEMENT_INTERVAL_MS));
+}
 strip_animation_mod_t *new_strip_processing_mod(strip_animation_mod_init_t init){
     strip_animation_mod_t *mod = malloc(sizeof(strip_animation_mod_t));
 
+    // Which animation we are using!
     mod->current_animation = init.init_type;
-    mod->high_freq_divider = 55;
+
+    // FFT copy buffer for dealing with animations!
+    mod->fft_copy_buffer = init.fft_copy_buffer;
+    mod->fft_data_size = init.fft_data_size;
+    mod->fft_data = malloc(sizeof(q15_t) * mod->fft_data_size);
+
+    // How many bars are we using?
+    mod->num_intervals = init.num_intervals;
+
+    // Peaks matrix and peaks divider( apply divider across entire spectrum)
+    mod->values_matrix = malloc(mod->num_intervals * sizeof(int));
+    mod->peaks_matrix = malloc(mod->num_intervals * sizeof(int));
+    memset(mod->values_matrix, 0, sizeof(int) * mod->num_intervals);
+    memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_intervals);
+
+    mod->high_freq_divider = 100;
     mod->low_freq_divider = 600;
-    mod->strip = init.strip;
+
+    mod->strip = strip_mod;
     mod->strip_pos_lower_bounds = init.strip_lower_bounds;
     mod->strip_pos_upper_bounds = init.strip_upper_bounds;
+
+    // calculate number LEDS based off upper and lower bounds
     mod->num_leds = init.strip_upper_bounds - init.strip_lower_bounds;
-    mod->fft_data_size = init.fft_data_size;
-    mod->fft_data = malloc(sizeof(q15_t) * init.fft_data_size);
-    mod->fft_copy_buffer = init.fft_copy_buffer;
-    // Calculate the size of the bars
-    mod->num_intervals = init.num_intervals;
     mod->interval_bar_size = mod->num_leds / mod->num_intervals;
-    mod->values_matrix = malloc(mod->num_intervals * sizeof(int));
-    mod->hue_offset = init.hue_offset;
+
+    // Hue shift as song intensity increases
+    mod->hue_high = init.hue_high;
+    mod->hue_low = init.hue_low;
+    mod->hue_divider = (mod->hue_high - mod->hue_low) / mod->interval_bar_size;
+
+    // Helps manage animation for brightness as intensity increases
+    mod->brightness_high = init.brightness_high;
+    mod->brightness_low = init.brightness_low;
+    mod->brightness_divider = (mod->brightness_high - mod->brightness_low) / mod->interval_bar_size;
+
+    // Helps manage animation for saturation as volume increases
+    mod->saturation_high = init.saturation_high;
+    mod->saturation_low = init.saturation_low;
+    mod->saturation_divider = (mod->saturation_high - mod->saturation_low) / mod->interval_bar_size;
     return mod;
 }
 
+
 static inline void strip_peak_drop_decrement(strip_animation_mod_t *mod){
-    for(int x = 0; x < mod->num_intervals; x++)
+    for(int x = 0; x < 12; x++)
         if(mod->values_matrix[x] > 0)
-            mod->values_matrix--;
+            mod->values_matrix[x]--;
 }
 
 static inline void clear_strip(strip_animation_mod_t *mod){
-    for(int n = 0; n < mod->num_leds; n++){
+    for(int n = mod->strip_pos_lower_bounds; n < mod->strip_pos_upper_bounds; n++){
         strip_set_leds(mod->strip, n, 0, 0, 0);
     }
 }
 
-static inline void manage_peaks(strip_animation_mod_t *mod){
-    for(int n = 0; n < mod->num_intervals; n++){
-        int value  = mod->fft_data[30 + n * 8];
-        hsv_color col;
-        col.h = value / (2 * mod->high_freq_divider / 35);
-        col.v = 30;
+static void manage_peaks(strip_animation_mod_t *mod){
+    for(int n = 0; n <  mod->num_intervals; n++){
+        int value  = mod->fft_data[31 + n * mod->interval_bar_size];
 
-        int saturation = 555 - (value / (mod->high_freq_divider / 35));
-        if (saturation > 255)
-            saturation = 255;
-        // Negative clipping
-        if (saturation < 0)
-            saturation = 0;
-        col.s = saturation;
+        hsv_color col;
         value = value / mod->high_freq_divider;
 
-        if(mod->values_matrix[n] < value)
+        if(value > mod->interval_bar_size)
+            value = mod->interval_bar_size;
+
+        col.h = mod->hue_low + value * mod->hue_divider;
+        col.s = mod->saturation_high - (value * mod->saturation_divider);
+        col.v = mod->brightness_low + value * mod->brightness_divider;
+
+        if(mod->values_matrix[n] <= value)
             mod->values_matrix[n] = value;
 
         for(int y = 0; y < mod->values_matrix[n]; y++){
-            strip_set_leds(mod->strip, n * 8 + y, col.h, col.s, col.v);
+            strip_set_leds_hsv(mod->strip, mod->strip_pos_lower_bounds + n * 8 + y, col.h, col.s, col.v);
         }
     }
 }
@@ -65,6 +100,7 @@ static inline void animation_type_one(strip_animation_mod_t *mod){
     mod->fft_copy_buffer(mod->fft_data, mod->fft_data_size);
     strip_peak_drop_decrement(mod);
     clear_strip(mod);
+    manage_peaks(mod);
     usleep(10000);
 }
 
@@ -77,5 +113,6 @@ void strip_processing_runtime(strip_animation_mod_t *mod){
             default:
             break;
         }
+
     }
 }

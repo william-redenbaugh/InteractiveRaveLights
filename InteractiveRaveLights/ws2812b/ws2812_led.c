@@ -61,7 +61,7 @@ WS2812B_t *setup_ws2812b_strip(int num_leds, const char *bus)
         strip->txbuff[i] = 0x00;
 
     update_ws2812b_strip(strip);
-    return strip;
+        return strip;
 }
 
 int update_ws2812b_strip(WS2812B_t *strip)
