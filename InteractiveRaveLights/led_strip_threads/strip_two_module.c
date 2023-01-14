@@ -24,15 +24,15 @@ void led_strip_thread_two_init(void *params)
     init_config.fft_data_size = 128 * sizeof(q15_t);
     init_config.num_intervals = 12;
     init_config.strip = strip_mod;
-    init_config.init_type = STRIP_ANIMATION_TYPE_ONE;
+    init_config.init_type = STRIP_ANIMATION_TYPE_TWO;
     init_config.fft_copy_buffer = fft_copy_buffer;
-    init_config.strip_upper_bounds = 191;
-    init_config.strip_lower_bounds = 97;
+    init_config.strip_upper_bounds = 192;
+    init_config.strip_lower_bounds = 96;
     init_config.hue_high = 240;
     init_config.hue_low = 80;
     init_config.delay_frametime_us = 10000;
-    init_config.brightness_high = 30;
-    init_config.brightness_low = 30;
+    init_config.brightness_high = 50;
+    init_config.brightness_low = 0;
 
     init_config.saturation_high = 255;
     init_config.saturation_low = 200;

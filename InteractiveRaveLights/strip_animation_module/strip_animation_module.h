@@ -11,6 +11,7 @@
 typedef enum strip_animaton_type{
     STRIP_ANIMATION_END = 0,
     STRIP_ANIMATION_TYPE_ONE,
+    STRIP_ANIMATION_TYPE_TWO,
 
 }strip_animation_type_t;
 
@@ -77,7 +78,7 @@ typedef struct{
     int num_intervals;
     void (*fft_copy_buffer)(q15_t *buff, size_t size);
 
-}strip_animation_mod_init_t
+}strip_animation_mod_init_t;
 
 /**
  * @brief Wherever you put the processing runtime thread, let this be the only function
