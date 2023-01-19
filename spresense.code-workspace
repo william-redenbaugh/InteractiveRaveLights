@@ -13,7 +13,7 @@
 		"spresense.sdk.path": "/home/wredenba/spresense",
 		"spresense.sdk.tools.path": "/home/wredenba/spresense/sdk/tools",
 		"terminal.integrated.env.linux": {
-			"PATH": "/home/wredenba/spresenseenv/usr/bin:/home/wredenba/.local/bin:/home/wredenba/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+			"PATH": "/home/wredenba/spresenseenv/usr/bin:/home/wredenba/.local/bin:/home/wredenba/.local/bin:/home/wredenba/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
 		},
 		"spresense.env.toolchain.path": "/home/wredenba/spresenseenv/usr/bin",
 		"cortex-debug.armToolchainPath": "/home/wredenba/spresenseenv/usr/bin",

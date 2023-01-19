@@ -12,7 +12,7 @@ typedef enum strip_animaton_type{
     STRIP_ANIMATION_END = 0,
     STRIP_ANIMATION_TYPE_ONE,
     STRIP_ANIMATION_TYPE_TWO,
-
+    STRIP_ANIMATION_TYPE_THREE,
 }strip_animation_type_t;
 
 /**
@@ -21,6 +21,7 @@ typedef enum strip_animaton_type{
 */
 typedef struct strip_animation_mod{
     pthread_mutex_t animation_mttx;
+    bool animation_changed;
     int delay_frametime_us;
     strip_animation_type_t current_animation;
     void (*fft_copy_buffer)(q15_t *buff, size_t size);

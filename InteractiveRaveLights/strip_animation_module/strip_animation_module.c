@@ -12,10 +12,51 @@ static void peak_management_wq(int argc, char *argv[]){
     //int ret = work_queue(LPWORK, &mod->peak_management_wq_handle, (worker_t)peak_management_wq, arg, MSEC2TICK(PEAK_MANAGEMENT_INTERVAL_MS));
 }
 
+static void setup_animation_variables(strip_animation_mod_t *mod){
+
+    if(mod->peaks_matrix != NULL){
+        free(mod->peaks_matrix);
+        mod->peaks_matrix = NULL;
+    }
+
+    if(mod->values_matrix != NULL){
+        free(mod->values_matrix);
+        mod->values_matrix = NULL;
+    }
+
+    switch(mod->current_animation){
+            case STRIP_ANIMATION_END:
+
+            case STRIP_ANIMATION_TYPE_ONE:
+                mod->values_matrix = malloc(mod->num_intervals * sizeof(int));
+                mod->peaks_matrix = malloc(mod->num_intervals * sizeof(int));
+                memset(mod->values_matrix, 0, sizeof(int) * mod->num_intervals);
+                memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_intervals);
+            break;
+
+            case STRIP_ANIMATION_TYPE_TWO:
+                mod->values_matrix = malloc(mod->num_intervals * sizeof(int));
+                mod->peaks_matrix = malloc(mod->num_intervals * sizeof(int));
+                memset(mod->values_matrix, 0, sizeof(int) * mod->num_intervals);
+                memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_intervals);
+            break;
+
+
+            case STRIP_ANIMATION_TYPE_THREE:
+                mod->peaks_matrix = malloc(mod->num_leds * sizeof(int));
+                memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_leds);
+
+            break;
+            default:
+            break;
+        }
+}
+
 strip_animation_mod_t *new_strip_processing_mod(strip_animation_mod_init_t init){
     strip_animation_mod_t *mod = malloc(sizeof(strip_animation_mod_t));
     // Setup mutex
     pthread_mutex_init(&mod->animation_mttx, NULL);
+    mod->animation_changed = false;
     // animation speed
     mod->delay_frametime_us = init.delay_frametime_us;
 
@@ -61,6 +102,8 @@ strip_animation_mod_t *new_strip_processing_mod(strip_animation_mod_init_t init)
     mod->saturation_high = init.saturation_high;
     mod->saturation_low = init.saturation_low;
     mod->saturation_divider = (mod->saturation_high - mod->saturation_low) / mod->interval_bar_size;
+
+    setup_animation_variables(mod);
     return mod;
 }
 
@@ -90,6 +133,18 @@ static hsv_color calculate_bar_hsv(strip_animation_mod_t *mod, int value, int n)
     col.h = mod->hue_low + mod->values_matrix[n] * mod->hue_divider;
     col.s = mod->saturation_high - (mod->values_matrix[n] * mod->saturation_divider);
     col.v = mod->brightness_low + mod->values_matrix[n] * mod->brightness_divider;
+
+    return col;
+}
+
+static hsv_color calculate_led_hsv(strip_animation_mod_t *mod, int value){
+    hsv_color col;
+
+    int new_value = value / mod->high_freq_divider;
+
+    col.h = mod->hue_low + new_value * mod->hue_divider;
+    col.s = mod->saturation_high - (new_value * mod->saturation_divider);
+    col.v = mod->brightness_low + new_value * mod->brightness_divider;
 
     return col;
 }
@@ -127,12 +182,29 @@ static inline void animation_type_one(strip_animation_mod_t *mod){
 static inline void animation_type_two(strip_animation_mod_t *mod){
     strip_peak_drop_decrement(mod);
     strip_manage_bars(mod);
+}
 
+static inline void animation_type_three(strip_animation_mod_t *mod){
+    // This animation doesn't work if the FFT buffer isn't as big as the strip
+    if(mod->fft_data_size < mod->num_leds)
+        return;
+
+    for(int n = 0; n < mod->num_leds; n++){
+        mod->peaks_matrix[n]--;
+        if(mod->fft_data[n] >= mod->peaks_matrix[n])
+            mod->peaks_matrix[n] = mod->fft_data;
+
+        hsv_color led_color = calculate_led_hsv(mod, mod->peaks_matrix[n]);
+        strip_set_leds_hsv(mod->strip + mod->strip_pos_lower_bounds, n, led_color.h, led_color.s, led_color.v);
+    }
 }
 
 void strip_processing_runtime(strip_animation_mod_t *mod){
     for(;;){
         mod->fft_copy_buffer(mod->fft_data, mod->fft_data_size);
+        if(mod->animation_changed){
+            setup_animation_variables(mod);
+        }
         pthread_mutex_lock(&mod->animation_mttx);
         switch(mod->current_animation){
             case STRIP_ANIMATION_END:
@@ -144,6 +216,12 @@ void strip_processing_runtime(strip_animation_mod_t *mod){
 
             case STRIP_ANIMATION_TYPE_TWO:
             animation_type_two(mod);
+            break;
+
+
+            case STRIP_ANIMATION_TYPE_THREE:
+            animation_type_three(mod);
+            break;
             default:
             break;
         }
@@ -155,5 +233,6 @@ void strip_processing_runtime(strip_animation_mod_t *mod){
 void stop_animation(strip_animation_mod_t *mod){
     pthread_mutex_lock(&mod->animation_mttx);
     mod->current_animation = STRIP_ANIMATION_END;
+    mod->animation_changed = true;
     pthread_mutex_unlock(&mod->animation_mttx);
 }
