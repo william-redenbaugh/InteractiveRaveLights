@@ -7,19 +7,22 @@
 
 /**
  * @brief Different animation types to set for the strip animation module
-*/
-typedef enum strip_animaton_type{
-    STRIP_ANIMATION_END = 0,
+ */
+typedef enum strip_animaton_type
+{
+    STRIP_ANIMATION_OFF = 0,
     STRIP_ANIMATION_TYPE_ONE,
     STRIP_ANIMATION_TYPE_TWO,
     STRIP_ANIMATION_TYPE_THREE,
-}strip_animation_type_t;
+    STRIP_ANIMATION_TYPE_FADE_OUT,
+} strip_animation_type_t;
 
 /**
  * @brief Module that contains all the variables needed for strip animations
  * @note Must be used by calling  "new_strip_processing_mod", do not make your own structure
-*/
-typedef struct strip_animation_mod{
+ */
+typedef struct strip_animation_mod
+{
     pthread_mutex_t animation_mttx;
     bool animation_changed;
     int delay_frametime_us;
@@ -47,7 +50,7 @@ typedef struct strip_animation_mod{
     int brightness_low;
     int brightness_high;
     int brightness_divider;
-}strip_animation_mod_t;
+} strip_animation_mod_t;
 
 /**
  * @brief Initialization structure for strip animations
@@ -62,8 +65,9 @@ typedef struct strip_animation_mod{
  * @param size_t fft_data_size: How big is the buffer we will copy over
  * @param int num_intervals: how many segments we want for our animation
  * @param fft_copy_buffer: Pointer to function where we'll copy our fft data from, must be async friendly!
-*/
-typedef struct{
+ */
+typedef struct
+{
     int delay_frametime_us;
     int strip_upper_bounds;
     int strip_lower_bounds;
@@ -79,13 +83,13 @@ typedef struct{
     int num_intervals;
     void (*fft_copy_buffer)(q15_t *buff, size_t size);
 
-}strip_animation_mod_init_t;
+} strip_animation_mod_init_t;
 
 /**
  * @brief Wherever you put the processing runtime thread, let this be the only function
  * you call in there, this function shouldn't ever return
  * @param strip_animation_mod_t* pointer to the strip_animation handler
-*/
+ */
 void strip_processing_runtime(strip_animation_mod_t *mod);
 
 /**
@@ -93,12 +97,12 @@ void strip_processing_runtime(strip_animation_mod_t *mod);
  * @param strip_animation_mod_init_t structure with all animation variables
  * @return strip_animation_mod_t* pointer to allocated memory used as structure for strip animation module
  * @note please populate init structure with correct variables based off design criteria
-*/
+ */
 strip_animation_mod_t *new_strip_processing_mod(strip_animation_mod_init_t init);
 
 /**
  * @brief Stops the animation, makes strip segment go blank
  * @param strip_animation_mod_t* pointer to the correct strip animation
-*/
+ */
 void stop_animation(strip_animation_mod_t *mod);
 #endif
