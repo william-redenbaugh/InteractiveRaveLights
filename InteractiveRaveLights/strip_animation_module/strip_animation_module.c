@@ -51,6 +51,8 @@ static void setup_animation_variables(strip_animation_mod_t *mod)
         memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_leds);
         break;
 
+    case STRIP_ANIMATION_TYPE_FADE_OUT:
+        mod->fade_out_vals.leds_strip_active = true;
     default:
         break;
     }
@@ -226,11 +228,9 @@ static inline void animation_type_three(strip_animation_mod_t *mod)
  */
 static inline void animation_type_fade_out(strip_animation_mod_t *mod)
 {
-    bool leds_strip_active = true;
-    // Keep on lowering down the led brightness til they are all dark
-    while (leds_strip_active)
+    if (mod->fade_out_vals.leds_strip_active)
     {
-        leds_strip_active = false;
+        mod->fade_out_vals.leds_strip_active = false;
 
         // Look through entire strip's leds
         for (int n = 0; n < mod->num_leds; n++)
@@ -240,17 +240,17 @@ static inline void animation_type_fade_out(strip_animation_mod_t *mod)
             // If we still need to decrement we will go through it one more time
             if (led_color.r > 0)
             {
-                leds_strip_active = true;
+                mod->fade_out_vals.leds_strip_active = true;
                 led_color.r--;
             }
             if (led_color.g > 0)
             {
-                leds_strip_active = true;
+                mod->fade_out_vals.leds_strip_active = true;
                 led_color.g--;
             }
             if (led_color.b > 0)
             {
-                leds_strip_active = true;
+                mod->fade_out_vals.leds_strip_active = true;
                 led_color.b--;
             }
 
@@ -289,7 +289,7 @@ void strip_processing_runtime(strip_animation_mod_t *mod)
             break;
 
         case STRIP_ANIMATION_TYPE_FADE_OUT:
-
+            animation_type_fade_out(mod);
             break;
         default:
             break;

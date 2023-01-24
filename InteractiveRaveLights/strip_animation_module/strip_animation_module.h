@@ -17,6 +17,10 @@ typedef enum strip_animaton_type
     STRIP_ANIMATION_TYPE_FADE_OUT,
 } strip_animation_type_t;
 
+typedef struct fade_out_vals
+{
+    bool leds_strip_active;
+} fade_out_vals_t;
 /**
  * @brief Module that contains all the variables needed for strip animations
  * @note Must be used by calling  "new_strip_processing_mod", do not make your own structure
@@ -50,6 +54,8 @@ typedef struct strip_animation_mod
     int brightness_low;
     int brightness_high;
     int brightness_divider;
+
+    fade_out_vals_t fade_out_vals;
 } strip_animation_mod_t;
 
 /**
