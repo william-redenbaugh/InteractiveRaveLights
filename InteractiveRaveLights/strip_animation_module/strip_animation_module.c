@@ -53,6 +53,9 @@ static void setup_animation_variables(strip_animation_mod_t *mod)
 
     case STRIP_ANIMATION_TYPE_FADE_OUT:
         mod->fade_out_vals.leds_strip_active = true;
+
+    case STRIP_ANIMATION_TYPE_FADE_RAINBOW:
+        mod->fade_out_vals.leds_strip_active = true;
     default:
         break;
     }
@@ -61,6 +64,7 @@ static void setup_animation_variables(strip_animation_mod_t *mod)
 strip_animation_mod_t *new_strip_processing_mod(strip_animation_mod_init_t init)
 {
     strip_animation_mod_t *mod = malloc(sizeof(strip_animation_mod_t));
+    memset(mod, 0, sizeof(strip_animation_mod_t));
     // Setup mutex
     pthread_mutex_init(&mod->animation_mttx, NULL);
     mod->animation_changed = false;
@@ -257,8 +261,67 @@ static inline void animation_type_fade_out(strip_animation_mod_t *mod)
             strip_set_leds(mod->strip, n + mod->strip_pos_lower_bounds, led_color.r, led_color.g, led_color.b);
         }
     }
+    // If we've reached the end of the fade out animation, we turn off the stirp animation engine
+    if(mod->fade_out_vals.leds_strip_active == false){
+        mod->current_animation = STRIP_ANIMATION_OFF;
+    }
+}
 
-    mod->current_animation = STRIP_ANIMATION_OFF;
+static inline void animation_type_fade_in_rainbow(strip_animation_mod_t *mod){
+    if (mod->fade_out_vals.leds_strip_active)
+    {
+        mod->fade_out_vals.leds_strip_active = false;
+        // Look through entire strip's leds
+        for (int n = 0; n < mod->num_leds; n++)
+        {
+
+            rgb_color led_color = strip_get_leds_rgb(mod->strip, n + mod->strip_pos_lower_bounds);
+
+            // If we still need to decrement we will go through it one more time
+            if (led_color.r > 0)
+            {
+                mod->fade_out_vals.leds_strip_active = true;
+                led_color.r--;
+            }
+            if (led_color.g > 0)
+            {
+                mod->fade_out_vals.leds_strip_active = true;
+                led_color.g--;
+            }
+            if (led_color.b > 0)
+            {
+                mod->fade_out_vals.leds_strip_active = true;
+                led_color.b--;
+            }
+
+            strip_set_leds(mod->strip, n + mod->strip_pos_lower_bounds, led_color.r, led_color.g, led_color.b);
+        }
+    }
+    // If we've reached the end of the fade out animation, we turn off the stirp animation engine
+    if(mod->fade_out_vals.leds_strip_active == false){
+        mod->current_animation = STRIP_ANIMATION_OFF;
+    }
+}
+
+void animation_type_rainbow_one(strip_animation_mod_t *mod){
+    uint8_t h = mod->animation_vals.current_h_pos;
+    uint8_t s = mod->animation_vals.current_s_pos;
+    uint8_t v = mod->animation_vals.current_v_pos;
+
+    mod->animation_vals.current_h_pos++;
+
+    for(int n = 0; n < mod->num_intervals; n++){
+        uint8_t current_h_val = (n + h) % 255;
+
+        hsv_color col;
+        col.h = current_h_val;
+        col.s = s;
+        col.v = v;
+
+        rgb_color rgb_col = hsv2rgb(col);
+
+        strip_set_leds(mod->strip, n + mod->strip_pos_lower_bounds, rgb_col.r, rgb_col.g, rgb_col.b);
+    }
 }
 
 void strip_processing_runtime(strip_animation_mod_t *mod)
@@ -292,6 +355,7 @@ void strip_processing_runtime(strip_animation_mod_t *mod)
             animation_type_fade_out(mod);
             break;
         default:
+            animation_type_fade_in_rainbow(mod);
             break;
         }
         pthread_mutex_unlock(&mod->animation_mttx);
