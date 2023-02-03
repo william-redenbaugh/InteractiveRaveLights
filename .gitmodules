@@ -10,3 +10,6 @@
 [submodule "stripCoProcessor/lib/NeoPixelConnect"]
 	path = stripCoProcessor/lib/NeoPixelConnect
 	url = git@github.com:MrYsLab/NeoPixelConnect.git
+[submodule "InteractiveRaveLights/tiny-json"]
+	path = InteractiveRaveLights/tiny-json
+	url = https://github.com/rafagafe/tiny-json.git
