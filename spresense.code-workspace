@@ -31,7 +31,8 @@
 			"pubsub.h": "c",
 			"beat_detection.h": "c",
 			"hsv2rgb.h": "c",
-			"pthread.h": "c"
+			"pthread.h": "c",
+			"stdint.h": "c"
 		}
 	}
 }
