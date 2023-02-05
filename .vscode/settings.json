@@ -1,0 +1,3 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}/InteractiveRaveLights/pubsub-c/ports/esp32"
+}

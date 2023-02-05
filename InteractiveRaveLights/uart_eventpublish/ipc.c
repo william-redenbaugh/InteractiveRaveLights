@@ -8,7 +8,7 @@
 #include "termios.h"
 #include "stdint.h"
 
-ipc_message_header_t get_header(int uart_fd)
+ipc_message_header_t ipc_get_header(int uart_fd)
 {
     // Get message header bytes:
     uint8_t header_arr[IPC_MESSAGE_HANDLER_SIZE];
@@ -81,4 +81,5 @@ bool serialize_message_header(ipc_message_header_t msg, uint8_t *buffer, size_t 
 
 bool ipc_send_error_message(int fd)
 {
+    char error_str[] = "{\" return_status \": \" error \"}";
 }

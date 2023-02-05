@@ -1508,6 +1508,28 @@ ipc.c.Users.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  /Users/wredenba/spresense/nuttx/include/nuttx/addrenv.h \
  /Users/wredenba/spresense/nuttx/include/fcntl.h \
  /Users/wredenba/spresense/nuttx/include/termios.h
+ipc_message_publishqueue.c.Users.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
+ uart_eventpublish/ipc_message_publishqueue.c \
+ uart_eventpublish/ipc_message_publishqueue.h uart_eventpublish/ipc.h \
+ /Users/wredenba/spresense/nuttx/include/stdint.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/config.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/compiler.h \
+ /Users/wredenba/spresense/nuttx/include/arch/types.h \
+ /Users/wredenba/spresense/nuttx/include/arch/inttypes.h \
+ /Users/wredenba/spresense/nuttx/include/limits.h \
+ /Users/wredenba/spresense/nuttx/include/arch/limits.h \
+ /Users/wredenba/spresense/nuttx/include/strings.h \
+ /Users/wredenba/spresense/nuttx/include/string.h \
+ /Users/wredenba/spresense/nuttx/include/stddef.h \
+ /Users/wredenba/spresense/nuttx/include/sys/types.h \
+ /Users/wredenba/spresense/nuttx/include/nuttx/b2c.h \
+ /Users/wredenba/spresense/nuttx/include/stdbool.h \
+ /Users/wredenba/spresense/nuttx/include/pthread.h \
+ /Users/wredenba/spresense/nuttx/include/sys/prctl.h \
+ /Users/wredenba/spresense/nuttx/include/unistd.h \
+ /Users/wredenba/spresense/nuttx/include/signal.h \
+ /Users/wredenba/spresense/nuttx/include/time.h \
+ /Users/wredenba/spresense/nuttx/include/semaphore.h
 ipc_thread.c.Users.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  uart_eventpublish/ipc_thread.c uart_eventpublish/ipc_thread.h \
  /Users/wredenba/spresense/nuttx/include/pthread.h \

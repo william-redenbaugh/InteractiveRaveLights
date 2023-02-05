@@ -10,6 +10,13 @@
  */
 #define BUFF_ARR_MAX_SIZE 4096
 
+enum ipc_message_type_enum
+{
+    IPC_MESSAGE_ERROR = 0,
+    IPC_MESSAGE_JSON,
+    IPC_MESSAGE_BYTEARRAY,
+} ipc_message_type_enum_t;
+
 /**
  * @brief Message header before we get the actual JSON message so we known the length of the string
  */
@@ -52,5 +59,5 @@ bool ipc_send_error_message(int fd);
  * @return ipc_message_header_t header data
  * @note will return -1 in header message len if data is not captured correctly
  */
-ipc_message_header_t get_header(int uart_fd);
+ipc_message_header_t ipc_get_header(int uart_fd);
 #endif

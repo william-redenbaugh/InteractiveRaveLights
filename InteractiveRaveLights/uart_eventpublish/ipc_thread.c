@@ -12,13 +12,13 @@
 #include "stdint.h"
 
 int uart_fd = -1;
-uint8_t *json_char_arr;
+uint8_t *content_buffer_arr;
 
 void uart_ipc_thread(void *params)
 {
     uart_fd = open("/dev/ttyS2", O_RDWR);
     // String buffer array for us to
-    json_char_arr = malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
+    content_buffer_arr = malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
 
     if (uart_fd < 0)
     {
@@ -27,7 +27,7 @@ void uart_ipc_thread(void *params)
 
     for (;;)
     {
-        ipc_message_header_t header = get_header(uart_fd);
+        ipc_message_header_t header = ipc_get_header(uart_fd);
         // If string is larger than buffer we can't accept the string
         if (header.message_len > BUFF_ARR_MAX_SIZE)
         {
@@ -35,10 +35,14 @@ void uart_ipc_thread(void *params)
             // Let message pass
             // Wait 1 second
             usleep(1000000);
-
             // Flush buffer
             tcflush(uart_fd, TCIOFLUSH);
             // Send error
+        }
+        else
+        {
+            // Get
+            int ret = read(uart_fd, content_buffer_arr, header.message_len);
         }
     }
 }
