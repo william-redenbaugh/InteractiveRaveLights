@@ -3,6 +3,8 @@
 #include "ipc.h"
 #include "pthread.h"
 
+#define IPC_QUEUE_MAX_NUM_ELEMENTS 128
+
 typedef enum ipc_message_callback_status
 {
     IPC_MESSAGE_COMPLETE_SUCCESS,
@@ -23,12 +25,21 @@ typedef struct ipc_message_node{
 } ipc_message_node_t;
 
 typedef struct ipc_message_publish_module{
-    ipc_message_node_t *head_node;
+    ipc_message_node_t *node_list;
+    size_t max_size;
+    size_t current_size;
+    size_t current_pos;
+
     pthread_mutex_t ipc_message_node_muttx;
 }ipc_message_publish_module_t;
 
-extern ipc_message_publish_module_t ipc_publush_queue_module;
+extern ipc_message_publish_module_t *ipc_publush_queue_module;
 
-bool ipc_publish_message();
+bool _ipc_publish_message(ipc_message_publish_module_t *module, ipc_message_node_t node);
+bool ipc_publish_message(ipc_message_node_t node);
 
+/**
+ *
+*/
+ipc_message_publish_module_t *_ipc_message_queue_init(void);
 #endif
