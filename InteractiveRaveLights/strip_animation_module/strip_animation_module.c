@@ -47,6 +47,9 @@ static void setup_animation_variables(strip_animation_mod_t *mod)
         break;
 
     case STRIP_ANIMATION_TYPE_THREE:
+        printf("Re displaying array\n");
+        free(mod->peaks_matrix);
+        mod->num_intervals = mod->num_leds;
         mod->peaks_matrix = malloc(mod->num_leds * sizeof(int));
         memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_leds);
         break;
@@ -156,7 +159,6 @@ static hsv_color calculate_led_hsv(strip_animation_mod_t *mod, int value)
     hsv_color col;
 
     int new_value = value / mod->high_freq_divider;
-
     col.h = mod->hue_low + new_value * mod->hue_divider;
     col.s = mod->saturation_high - (new_value * mod->saturation_divider);
     col.v = mod->brightness_low + new_value * mod->brightness_divider;
@@ -215,12 +217,23 @@ static inline void animation_type_three(strip_animation_mod_t *mod)
 
     for (int n = 0; n < mod->num_leds; n++)
     {
-        mod->peaks_matrix[n]--;
-        if (mod->fft_data[n] >= mod->peaks_matrix[n])
-            mod->peaks_matrix[n] = mod->fft_data;
+
+        if (mod->fft_data[n + 30] >= mod->peaks_matrix[n])
+            mod->peaks_matrix[n] = mod->fft_data[n + 30];
+
+        // Peak detection
+        if(mod->peaks_matrix[n] > 2048)
+            mod->peaks_matrix[n] = 2048;
+
+        if(mod->peaks_matrix[n] > 60)
+            mod->peaks_matrix[n]-=60;
+        else{
+            mod->peaks_matrix[n] = 0;
+        }
 
         hsv_color led_color = calculate_led_hsv(mod, mod->peaks_matrix[n]);
         strip_set_leds_hsv(mod->strip + mod->strip_pos_lower_bounds, n, led_color.h, led_color.s, led_color.v);
+
     }
 }
 

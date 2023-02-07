@@ -44,5 +44,10 @@ void uart_ipc_thread(void *params)
             // Get
             int ret = read(uart_fd, content_buffer_arr, header.message_len);
         }
+
     }
+}
+
+void uart_ipc_init(void *params){
+
 }
