@@ -14,6 +14,13 @@
 int uart_fd = -1;
 uint8_t *content_buffer_arr;
 
+void uart_ipc_publish_thread(void *params)
+{
+    for (;;)
+    {
+    }
+}
+
 void uart_ipc_thread(void *params)
 {
     uart_fd = open("/dev/ttyS2", O_RDWR);
