@@ -52,7 +52,7 @@ void uart_ipc_publish_thread(void *params)
     }
 }
 
-void uart_ipc_consume_thread(void *params)
+void uart_ipc_consume_thread_init(void *params)
 {
     uart_fd = open("/dev/ttyS2", O_RDWR);
     // String buffer array for us to
@@ -62,10 +62,14 @@ void uart_ipc_consume_thread(void *params)
     {
         printf("UART had issues initializing: %d\n", uart_fd);
     }
+}
+
+void uart_ipc_consume_thread(void *params)
+{
 
     for (;;)
     {
-        ipc_message_header_t header = ipc_get_header(uart_fd);
+        ipc_message_header_t header = ipc_get_header_from_uart(uart_fd);
         // If string is larger than buffer we can't accept the string
         if (header.message_len > BUFF_ARR_MAX_SIZE)
         {
@@ -81,10 +85,20 @@ void uart_ipc_consume_thread(void *params)
         {
             // Get
             int ret = read(uart_fd, content_buffer_arr, header.message_len);
+            if (ret != header.message_len)
+            {
+                printf("Failiure to get entire message");
+                // Let message pass
+                // Wait 1 second
+                usleep(1000000);
+                // Flush buffer
+                tcflush(uart_fd, TCIOFLUSH);
+                // Send error
+            }
+            else
+            {
+                printf("parse message!");
+            }
         }
     }
-}
-
-void uart_ipc_init(void *params)
-{
 }

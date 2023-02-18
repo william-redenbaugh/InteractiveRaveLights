@@ -8,9 +8,9 @@
 #include "termios.h"
 #include "stdint.h"
 
-ipc_message_header_t ipc_get_header(int uart_fd)
+ipc_message_header_t ipc_get_header_from_uart(int uart_fd)
 {
-    // Get message header bytes:
+    // Get message header bytes
     uint8_t header_arr[IPC_MESSAGE_HANDLER_SIZE];
     ipc_message_header_t header;
     header.message_len = -1;

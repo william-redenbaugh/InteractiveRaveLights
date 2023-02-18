@@ -59,5 +59,5 @@ bool ipc_send_error_message(int fd);
  * @return ipc_message_header_t header data
  * @note will return -1 in header message len if data is not captured correctly
  */
-ipc_message_header_t ipc_get_header(int uart_fd);
+ipc_message_header_t ipc_get_header_from_uart(int uart_fd);
 #endif
