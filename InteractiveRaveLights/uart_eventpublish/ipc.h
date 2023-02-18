@@ -4,6 +4,7 @@
 #include "stdint.h"
 #include "strings.h"
 #include "stdbool.h"
+#include "../../common_ipc_enum/common_ipc_enum.h"
 
 /**
  * @brief What is the largest buffer size we'd want our array to be
