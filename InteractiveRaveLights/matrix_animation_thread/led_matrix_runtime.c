@@ -45,11 +45,31 @@ void led_matrix_init(void *ptr)
     // RGBMatrixInit(&handle);
 }
 
+<<<<<<< HEAD
 void led_matrix_runtime(void *ptr)
 {
     memset(values, 0, sizeof(values));
     for (;;)
     {
+=======
+void wait_matrix_complete(void){
+    pthread_mutex_lock(&signal_mt);
+    pthread_cond_wait(&signal_matrix_complate, &signal_mt);
+}
+
+static int values[8];
+static int values_matrix[12];
+static q15_t log_fft_data[ADC_FFT_BUFFER_SIZE];
+int decrement = 0;
+void led_matrix_runtime(void *ptr){
+
+    WS2812B_t *strip = setup_ws2812b_strip(96);
+
+    update_ws2812b_strip(strip);
+
+    for(;;){
+        fft_copy_data(fft_data, sizeof(fft_data));
+>>>>>>> 1e084991add21552c8342680bb0a67022082ec49
 
         fft_copy_buffer(fft_data, sizeof(fft_data));
         decrement++;
