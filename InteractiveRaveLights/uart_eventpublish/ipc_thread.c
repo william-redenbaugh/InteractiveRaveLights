@@ -11,6 +11,7 @@
 #include "termios.h"
 #include "stdint.h"
 #include "ipc_message_publishqueue.h"
+#include "ipc_message_subscribequeue.h"
 
 int uart_fd = -1;
 uint8_t *content_buffer_arr;
@@ -97,6 +98,7 @@ void uart_ipc_consume_thread(void *params)
             }
             else
             {
+                ipc_run_all_sub_cb(header, content_buffer_arr);
                 printf("parse message!");
             }
         }
