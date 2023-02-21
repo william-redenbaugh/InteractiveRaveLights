@@ -19,9 +19,6 @@
 static q15_t fft_data[ADC_FFT_BUFFER_SIZE];
 struct I2C1735 handle;
 
-static int values[8];
-int decrement = 0;
-
 static void draw_bitmap_red(uint8_t image[8][8])
 {
     disp_show_color(&handle, 0, 0, 0);
@@ -45,76 +42,18 @@ void led_matrix_init(void *ptr)
     // RGBMatrixInit(&handle);
 }
 
-<<<<<<< HEAD
-void led_matrix_runtime(void *ptr)
+void wait_matrix_complete(void)
 {
-    memset(values, 0, sizeof(values));
-    for (;;)
-    {
-=======
-void wait_matrix_complete(void){
-    pthread_mutex_lock(&signal_mt);
-    pthread_cond_wait(&signal_matrix_complate, &signal_mt);
 }
 
-static int values[8];
-static int values_matrix[12];
-static q15_t log_fft_data[ADC_FFT_BUFFER_SIZE];
-int decrement = 0;
-void led_matrix_runtime(void *ptr){
+void led_matrix_runtime(void *ptr)
+{
 
-    WS2812B_t *strip = setup_ws2812b_strip(96);
-
-    update_ws2812b_strip(strip);
-
-    for(;;){
+    for (;;)
+    {
         fft_copy_data(fft_data, sizeof(fft_data));
->>>>>>> 1e084991add21552c8342680bb0a67022082ec49
 
         fft_copy_buffer(fft_data, sizeof(fft_data));
-        decrement++;
-        if (decrement == 2)
-        {
-            for (int x = 0; x < 8; x++)
-            {
-                if (values[x] > 0)
-                    values[x]--;
-            }
-            decrement = 0;
-        }
-
-        for (int x = 0; x < 8; x++)
-        {
-            int value = fft_data[x * 16 + 20];
-            if (value < 0)
-                value = 0;
-            value = value / 10;
-            if (value > 7)
-                value = 7;
-
-            if (values[x] < value)
-            {
-                values[x] = value;
-            }
-
-            hsv_color hsv_col;
-            hsv_col.h = value * 15;
-            hsv_col.s = 255;
-            hsv_col.v = 255;
-
-            rgb_color rgb_col = hsv2rgb(hsv_col);
-            for (int y = 0; y < values[x]; y++)
-            {
-                uint8_t pos[2] = {y, x};
-                draw_point_color(&handle, pos, rgb_col.r, rgb_col.g, rgb_col.b);
-            }
-
-            for (int y = values[x]; y < 8; y++)
-            {
-                uint8_t pos[2] = {y, x};
-                draw_point_color(&handle, pos, 0, 0, 0);
-            }
-        }
 
         // image_test(&handle);
         usleep(10000);

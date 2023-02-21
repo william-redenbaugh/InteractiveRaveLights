@@ -1,4 +1,6 @@
 #include "ipc_message_subscribequeue.h"
+#include "ipc_message_publishqueue.h"
+#include "../common_ipc_enum/common_ipc_enum.h"
 
 ipc_subscrube_module_t *ipc_subscribe_module_main;
 
@@ -19,6 +21,19 @@ bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscru
     {
         return false;
     }
+    // No need to send an ack if the message we just received isn't an ack
+    if (IPC_TYPE_ACK == header.message_id)
+    {
+        // If we just recieved any other message though
+        // We need to send an ACK back
+        ipc_message_node_t message;
+        message.buffer_ptr = NULL;
+        message.callback_func = NULL;
+        message.message_header.message_id = IPC_TYPE_ACK;
+        message.message_header.message_len = 0;
+        message.message_header.message_type_enum = IPC_MESSAGE_ACK;
+        ipc_publish_message(message);
+    }
 
     // Hash index based off the message id.
     ipc_subscribe_cb_list_t list = mod->msg_sub_heads_list[header.message_id];
@@ -33,6 +48,7 @@ bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscru
         node->sub_cb(ret_cb);
         node = node->next;
     }
+
     pthread_mutex_unlock(&list.ipc_message_node_muttx);
 }
 

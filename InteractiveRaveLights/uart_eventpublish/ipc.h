@@ -14,6 +14,8 @@
 enum ipc_message_type_enum
 {
     IPC_MESSAGE_ERROR = 0,
+    IPC_MESSAGE_ACK,
+    IPCM_MESSAGE_NONE,
     IPC_MESSAGE_JSON,
     IPC_MESSAGE_BYTEARRAY,
 } ipc_message_type_enum_t;

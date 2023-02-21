@@ -41,15 +41,20 @@ void uart_ipc_publish_thread(void *params)
             callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL;
         }
 
-        write_size = write(uart_fd, (void *)&event_node.buffer_ptr, event_node.message_header.message_len);
-        // If we couldn't write entire message, say we failed to publish!
-        if (write_size != sizeof(ipc_message_header_t))
+        // Write message contents after
+        if (event_node.message_header.message_len > 0 | event_node.buffer_ptr != NULL)
         {
-            callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL;
+            write_size = write(uart_fd, (void *)&event_node.buffer_ptr, event_node.message_header.message_len);
+            // If we couldn't write entire message, say we failed to publish!
+            if (write_size != sizeof(ipc_message_header_t))
+            {
+                callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL;
+            }
         }
 
-        // Any cleanup needed for the published event!
-        event_node.callback_func(callback_ret);
+        if (event_node.callback_func != NULL)
+            // Any cleanup needed for the published event!
+            event_node.callback_func(callback_ret);
     }
 }
 
@@ -98,6 +103,8 @@ void uart_ipc_consume_thread(void *params)
             }
             else
             {
+                // Will run all callbacks related to a specific
+                // Enumerated message!
                 ipc_run_all_sub_cb(header, content_buffer_arr);
                 printf("parse message!");
             }
