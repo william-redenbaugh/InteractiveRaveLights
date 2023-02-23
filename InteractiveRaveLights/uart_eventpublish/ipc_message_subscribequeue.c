@@ -43,8 +43,13 @@ bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscru
     while (node != NULL)
     {
         ipc_sub_ret_cb_t ret_cb;
+
+        // The data we are passing in
         ret_cb.data = data;
+
+        // Header of data
         ret_cb.msg_header = header;
+        // Run callback
         node->sub_cb(ret_cb);
         node = node->next;
     }
