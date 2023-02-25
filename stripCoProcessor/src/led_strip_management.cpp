@@ -1,8 +1,6 @@
-#include "NeoPixelConnect.h"
 #include "led_strip_management.h"
 #include "led_matrix_generic.h"
 #include "FreeRTOS.h"
-
 
 // Create an instance of NeoPixelConnect and initialize it
 // to use GPIO pin 4 (D12) as the control pin, for a string

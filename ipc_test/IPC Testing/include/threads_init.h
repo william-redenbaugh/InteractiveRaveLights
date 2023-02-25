@@ -1,8 +1,7 @@
 #ifndef THREADS_INIT_H
 #define THREADS_INIT_H
 #include "sys/_stdint.h"
-#include "FreeRTOS.h"
-#include "task.h"
+#include "OS/OSThreadKernel.h"
 #include "ipc_thread.h"
 
 /**
@@ -17,7 +16,7 @@ typedef struct
     uint16_t stack_size;
     uint16_t priority;
     void *param;
-    TaskHandle_t *handle;
+    os_thread_id_t handle;
 } task_init_descriptor_t;
 
 /**

@@ -13,3 +13,6 @@
 [submodule "InteractiveRaveLights/tiny-json"]
 	path = InteractiveRaveLights/tiny-json
 	url = https://github.com/rafagafe/tiny-json.git
+[submodule "ipc_test/IPC Testing/lib/TeensyOS"]
+	path = ipc_test/IPC Testing/lib/TeensyOS
+	url = git@github.com:william-redenbaugh/TeensyOS.git

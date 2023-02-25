@@ -2,8 +2,10 @@
 #include <FreeRTOS.h>
 #include "task.h"
 #include "threads_init.h"
+#include "ipc_message_publishqueue.h"
+#include "threads_list.h"
+#include "ipc_thread.h"
 void setup() {
-  Serial.begin();
   threads_list_init();
 }
 
@@ -12,7 +14,6 @@ void loop() {
 }
 
 void setup1(){
-
 }
 
 void loop1(){

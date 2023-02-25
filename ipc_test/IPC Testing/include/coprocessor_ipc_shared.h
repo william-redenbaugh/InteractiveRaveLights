@@ -1,0 +1,17 @@
+#ifndef _COPROCESSOR_IPC_SHARED_H
+#define _COPROCESSOR_IPC_SHARED_H
+
+#include "stdio.h"
+
+typedef enum {
+    LED_STRIP_ONE = 0,
+    LED_STRIP_TWO,
+    LED_STRIP_THREE
+}led_strip_t;
+
+#define NUM_PIXELS_PER_STRIP 96
+#define NUM_COLS_PER_PIXEL 3
+#define NUM_STRIPS 3
+#define INPUT_BUFFER_SIZE NUM_PIXELS_PER_STRIP *NUM_COLS_PER_PIXEL *NUM_STRIPS
+
+#endif

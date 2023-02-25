@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "ipc_message_subscribequeue.h": "c",
+        "ipc.h": "c"
     }
 }
