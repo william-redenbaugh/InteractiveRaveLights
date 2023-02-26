@@ -34,7 +34,7 @@ void uart_ipc_publish_thread(void *params)
         // Writes the message header to UART first!
 
         //int write_size = write(uart_fd, (void *)&event_node.message_header, sizeof(ipc_message_header_t));
-        int write_size = Serial1.write((uint8_t*)&event_node.message_header, sizeof(event_node.message_header));
+        int write_size = Serial.write((uint8_t*)&event_node.message_header, sizeof(event_node.message_header));
         // If we couldn't write complete header, say we failed to publish!
         if (write_size != sizeof(ipc_message_header_t))
         {
@@ -44,7 +44,7 @@ void uart_ipc_publish_thread(void *params)
         // Write message contents after
         if (event_node.message_header.message_len > 0 | event_node.buffer_ptr != NULL)
         {
-            write_size = Serial1.write((uint8_t *)&event_node.buffer_ptr, event_node.message_header.message_len);
+            write_size = Serial.write((uint8_t *)&event_node.buffer_ptr, event_node.message_header.message_len);
             // If we couldn't write entire message, say we failed to publish!
             if (write_size != sizeof(ipc_message_header_t))
             {
@@ -56,13 +56,13 @@ void uart_ipc_publish_thread(void *params)
             // Any cleanup needed for the published event!
             event_node.callback_func(callback_ret);
 
-        
+
     }
 }
 
 void uart_ipc_consume_thread_init(void *params)
 {
-    Serial1.begin(115200);   
+    Serial.begin(115200);
     //uart_fd = open("/dev/ttyS2", O_RDWR);
     // String buffer array for us to
     content_buffer_arr = (uint8_t*)malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
@@ -73,9 +73,10 @@ void uart_ipc_consume_thread(void *params)
 
     for (;;)
     {
-        if(Serial1.available()){
-            Serial.write(Serial1.read());
-        }
+        os_thread_delay_s(1);
+        //if(Serial.available()){
+        //    Serial.write(Serial.read());
+        //}
 
         /*
         ipc_message_header_t header = ipc_get_header_from_uart(uart_fd);
@@ -88,8 +89,8 @@ void uart_ipc_consume_thread(void *params)
             vTaskDelay(1000/portTICK_RATE_MS);
             //usleep(1000000);
             // Flush buffer
-            while(Serial1.available())
-                Serial1.read();
+            while(Serial.available())
+                Serial.read();
 
             // Send error
         }
@@ -105,8 +106,8 @@ void uart_ipc_consume_thread(void *params)
                 // Wait 1 second
                 vTaskDelay(1000/portTICK_RATE_MS);
                 // Flush buffer
-                while(Serial1.available())
-                Serial1.read();
+                while(Serial.available())
+                Serial.read();
             }
             else
             {

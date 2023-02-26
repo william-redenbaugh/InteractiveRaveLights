@@ -5,7 +5,7 @@
 #include "ipc_message_publishqueue.h"
 
 void test_thread(void *param){
-    for(;;){
+   for(;;){
         ipc_message_node_t node;
         node.buffer_ptr = NULL;
         node.message_header.message_len = 0;

@@ -14,7 +14,7 @@ void threads_list_init(void)
     {
         if(threads[n].task_fun != NULL){
             // New block of memory from heap for stack pointer
-            uint8_t *stack_ptr = (uint8_t*)malloc(sizeof(threads[n].stack_size));
+            uint8_t *stack_ptr = new uint8_t[threads[n].stack_size];
             os_add_thread((thread_func_t)threads[n].task_fun, threads[n].param, threads[n].stack_size, stack_ptr);
         }
     }

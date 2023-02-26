@@ -1,6 +1,5 @@
 #include "ipc_thread.h"
 #include "pthread.h"
-#include "tiny-json/tiny-json.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,8 +7,6 @@
 #include <sched.h>
 #include <errno.h>
 #include "ipc.h"
-#include "nuttx/fs/ioctl.h"
-#include "nuttx/serial/tioctl.h"
 #include "termios.h"
 #include "stdint.h"
 #include "ipc_message_publishqueue.h"
@@ -27,15 +24,6 @@ void uart_ipc_publish_thread(void *params)
 {
     for (;;)
     {
-        usleep(1000000);
-        printf("Testsdf\n");
-        char test[] = "hellsdfdo world\n";
-        int ret = write(uart_fd, test, sizeof(test));
-
-        if(ret < 0){
-            printf("Error\n");
-        }
-        /*
         // Wait until we can consume the entire node
         ipc_message_node_t event_node = ipc_block_consume_new_event();
 
@@ -66,28 +54,12 @@ void uart_ipc_publish_thread(void *params)
         if (event_node.callback_func != NULL)
             // Any cleanup needed for the published event!
             event_node.callback_func(callback_ret);
-        */
     }
 }
 
 void uart_ipc_consume_thread_init(void *params)
 {
     uart_fd = open("/dev/ttyS2", O_RDWR);
-
-    struct termios tio;
-    int ret = ioctl(uart_fd, TCGETS, &tio);
-
-    tio.c_cflag |= CREAD;
-    tio.c_cflag |= CLOCAL;
-    tio.c_cflag &= ~CSIZE;
-    tio.c_cflag |= CS8;
-    tio.c_cflag &= ~CSTOPB;
-    tio.c_cflag &= ~PARENB;
-    cfsetspeed(&tio, 115200);
-
-    ioctl(uart_fd, TCSETS, &tio);
-    ioctl(uart_fd, TCFLSH, NULL);
-
     // String buffer array for us to
     content_buffer_arr = malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
 
@@ -102,8 +74,6 @@ void uart_ipc_consume_thread(void *params)
 
     for (;;)
     {
-        usleep(10000000);
-        /*
         ipc_message_header_t header = ipc_get_header_from_uart(uart_fd);
         // If string is larger than buffer we can't accept the string
         if (header.message_len > BUFF_ARR_MAX_SIZE)
@@ -138,6 +108,5 @@ void uart_ipc_consume_thread(void *params)
                 printf("parse message!");
             }
         }
-        */
     }
 }

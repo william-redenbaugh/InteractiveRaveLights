@@ -4,20 +4,19 @@ ipc_message_publish_module_t *ipc_publish_queue_module;
 
 bool ipc_publish_message(ipc_message_node_t node)
 {
-    return _ipc_publish_message(ipc_publish_queue_module, node);
+    _ipc_publish_message(ipc_publish_queue_module, node);
 }
 
 bool _ipc_publish_message(ipc_message_publish_module_t *module, ipc_message_node_t node)
 {
     // Pushes a new event.
     _signal_new_event(module);
-    return _ipc_push_message_queue(module, node);
+    _ipc_push_message_queue(module, node);
 }
 
 bool _ipc_push_message_queue(ipc_message_publish_module_t *module, ipc_message_node_t node)
 {
-
-    module->new_msg_mp.lockWaitIndefinite();
+    pthread_mutex_lock(&module->ipc_message_node_muttx);
     if (module->max_size == module->current_size)
         return false;
 
@@ -31,14 +30,12 @@ bool _ipc_push_message_queue(ipc_message_publish_module_t *module, ipc_message_n
     // Rotate around the circular buffer
     if (module->head_pos == module->max_size)
         module->head_pos = 0;
-
-    module->new_msg_mp.unlock();
-    return true;
+    pthread_mutex_unlock(&module->ipc_message_node_muttx);
 }
 
 bool _ipc_pop_message_queue(ipc_message_publish_module_t *module, ipc_message_node_t *node)
 {
-    module->new_msg_mp.lockWaitIndefinite();
+    pthread_mutex_lock(&module->ipc_message_node_muttx);
     if (module->current_size == 0)
         return false;
 
@@ -54,27 +51,24 @@ bool _ipc_pop_message_queue(ipc_message_publish_module_t *module, ipc_message_no
     // Rotate around the circular buffer
     if (module->tail_pos == module->max_size)
         module->tail_pos = 0;
-    module->new_msg_mp.unlock();
-
-    return true;
+    pthread_mutex_unlock(&module->ipc_message_node_muttx);
 }
 
 int _signal_new_event(ipc_message_publish_module_t *module)
 {
-    module->new_msg_cv.signal(THREAD_SIGNAL_0);
-    return 9;
+    int ret = pthread_cond_signal(&module->new_msg_cv);
+    return ret;
 }
 
 void _ipc_msg_queue_wait_new_event(ipc_message_publish_module_t *module)
 {
-    module->ipc_message_node_muttx.lockWaitIndefinite();
+    pthread_mutex_lock(&module->ipc_message_node_muttx);
     int num_msg = module->current_size;
-    module->ipc_message_node_muttx.unlock();
+    pthread_mutex_unlock(&module->ipc_message_node_muttx);
 
     // If there are no messages in queue
     if (num_msg == 0)
-        module->new_msg_cv.wait_notimeout(THREAD_SIGNAL_0);
-    module->new_msg_cv.clear(THREAD_SIGNAL_0);
+        pthread_cond_wait(&module->new_msg_cv, &module->new_msg_mp);
 }
 
 ipc_message_node_t _ipc_block_consume_new_event(ipc_message_publish_module_t *module)
@@ -103,20 +97,19 @@ void ipc_msg_queue_wait_new_event(void)
 /***/
 ipc_message_publish_module_t *_ipc_message_queue_init(void)
 {
-
-    ipc_message_publish_module_t *module =  new ipc_message_publish_module_t;
+    ipc_message_publish_module_t *module = malloc(sizeof(ipc_message_publish_module_t));
     module->max_size = IPC_QUEUE_MAX_NUM_ELEMENTS;
-    module->node_list =  new ipc_message_node_t;
+    module->node_list = malloc(sizeof(ipc_message_node_t) * module->max_size);
     module->current_size = 0;
     module->head_pos = 0;
     module->tail_pos = 0;
 
-    //module->ipc_message_node_muttx = xSemaphoreCreateBinary();
+    // Initialize synchro mutex
+    pthread_mutex_init(&module->ipc_message_node_muttx, NULL);
 
-    //module->new_msg_cv = xEventGroupCreate();
-    //module->new_msg_mp = xSemaphoreCreateBinary();
-
-    return module;
+    // Init signal/mutx
+    pthread_mutex_init(&module->new_msg_mp, NULL);
+    pthread_cond_init(&module->new_msg_cv, NULL);
 }
 
 void init_ipc_message_queue(void)
