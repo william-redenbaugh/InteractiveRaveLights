@@ -23,18 +23,22 @@ void uart_ipc_publish_init(void *params)
     init_ipc_message_queue();
 }
 
+char test_arr[1024];
 void uart_ipc_publish_thread(void *params)
 {
     for (;;)
     {
-        usleep(1000000);
+        usleep(100000);
         printf("Testsdf\n");
-        char test[] = "hellsdfdo world\n";
-        int ret = write(uart_fd, test, sizeof(test));
 
-        if(ret < 0){
-            printf("Error\n");
-        }
+        int ret = read(uart_fd, test_arr, 20);
+
+        printf(test_arr);
+        //int ret = write(uart_fd, test, sizeof(test));
+
+        //if(ret < 0){
+        //    printf("Error\n");
+        //}
         /*
         // Wait until we can consume the entire node
         ipc_message_node_t event_node = ipc_block_consume_new_event();
@@ -75,18 +79,25 @@ void uart_ipc_consume_thread_init(void *params)
     uart_fd = open("/dev/ttyS2", O_RDWR);
 
     struct termios tio;
-    int ret = ioctl(uart_fd, TCGETS, &tio);
 
-    tio.c_cflag |= CREAD;
-    tio.c_cflag |= CLOCAL;
-    tio.c_cflag &= ~CSIZE;
-    tio.c_cflag |= CS8;
-    tio.c_cflag &= ~CSTOPB;
-    tio.c_cflag &= ~PARENB;
+    tcgetattr(uart_fd, &tio);
+
+    /* tty: setup parameters */
+
+    tio.c_cflag |= CREAD;   /* Enable receive */
+    tio.c_cflag |= CLOCAL;  /* Local line, no modem control */
+    tio.c_cflag &= ~CSIZE;  /* Clean the bits */
+    tio.c_cflag |= CS8;     /* Data bit 8bit */
+    tio.c_cflag &= ~CSTOPB; /* Stop bit 1bit */
+    tio.c_cflag &= ~PARENB; /* Paritiy none */
+
     cfsetspeed(&tio, 115200);
 
-    ioctl(uart_fd, TCSETS, &tio);
-    ioctl(uart_fd, TCFLSH, NULL);
+    /* tty: set to tty device */
+
+    tcsetattr(uart_fd, TCSANOW, &tio);
+    const int bits = TIOCM_RTS;
+    int ret = ioctl(uart_fd, TIOCMBIS, (unsigned long)&bits);
 
     // String buffer array for us to
     content_buffer_arr = malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
