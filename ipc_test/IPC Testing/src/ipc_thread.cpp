@@ -34,7 +34,7 @@ void uart_ipc_publish_thread(void *params)
         // Writes the message header to UART first!
 
         //int write_size = write(uart_fd, (void *)&event_node.message_header, sizeof(ipc_message_header_t));
-        int write_size = Serial.write((uint8_t*)&event_node.message_header, sizeof(event_node.message_header));
+        int write_size = Serial1.write((uint8_t*)&event_node.message_header, sizeof(event_node.message_header));
         // If we couldn't write complete header, say we failed to publish!
         if (write_size != sizeof(ipc_message_header_t))
         {
@@ -44,7 +44,7 @@ void uart_ipc_publish_thread(void *params)
         // Write message contents after
         if (event_node.message_header.message_len > 0 | event_node.buffer_ptr != NULL)
         {
-            write_size = Serial.write((uint8_t *)&event_node.buffer_ptr, event_node.message_header.message_len);
+            write_size = Serial1.write((uint8_t *)&event_node.buffer_ptr, event_node.message_header.message_len);
             // If we couldn't write entire message, say we failed to publish!
             if (write_size != sizeof(ipc_message_header_t))
             {
@@ -62,7 +62,7 @@ void uart_ipc_publish_thread(void *params)
 
 void uart_ipc_consume_thread_init(void *params)
 {
-    Serial.begin(115200);
+    Serial1.begin(115200);
     //uart_fd = open("/dev/ttyS2", O_RDWR);
     // String buffer array for us to
     content_buffer_arr = (uint8_t*)malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
