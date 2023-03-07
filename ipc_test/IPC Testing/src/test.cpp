@@ -5,7 +5,7 @@
 #include "ipc_message_publishqueue.h"
 
 void test_thread(void *param){
-    Serial1.begin(115200);
+    Serial.begin(115200);
    for(;;){
         /*
         ipc_message_node_t node;
@@ -16,9 +16,10 @@ void test_thread(void *param){
         node.message_header.message_id = IPC_TYPE_ACK;
 
         ipc_publish_message(node);
-        os_thread_delay_ms(1000);
+        os_thread_delay_ms(1000);In
         */
 
-       Serial1.println("hello worldasfdasdf");
+       Serial.println("hello worldasfdasdf");
+       os_thread_delay_s(1);
     }
 }

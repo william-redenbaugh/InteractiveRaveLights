@@ -1,95 +1,116 @@
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/ioctl.h>
-#include <errno.h>
-#include <debug.h>
-#include <nuttx/i2c/i2c_master.h>
-#include <pthread.h>
-#include "pubsub-c/pubsub.h"
 #include "statemachine.h"
+#include "stdlib.h"
 
-int init_statemachine(sm_handle_t *sm_handle, const sm_state_t *states, int current_state)
-{
-    SM_PRINTF_DEBUG("Initializing statemachine...\n");
-    // Make sure we aren't touching any null references.
-    if (sm_handle == NULL | states == NULL)
-        return EINVAL;
+statemachine_t *init_new_statemachine(const int num_states, const int init_state, statemachine_state_t *states_list){
 
-    sm_handle->states_table = states;
-    sm_handle->current_state = current_state;
+    // Basic bounds check
+    if(num_states <= 0 || states_list == NULL)
+        return NULL;
 
-    SM_PRINTF_DEBUG("Setting up state stable and current state\n");
+    statemachine_t *statemachine = (statemachine_t*)malloc(sizeof(statemachine_t));
 
-    int n = 0;
-    int temp_state = sm_handle->states_table[n].state;
-    while (temp_state != SM_STATE_NULL)
+    statemachine->current_state = init_state;
+    statemachine->latest_event = 0;
+    statemachine->num_states = num_states;
+    statemachine->latest_event = NULL_EVENT;
+    statemachine->states_list = states_list;
+
+    for (int n = 0; n < num_states; n++)
     {
-        temp_state = sm_handle->states_table[n].state;
-        n++;
+        // Init and clear all event submission data.
+        for(int k = 0; k < statemachine->states_list[n].num_events; k++){
+            event_submission_t *event_sb = &statemachine->states_list[n].events_list[k];
+
+            if(event_sb == NULL){
+                free(statemachine);
+                return NULL;
+            }
+        }
     }
 
-    if (n == 0)
-        return ENODATA;
-
-    SM_PRINTF_DEBUG("Finalizing Statemachine initialization\n");
-    sm_handle->num_states = n;
-
-    return 0;
+    return statemachine;
 }
 
-int get_hsm_state(sm_handle_t *sm_handle)
-{
-    return sm_handle->current_state;
+int statemachine_submit_event(statemachine_t *statemachine, int event, void *params){
+    if(statemachine == NULL)
+        return MK_INT_ERR;
+    int current_state = statemachine->current_state;
+
+    int next_state = -1;
+    int event_index = -1;
+
+    // Look through list of events, then add to state list
+    for (int n = 0; n < statemachine->states_list[current_state].num_events; n++){
+        // Find correct event id, then submit!
+        if(event == statemachine->states_list[current_state].events_list[n].event_id){
+            // Set next state value
+            next_state = statemachine->states_list[current_state].events_list[n].next_state;
+            // Then next event index value
+            event_index = statemachine->states_list[current_state].events_list[n].event_id;
+            break;
+        }
+
+        if(END_EVENT == statemachine->states_list[current_state].events_list[n].event_id){
+            return MK_NOT_INITED;
+        }
+    }
+    // Couldn't find correct event in current statemachine
+    // Return error and don't exit/enter states or run event callbacks
+    if (next_state == -1)
+        return MK_INVALID_PARAM;
+
+    // Run exit function
+    if(statemachine->states_list[current_state].exit_function != NULL)
+        statemachine->states_list[current_state].exit_function(
+            event,
+            current_state,
+            &next_state,
+            params);
+
+    // Run event callback
+    if(statemachine->states_list[current_state].events_list[event_index].event_cb_function != NULL)
+        statemachine->states_list[current_state].events_list[event_index].event_cb_function(
+            event,
+            current_state,
+            &next_state,
+            params);
+
+    // Run entry function
+    if(statemachine->states_list[next_state].entry_function != NULL){
+        statemachine->states_list[next_state].entry_function(
+            event,
+            current_state,
+            &next_state,
+            params);
+    }
+
+    statemachine->current_state = next_state;
+
+    return MK_OK;
 }
 
-int submit_event(sm_handle_t *sm_handle, int next_event, void *params)
-{
-    int current_state = sm_handle->current_state;
-    if (current_state == SM_STATE_NULL)
-        return;
+int statemachine_set_state(statemachine_t *statemachine, int next_state, void *param){
+    if(statemachine == NULL || statemachine->num_events <= next_state)
+        return MK_INT_ERR;
 
-    // SM_PRINTF_DEBUG("Current state:%d\n", current_state);
+    int current_state = statemachine->current_state;
 
-    // printf("Current state: %d\n", sm_handle->current_state);
+    // Run exit function
+    if(statemachine->states_list[current_state].exit_function != NULL)
+        statemachine->states_list[current_state].exit_function(
+            -1,
+            current_state,
+            &next_state,
+            param);
 
-    // Get our list of transitions
-    sm_transition_t *selected_transition_table = sm_handle->states_table[current_state].sm_transitions;
-    // Based on the current state we are in, we shall select a particular transition table
-
-    // iterate through the transition table until we reach the end or the relevent event callback
-    // Or if no event exists we reach the end of the table
-    int n = 0;
-    while ((selected_transition_table[n].event = !next_event) || selected_transition_table[n].event == SM_EVENT_NULL)
-        n++;
-
-    // SM_PRINTF_DEBUG("Event: %d\n", n);
-
-    if (selected_transition_table[n].event == SM_EVENT_NULL)
-    {
-        SM_PRINTF_DEBUG("No event matched with this current state in the statemachine\n");
-
-        return EIO;
+    // Run entry function
+    if(statemachine->states_list[next_state].entry_function != NULL){
+        statemachine->states_list[next_state].entry_function(
+            -1,
+            current_state,
+            &next_state,
+            param);
     }
-    if (selected_transition_table[n].event == next_event)
-    {
-        SM_PRINTF_DEBUG("Matching event found for this state in the statemachine, executing...\n ");
-        // Once we find the matching event, we find
-        int next_state = selected_transition_table[n].next_state;
-        // Since we are exiting the previous state, call the previous state function if not null
-        if (sm_handle->states_table[current_state].exit_fn != NULL)
-            sm_handle->states_table[current_state].exit_fn(params);
-        // Call transition
-        selected_transition_table[n].event_fn(next_event, params, &next_state);
-        // Now we know what the next state will be, so we shall set it in our
-        // SM handler
-        sm_handle->current_state = next_state;
 
-        // Now that we are entering a new state in our state machine, we can call the next state's entry function if not null.
-        if (sm_handle->states_table[sm_handle->current_state].entry_fn != NULL)
-            sm_handle->states_table[sm_handle->current_state].entry_fn(params);
-        return 0;
-    }
-    return 0;
+    return MK_OK;
 }

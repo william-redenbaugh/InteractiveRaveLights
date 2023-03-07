@@ -2,14 +2,16 @@
 #include <Arduino.h>
 #include "threads_init.h"
 #include "ipc_message_publishqueue.h"
-
+#include "STATEMACHINE/statemachine.h"
 /// 4086459573
 // Man Myth Legend Vinh
+
 
 
 void setup(){
   os_init();
   threads_list_init();
+  test_new_statemachine();
 }
 
 void loop(){

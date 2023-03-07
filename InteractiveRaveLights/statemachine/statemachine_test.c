@@ -1,145 +1,114 @@
 #include "statemachine.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/ioctl.h>
-#include <errno.h>
-#include <debug.h>
-#include <nuttx/i2c/i2c_master.h>
-#include <pthread.h>
-#include "pubsub-c/pubsub.h"
-#include "statemachine.h"
 
-typedef enum
-{
-    SM_TEST_STATE_ONE,
-    SM_TEST_STATE_TWO,
-    SM_TEST_STATE_THREE,
-    SM_TEST_STATE_END
-} tests_states_t;
+typedef enum test_states{
+    TEST_STATE_ONE = 0,
+    TEST_STATE_TWO,
+    TEST_STATE_THREE,
+    END_TEST_STATE = END_STATE,
+}test_states_t;
 
-typedef enum
-{
-    SM_TEST_EVENT_ONE,
-    SM_TEST_EVENT_TWO,
-    SM_TEST_EVENT_THREE,
-    SM_TEST_EVENT_END
-} tests_events_t;
+typedef enum test_events{
+    TEST_EVENT_ONE = 0,
+    TEST_EVENT_TWO,
+    TEST_EVENT_THREE,
+    END_TEST_EVENT = END_EVENT,
+}test_events_t;
 
-void state_one_event_one(void)
-{
-    printf("State one event one function\n");
+void state_one_entry_function(int event, int old_state, int *next_state, void* param){
+
 }
 
-void state_one_event_two(void)
-{
-    printf("State one event two function\n");
+void state_one_exit_function(int event, int old_state, int *next_state, void* param){
+    
 }
 
-void state_one_event_three(void)
-{
-    printf("State one event three function\n");
+void state_two_entry_function(int event, int old_state, int *next_state, void* param){
+
 }
 
-void state_two_event_one(void)
-{
-    printf("State two event one function\n");
+void state_two_exit_function(int event, int old_state, int *next_state, void* param){
+
 }
 
-void state_two_event_two(void)
-{
-    printf("State two event two function\n");
+void state_three_entry_function(int event, int old_state, int *next_state, void* param){
+
 }
 
-void state_two_event_three(void)
-{
-    printf("State two event three function\n");
+void state_three_exit_function(int event, int old_state, int *next_state, void* param){
+
 }
 
-void state_three_event_one(void)
-{
-    printf("State three event one function\n");
+void state_one_event_one_function(int event, int old_state, int *next_state, void *params){
+
 }
 
-void state_three_event_two(void)
-{
-    printf("State three event two function\n");
+void state_one_event_two_function(int event, int old_state, int *next_state, void *params){
+
 }
 
-void state_three_event_three(void)
-{
-    printf("State three event three function\n");
+void state_one_event_three_function(int event, int old_state, int *next_state, void *params){
+
 }
 
-void state_one_entry_fn(void)
-{
-    printf("State one entry function\n");
+void state_two_event_one_function(int event, int old_state, int *next_state, void *params){
+
 }
 
-void state_two_entry_fn(void)
-{
-    printf("State two entry function\n");
+void state_two_event_two_function(int event, int old_state, int *next_state, void *params){
+
 }
 
-void state_three_entry_fn(void)
-{
-    printf("State three entry function\n");
+void state_two_event_three_function(int event, int old_state, int *next_state, void *params){
+
 }
 
-void state_one_exit_fn(void)
-{
-    printf("State one exit function\n");
+void state_three_event_one_function(int event, int old_state, int *next_state, void *params){
+
 }
 
-void state_two_exit_fn(void)
-{
-    printf("State two exit function\n");
+void state_three_event_two_function(int event, int old_state, int *next_state, void *params){
+
 }
 
-void state_three_exit_fn(void)
-{
-    printf("State three exit function\n");
+void state_three_event_three_function(int event, int old_state, int *next_state, void *params){
+
 }
 
-static const sm_transition_t state_one_transitions[] = {
-    {SM_TEST_EVENT_ONE, state_one_event_one, SM_TEST_STATE_TWO},
-    {SM_TEST_EVENT_TWO, state_one_event_two, SM_TEST_STATE_TWO},
-    {SM_TEST_EVENT_THREE, state_one_event_three, SM_TEST_STATE_TWO},
-    {SM_EVENT_NULL, NULL, SM_STATE_NULL}};
-
-static const sm_transition_t state_two_transitions[] = {
-    {SM_TEST_EVENT_ONE, state_two_event_one, SM_TEST_STATE_THREE},
-    {SM_TEST_EVENT_TWO, state_two_event_two, SM_TEST_STATE_THREE},
-    {SM_TEST_EVENT_THREE, state_two_event_three, SM_TEST_STATE_THREE},
-    {SM_EVENT_NULL, NULL, SM_STATE_NULL}};
-
-static const sm_transition_t state_three_transitions[] = {
-    {SM_TEST_EVENT_ONE, state_three_event_one, SM_TEST_STATE_ONE},
-    {SM_TEST_EVENT_TWO, state_three_event_two, SM_TEST_STATE_ONE},
-    {SM_TEST_EVENT_THREE, state_three_event_three, SM_TEST_STATE_ONE},
-    {SM_EVENT_NULL, NULL, SM_STATE_NULL}};
-
-static const sm_state_t test_sm_states[] = {
-    [SM_TEST_STATE_ONE] = {SM_TEST_STATE_ONE, state_one_transitions, state_one_entry_fn, state_one_exit_fn},
-    [SM_TEST_STATE_TWO] = {SM_TEST_STATE_TWO, state_two_transitions, state_two_entry_fn, state_two_exit_fn},
-    [SM_TEST_STATE_THREE] = {SM_TEST_STATE_THREE, state_three_transitions, state_three_entry_fn, state_three_exit_fn},
-    [SM_TEST_STATE_END] = {SM_STATE_NULL, NULL, NULL, NULL},
+event_submission_t state_one_eventlist[] = {
+    {state_one_event_one_function, NULL, TEST_EVENT_ONE, TEST_STATE_TWO},
+    {state_one_event_two_function, NULL, TEST_EVENT_TWO, TEST_STATE_ONE},
+    {state_one_event_three_function, NULL, TEST_EVENT_THREE, TEST_STATE_THREE},
+    {NULL, NULL, NULL_EVENT, NULL_STATE},
 };
 
-void test_sm(void)
-{
-    sm_handle_t handle;
-    init_statemachine(&handle, test_sm_states, SM_TEST_STATE_ONE);
+event_submission_t state_two_eventlist[] = {
+    {state_two_event_one_function, NULL, TEST_EVENT_ONE, TEST_STATE_ONE},
+    {state_two_event_two_function, NULL, TEST_EVENT_TWO, TEST_STATE_TWO},
+    {state_two_event_three_function, NULL, TEST_EVENT_THREE, TEST_STATE_THREE},
+    {NULL, NULL, NULL_EVENT, NULL_STATE},
+};
 
-    submit_event(&handle, SM_TEST_EVENT_ONE, NULL);
-    submit_event(&handle, SM_TEST_EVENT_ONE, NULL);
-    submit_event(&handle, SM_TEST_EVENT_ONE, NULL);
+event_submission_t state_three_eventlist[] = {
+    {state_three_event_one_function, NULL, TEST_EVENT_ONE, TEST_STATE_ONE},
+    {state_three_event_two_function, NULL, TEST_EVENT_TWO, TEST_STATE_ONE},
+    {state_three_event_three_function, NULL, TEST_EVENT_THREE, TEST_STATE_TWO},
+    {NULL, NULL, NULL_EVENT, NULL_STATE},
+};
 
-    submit_event(&handle, SM_TEST_EVENT_TWO, NULL);
-    submit_event(&handle, SM_TEST_EVENT_TWO, NULL);
-    submit_event(&handle, SM_TEST_EVENT_TWO, NULL);
+statemachine_state_t test_state_list[] = {
+    {TEST_STATE_ONE, state_one_entry_function, state_one_exit_function, NUM_EVENTS(state_one_eventlist), state_one_eventlist},
+    {TEST_STATE_ONE, state_two_entry_function, state_two_exit_function, NUM_EVENTS(state_two_eventlist), state_two_eventlist},
+    {TEST_STATE_THREE, state_three_entry_function, state_three_exit_function, NUM_EVENTS(state_three_eventlist), state_three_eventlist},
+    {NULL_STATE, NULL, NULL, 0, NULL},
+};
 
-    submit_event(&handle, SM_TEST_EVENT_THREE, NULL);
-    submit_event(&handle, SM_TEST_EVENT_THREE, NULL);
-    submit_event(&handle, SM_TEST_EVENT_THREE, NULL);
-}
+void test_new_statemachine(void){
+
+    int num_state_list = NUM_STATES(test_state_list);
+    for(int k = 0; k < num_state_list; k++){
+        int current_state = test_state_list[k].num_events;
+        printf("Current state %d", current_state);
+    }
+    statemachine_t *test_sm = init_new_statemachine(NUM_STATES(test_state_list), TEST_STATE_ONE, test_state_list);
+    statemachine_submit_event(test_sm, TEST_EVENT_ONE, NULL);
+} 
