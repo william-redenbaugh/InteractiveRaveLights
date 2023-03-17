@@ -1,11 +1,19 @@
 
 #include "OS/OSThreadKernel.h"
 #include <Arduino.h>
-#include "threads_init.h"
 #include "ipc_message_publishqueue.h"
 
 void test_thread(void *param){
-    Serial.begin(115200);
+    Serial3.begin(115200);
+    pinMode(LED_BUILTIN, OUTPUT);
+
+    for(int n = 0; n < 30;n++){
+            digitalWrite(LED_BUILTIN, HIGH);
+            os_thread_delay_ms(20);
+            digitalWrite(LED_BUILTIN, LOW);
+            os_thread_delay_ms(20);
+            //Serial.println();
+        }
    for(;;){
         /*
         ipc_message_node_t node;
@@ -19,7 +27,15 @@ void test_thread(void *param){
         os_thread_delay_ms(1000);In
         */
 
-       Serial.println("hello worldasfdasdf");
-       os_thread_delay_s(1);
+
+        String str = Serial.readString();
+
+        for(int n = 0; n < str.length();n++){
+            digitalWrite(LED_BUILTIN, HIGH);
+            os_thread_delay_ms(20);
+            digitalWrite(LED_BUILTIN, LOW);
+            os_thread_delay_ms(20);
+            //Serial.println();
+        }
     }
 }

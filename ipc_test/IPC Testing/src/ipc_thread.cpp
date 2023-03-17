@@ -55,8 +55,6 @@ void uart_ipc_publish_thread(void *params)
         if (event_node.callback_func != NULL)
             // Any cleanup needed for the published event!
             event_node.callback_func(callback_ret);
-
-
     }
 }
 
