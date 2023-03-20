@@ -26,15 +26,17 @@ void uart_ipc_publish_init(void *params)
 char test_arr[1024];
 void uart_ipc_publish_thread(void *params)
 {
+    uart_fd = open("/dev/ttyS2", O_RDWR);
+
     for (;;)
     {
-        usleep(100000);
-        printf("Testsdf\n");
+        usleep(10000);
+        //printf("Testsdf\n");
 
-        int ret = read(uart_fd, test_arr, 20);
-
-        printf(test_arr);
-        //int ret = write(uart_fd, test, sizeof(test));
+        //int ret = read(uart_fd, test_arr, 20);
+        char hello[] = "hello world\n";
+        //printf(test_arr);
+        write(uart_fd, hello, sizeof(hello));
 
         //if(ret < 0){
         //    printf("Error\n");
@@ -76,31 +78,32 @@ void uart_ipc_publish_thread(void *params)
 
 void uart_ipc_consume_thread_init(void *params)
 {
-    uart_fd = open("/dev/ttyS2", O_RDWR);
+
 
     struct termios tio;
 
     tcgetattr(uart_fd, &tio);
 
-    /* tty: setup parameters */
+    // tty: setup parameters
 
-    tio.c_cflag |= CREAD;   /* Enable receive */
-    tio.c_cflag |= CLOCAL;  /* Local line, no modem control */
-    tio.c_cflag &= ~CSIZE;  /* Clean the bits */
-    tio.c_cflag |= CS8;     /* Data bit 8bit */
-    tio.c_cflag &= ~CSTOPB; /* Stop bit 1bit */
-    tio.c_cflag &= ~PARENB; /* Paritiy none */
+    tio.c_cflag |= CREAD;   // Enable receive
+    tio.c_cflag |= CLOCAL;  // Local line, no modem control
+    tio.c_cflag &= ~CSIZE;  // Clean the bits
+    tio.c_cflag |= CS8;     // Data bit 8bit
+    tio.c_cflag &= ~CSTOPB; // Stop bit 1bit
+    tio.c_cflag &= ~PARENB; // Paritiy none
 
     cfsetspeed(&tio, 115200);
 
-    /* tty: set to tty device */
 
-    tcsetattr(uart_fd, TCSANOW, &tio);
+    //csetattr(uart_fd, TCSANOW, &tio);
+    /*
     const int bits = TIOCM_RTS;
     int ret = ioctl(uart_fd, TIOCMBIS, (unsigned long)&bits);
 
     // String buffer array for us to
     content_buffer_arr = malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
+    */
 
     if (uart_fd < 0)
     {

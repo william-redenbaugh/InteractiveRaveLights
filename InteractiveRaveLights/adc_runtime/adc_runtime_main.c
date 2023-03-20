@@ -219,7 +219,7 @@ void adc_runtime_thread(void *ptr)
         read_adc_data(adc);
         filter_adc_data(adc);
         adc_copy_data_complete(adc);
-        usleep(1000);
+        usleep(10000);
     }
 
     close_adc_reading(adc);

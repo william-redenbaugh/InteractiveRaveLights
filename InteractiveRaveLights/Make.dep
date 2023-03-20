@@ -1032,7 +1032,7 @@ rgbMatrixC.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  /home/wredenba/spresense/nuttx/include/nuttx/i2c/i2c_master.h \
  /home/wredenba/spresense/nuttx/include/assert.h
 statemachine.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
- statemachine/statemachine.c \
+ statemachine/statemachine.c statemachine/statemachine.h error/error.h \
  /home/wredenba/spresense/nuttx/include/stdio.h \
  /home/wredenba/spresense/nuttx/include/nuttx/config.h \
  /home/wredenba/spresense/nuttx/include/sys/types.h \
@@ -1078,19 +1078,10 @@ statemachine.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: 
  /home/wredenba/spresense/nuttx/include/arch/arch.h \
  /home/wredenba/spresense/nuttx/include/nuttx/pgalloc.h \
  /home/wredenba/spresense/nuttx/include/nuttx/addrenv.h \
- /home/wredenba/spresense/nuttx/include/stdlib.h \
- /home/wredenba/spresense/nuttx/include/fcntl.h \
- /home/wredenba/spresense/nuttx/include/sys/ioctl.h \
- /home/wredenba/spresense/nuttx/include/nuttx/fs/ioctl.h \
- /home/wredenba/spresense/nuttx/include/nuttx/serial/tioctl.h \
- /home/wredenba/spresense/nuttx/include/nuttx/net/ioctl.h \
- /home/wredenba/spresense/nuttx/include/debug.h \
- /home/wredenba/spresense/nuttx/include/syslog.h \
- /home/wredenba/spresense/nuttx/include/nuttx/i2c/i2c_master.h \
- pubsub-c/pubsub.h statemachine/statemachine.h
+ /home/wredenba/spresense/nuttx/include/stdlib.h
 statemachine_test.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  statemachine/statemachine_test.c statemachine/statemachine.h \
- /home/wredenba/spresense/nuttx/include/stdio.h \
+ error/error.h /home/wredenba/spresense/nuttx/include/stdio.h \
  /home/wredenba/spresense/nuttx/include/nuttx/config.h \
  /home/wredenba/spresense/nuttx/include/sys/types.h \
  /home/wredenba/spresense/nuttx/include/nuttx/compiler.h \
@@ -1134,17 +1125,7 @@ statemachine_test.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLight
  /home/wredenba/spresense/nuttx/include/sys/uio.h \
  /home/wredenba/spresense/nuttx/include/arch/arch.h \
  /home/wredenba/spresense/nuttx/include/nuttx/pgalloc.h \
- /home/wredenba/spresense/nuttx/include/nuttx/addrenv.h \
- /home/wredenba/spresense/nuttx/include/stdlib.h \
- /home/wredenba/spresense/nuttx/include/fcntl.h \
- /home/wredenba/spresense/nuttx/include/sys/ioctl.h \
- /home/wredenba/spresense/nuttx/include/nuttx/fs/ioctl.h \
- /home/wredenba/spresense/nuttx/include/nuttx/serial/tioctl.h \
- /home/wredenba/spresense/nuttx/include/nuttx/net/ioctl.h \
- /home/wredenba/spresense/nuttx/include/debug.h \
- /home/wredenba/spresense/nuttx/include/syslog.h \
- /home/wredenba/spresense/nuttx/include/nuttx/i2c/i2c_master.h \
- pubsub-c/pubsub.h
+ /home/wredenba/spresense/nuttx/include/nuttx/addrenv.h
 strip_animation_module.c.home.wredenba.git.InteractiveRaveLights.InteractiveRaveLights.o: \
  strip_animation_module/strip_animation_module.c \
  strip_animation_module/strip_animation_module.h \
