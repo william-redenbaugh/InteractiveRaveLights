@@ -16,3 +16,6 @@
 [submodule "ipc_test/IPC Testing/lib/TeensyOS"]
 	path = ipc_test/IPC Testing/lib/TeensyOS
 	url = git@github.com:william-redenbaugh/TeensyOS.git
+[submodule "InteractiveRaveLights/InteractiveRaveLights/TeensyOSCSAL"]
+	path = InteractiveRaveLights/InteractiveRaveLights/TeensyOSCSAL
+	url = git@github.com:william-redenbaugh/TeensyOSCSAL.git
