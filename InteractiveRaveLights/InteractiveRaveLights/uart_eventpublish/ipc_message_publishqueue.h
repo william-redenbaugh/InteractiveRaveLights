@@ -1,9 +1,9 @@
 #ifndef IPC_MESSAGE_PUBLISHQUEUE_H
 #define IPC_MESSAGE_PUBLISHQUEUE_H
 #include "ipc.h"
+#include "pthread.h"
 
-#define IPC_QUEUE_MAX_NUM_ELEMENTS 16
-#define TASK1_BIT   (1UL << 0UL) // zero shift for bit0
+#define IPC_QUEUE_MAX_NUM_ELEMENTS 128
 
 typedef enum ipc_message_callback_status
 {
@@ -32,11 +32,10 @@ typedef struct ipc_message_publish_module
     int current_size;
     int head_pos;
     int tail_pos;
-    MutexLock ipc_message_node_muttx;
 
-    // Signal handler detecting new message
-    OSSignal new_msg_cv;
-    MutexLock new_msg_mp;
+    bool waiting;
+    pthread_mutex_t ipc_message_node_muttx;
+    sem_t new_msg_mp;
 } ipc_message_publish_module_t;
 
 extern ipc_message_publish_module_t *ipc_publush_queue_module;

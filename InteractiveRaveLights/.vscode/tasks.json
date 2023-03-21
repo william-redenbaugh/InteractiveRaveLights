@@ -62,6 +62,22 @@
 			]
 		},
 		{
+			"label": "Check flashable SPK file",
+			"type": "shell",
+			"command": "${config:spresense.env.extension.path}/scripts/check_spk.sh",
+			"args": [
+				"",
+				"out/*.nuttx.spk"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"group": "test",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
 			"label": "Build and flash",
 			"type": "shell",
 			"dependsOrder": "sequence",
@@ -69,7 +85,35 @@
 				"Build application",
 				"Flash worker"
 			],
-			"command": "cd \"${workspaceFolder}\";${config:spresense.sdk.path}/sdk/tools/flash.sh -c ${config:spresense.serial.port} -b ${config:spresense.flashing.speed} out/*.nuttx.spk",
+			"command": "${config:spresense.sdk.path}/sdk/tools/flash.sh",
+			"args": [
+				"-c",
+				"${config:spresense.serial.port}",
+				"-b",
+				"${config:spresense.flashing.speed}",
+				"out/*.nuttx.spk"
+			],
+			"group": "test",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "Flash application",
+			"type": "shell",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Check flashable SPK file",
+				"Flash worker"
+			],
+			"command": "${config:spresense.sdk.path}/sdk/tools/flash.sh",
+			"args": [
+				"-c",
+				"${config:spresense.serial.port}",
+				"-b",
+				"${config:spresense.flashing.speed}",
+				"out/*.nuttx.spk"
+			],
 			"group": "test",
 			"problemMatcher": [
 				"$gcc"
@@ -78,7 +122,15 @@
 		{
 			"label": "Flash worker",
 			"type": "shell",
-			"command": "cd \"${workspaceFolder}\";if [ -d out/worker -a \"`ls out/worker/`\" != \"\" ]; then ${config:spresense.sdk.path}/sdk/tools/flash.sh -w -c ${config:spresense.serial.port} -b ${config:spresense.flashing.speed} out/worker/*; fi;",
+			"command": "${config:spresense.env.extension.path}/scripts/flash_worker.sh",
+			"args": [
+				"${config:spresense.sdk.path}",
+				"${config:spresense.serial.port}",
+				"${config:spresense.flashing.speed}"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
 			"group": "test",
 			"problemMatcher": [
 				"$gcc"
@@ -87,16 +139,29 @@
 		{
 			"label": "Clean flash",
 			"type": "shell",
-			"command": ".vscode/clean_flash.sh -s ${config:spresense.sdk.path} -c ${config:spresense.serial.port}",
+			"command": "${config:spresense.env.extension.path}/scripts/prepare_debug.sh",
+			"args": [
+				"${config:spresense.sdk.path}",
+				"linux",
+				"${config:spresense.serial.port}"
+			],
 			"group": "test",
 			"problemMatcher": [
 				"$gcc"
 			]
 		},
 		{
-			"label": "Burn bootloader",
+			"label": "Flash bootloader",
 			"type": "shell",
-			"command": "${config:spresense.sdk.path}/sdk/tools/flash.sh -l ${config:spresense.sdk.path}/firmware/spresense -c ${config:spresense.serial.port} -b ${config:spresense.flashing.speed}",
+			"command": "${config:spresense.sdk.path}/sdk/tools/flash.sh",
+			"args": [
+				"-l",
+				"${config:spresense.sdk.path}/firmware/spresense",
+				"-c",
+				"${config:spresense.serial.port}",
+				"-b",
+				"${config:spresense.flashing.speed}"
+			],
 			"group": "test",
 			"problemMatcher": [
 				"$gcc"

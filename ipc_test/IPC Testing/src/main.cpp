@@ -1,5 +1,5 @@
-#include "OS/OSThreadKernel.h"
 #include <Arduino.h>
+#include "OS/OSThreadKernel.h"
 #include "ipc_message_publishqueue.h"
 #include "STATEMACHINE/statemachine.h"
 #include "UNIT_TESTS/OS_UNIT_TESTS/os_unit_test.h"
@@ -10,8 +10,7 @@
 
 void setup(){
   os_init();
-
-  os_init_testrun();
+  //s_init_testrun();
   threads_list_init();
 }
 

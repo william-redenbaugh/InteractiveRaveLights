@@ -1,4 +1,4 @@
-#include "ipc.h"
+#include "Arduino.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -6,7 +6,7 @@
 #include <errno.h>
 #include "ipc.h"
 #include "stdint.h"
-#include "Arduino.h"
+#include "ipc.h"
 
 ipc_message_header_t ipc_get_header_from_uart(int uart_fd)
 {
@@ -15,7 +15,10 @@ ipc_message_header_t ipc_get_header_from_uart(int uart_fd)
     ipc_message_header_t header;
     header.message_len = -1;
     header.message_id = -1;
-    int ret = Serial1.readBytes(header_arr, sizeof(header_arr));
+
+    while(Serial.available() < sizeof(header_arr))
+        os_thread_delay_ms(1);
+    int ret = Serial.readBytes(header_arr, sizeof(header_arr));
     if (ret < 0)
     {
         printf("Uart Reading error when getting header...\n");
