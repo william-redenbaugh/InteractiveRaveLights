@@ -34,7 +34,9 @@ void uart_ipc_publish_thread(void *params)
         // Writes the message header to UART first!
 
         //int write_size = write(uart_fd, (void *)&event_node.message_header, sizeof(ipc_message_header_t));
-        int write_size = Serial.write((uint8_t*)&event_node.message_header, sizeof(event_node.message_header));
+        uint8_t output_buffer[9];
+        serialize_message_header(event_node.message_header, output_buffer, sizeof(output_buffer));
+        int write_size = Serial.write(output_buffer, sizeof(output_buffer));
         // If we couldn't write complete header, say we failed to publish!
         if (write_size != sizeof(ipc_message_header_t))
         {

@@ -107,7 +107,7 @@ void uart_ipc_consume_thread(void *params)
         // If string is larger than buffer we can't accept the string
         if (header.message_len > BUFF_ARR_MAX_SIZE)
         {
-            printf("Requested Packet Buffer Overflow detection\n");
+            printf("Requested Packet Buffer Overflow detection %d\n", header.message_len);
             // Let message pass
             // Wait 1 second
             usleep(1000000);
@@ -118,9 +118,10 @@ void uart_ipc_consume_thread(void *params)
         else
         {
             // Get
+            memset(content_buffer_arr, NULL, sizeof(content_buffer_arr));
             int ret = read(uart_fd, content_buffer_arr, header.message_len);
 
-            printf("got new message!\n");
+            printf("got new message!\n %s", content_buffer_arr);
             /**
             if (ret != header.message_len)
             {

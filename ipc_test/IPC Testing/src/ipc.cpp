@@ -61,20 +61,15 @@ ipc_message_header_t deserialize_message_header(uint8_t *buffer, size_t len)
 bool serialize_message_header(ipc_message_header_t msg, uint8_t *buffer, size_t len)
 {
 
-    if (len != IPC_MESSAGE_HANDLER_SIZE)
-    {
-        return false;
-    }
-
     buffer[0] = msg.message_len;
-    buffer[1] = msg.message_len >> 8;
-    buffer[2] = msg.message_len >> 16;
-    buffer[3] = msg.message_len >> 24;
+    buffer[1] = (msg.message_len >> 8) & 0xFF;
+    buffer[2] = (msg.message_len >> 16) & 0xFF;
+    buffer[3] = (msg.message_len >> 24) & 0xFF;
 
     buffer[4] = msg.message_id;
-    buffer[5] = msg.message_id >> 8;
-    buffer[6] = msg.message_id >> 16;
-    buffer[7] = msg.message_id >> 24;
+    buffer[5] = (msg.message_id >> 8) & 0xFF;
+    buffer[6] = (msg.message_id >> 16) & 0xFF;
+    buffer[7] = (msg.message_id >> 24) & 0xFF;
 
     buffer[8] = msg.message_type_enum;
     return true;

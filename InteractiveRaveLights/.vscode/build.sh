@@ -176,7 +176,7 @@ function build_worker (){
 # Usage: clean_kernel
 function clean_kernel (){
     cd ${SDK_PATH}/sdk
-    make cleankernel
+    make cleankernel -j32
 }
 
 # Name: clean_sdk
