@@ -29,7 +29,7 @@ void uart_ipc_publish_thread(void *params)
 
 
     for (;;)
-    {   
+    {
         // Wait until we can consume the entire node
         ipc_message_node_t event_node = ipc_block_consume_new_event();
 
@@ -80,11 +80,18 @@ void uart_ipc_consume_thread_init(void *params)
     tio.c_cflag &= ~CSTOPB; /* Stop bit 1bit */
     tio.c_cflag &= ~PARENB; /* Paritiy none */
 
+    tio.c_cc[VMIN] = 9;
+    tio.c_cc[VTIME] = 0;
     cfsetspeed(&tio, 115200);
 
     /* tty: set to tty device */
 
-    tcsetattr(uart_fd, TCSANOW, &tio);
+    if (tcsetattr(uart_fd, TCSANOW, &tio)){
+        printf("Error setting uart attributes\n");
+    }
+    else{
+        printf("Success in setting UART attributes\n");
+    }
     const int bits = TIOCM_RTS;
     int ret = ioctl(uart_fd, TIOCMBIS, (unsigned long)&bits);
 
@@ -95,6 +102,9 @@ void uart_ipc_consume_thread_init(void *params)
     {
         printf("UART had issues initializing: %d\n", uart_fd);
     }
+    else{
+        printf("UART IPC Initialized Successfully\n");
+    }
 }
 
 void uart_ipc_consume_thread(void *params)
@@ -103,7 +113,7 @@ void uart_ipc_consume_thread(void *params)
     for (;;)
     {
         ipc_message_header_t header = ipc_get_header_from_uart(uart_fd);
-        
+
         // If string is larger than buffer we can't accept the string
         if (header.message_len > BUFF_ARR_MAX_SIZE)
         {
@@ -121,7 +131,11 @@ void uart_ipc_consume_thread(void *params)
             memset(content_buffer_arr, NULL, sizeof(content_buffer_arr));
             int ret = read(uart_fd, content_buffer_arr, header.message_len);
 
-            printf("got new message!\n %s", content_buffer_arr);
+            printf("got new message: %s\n", content_buffer_arr);
+            printf("Messsage Length %d\n", header.message_len);
+            tcflush(uart_fd, TCIOFLUSH);
+
+
             /**
             if (ret != header.message_len)
             {
@@ -143,6 +157,6 @@ void uart_ipc_consume_thread(void *params)
             */
            tcflush(uart_fd, TCIOFLUSH);
         }
-        
+
     }
 }

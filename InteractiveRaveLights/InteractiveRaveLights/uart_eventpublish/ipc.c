@@ -12,16 +12,15 @@ ipc_message_header_t ipc_get_header_from_uart(int uart_fd)
 {
     // Get message header bytes
     uint8_t header_arr[IPC_MESSAGE_HANDLER_SIZE];
+    int total_bytes_uploaded = 0;
     ipc_message_header_t header;
     header.message_len = -1;
     header.message_id = -1;
 
-    int ret = read(uart_fd, header_arr, sizeof(header_arr));
-
-    if (ret < 0)
-    {
-        printf("Uart Reading error when getting header...\n");
-        return header;
+    while(total_bytes_uploaded < 9){
+        int ret = read(uart_fd, &header_arr[total_bytes_uploaded], 9 - total_bytes_uploaded);
+        total_bytes_uploaded += ret;
+        usleep(500);
     }
     // Deserialize
     header = deserialize_message_header(header_arr, sizeof(header_arr));

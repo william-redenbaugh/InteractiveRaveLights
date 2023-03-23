@@ -23,7 +23,7 @@ void uart_ipc_publish_thread(void *params)
 {
     for (;;)
     {
-        
+
         // Wait until we can consume the entire node
         ipc_message_node_t event_node = ipc_block_consume_new_event();
 
@@ -46,7 +46,7 @@ void uart_ipc_publish_thread(void *params)
         // Write message contents after
         if (event_node.message_header.message_len > 0 | event_node.buffer_ptr != NULL)
         {
-            write_size = Serial.write((uint8_t *)&event_node.buffer_ptr, event_node.message_header.message_len);
+            write_size = Serial.write((uint8_t *)event_node.buffer_ptr, event_node.message_header.message_len);
             // If we couldn't write entire message, say we failed to publish!
             if (write_size != sizeof(ipc_message_header_t))
             {
@@ -112,6 +112,6 @@ void uart_ipc_consume_thread(void *params)
                 printf("parse message!");
             }
         }
-        
+
     }
 }
