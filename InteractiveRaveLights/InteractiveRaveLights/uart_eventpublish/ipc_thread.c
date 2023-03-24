@@ -26,8 +26,6 @@ void uart_ipc_publish_init(void *params)
 char test_arr[1024];
 void uart_ipc_publish_thread(void *params)
 {
-
-
     for (;;)
     {
         // Wait until we can consume the entire node
@@ -56,7 +54,8 @@ void uart_ipc_publish_thread(void *params)
                 callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL;
             }
         }
-
+        
+        
         if (event_node.callback_func != NULL)
             // Any cleanup needed for the published event!
             event_node.callback_func(callback_ret);
@@ -80,8 +79,8 @@ void uart_ipc_consume_thread_init(void *params)
     tio.c_cflag &= ~CSTOPB; /* Stop bit 1bit */
     tio.c_cflag &= ~PARENB; /* Paritiy none */
 
-    tio.c_cc[VMIN] = 9;
-    tio.c_cc[VTIME] = 0;
+    tio.c_cc[VMIN] = 1;
+    tio.c_cc[VTIME] = 5;
     cfsetspeed(&tio, 115200);
 
     /* tty: set to tty device */
@@ -105,6 +104,8 @@ void uart_ipc_consume_thread_init(void *params)
     else{
         printf("UART IPC Initialized Successfully\n");
     }
+
+    init_ipc_module();
 }
 
 void uart_ipc_consume_thread(void *params)
@@ -117,11 +118,10 @@ void uart_ipc_consume_thread(void *params)
         // If string is larger than buffer we can't accept the string
         if (header.message_len > BUFF_ARR_MAX_SIZE)
         {
-            printf("Requested Packet Buffer Overflow detection %d\n", header.message_len);
+            printf("Requested Packet Buffer Overflow detection %X\n", header.message_len);
             // Let message pass
             // Wait 1 second
             usleep(1000000);
-            // Flush buffer
             tcflush(uart_fd, TCIOFLUSH);
             // Send error
         }
@@ -129,17 +129,19 @@ void uart_ipc_consume_thread(void *params)
         {
             // Get
             memset(content_buffer_arr, NULL, sizeof(content_buffer_arr));
-            int ret = read(uart_fd, content_buffer_arr, header.message_len);
-
-            printf("got new message: %s\n", content_buffer_arr);
-            printf("Messsage Length %d\n", header.message_len);
             tcflush(uart_fd, TCIOFLUSH);
 
+            int total_bytes_uploaded = 0;
+            // Block until we get all data.
+            while(total_bytes_uploaded < header.message_len){
+                int ret = read(uart_fd, &content_buffer_arr[total_bytes_uploaded], header.message_len - total_bytes_uploaded);
+                total_bytes_uploaded += ret;
+                usleep(500);
+            }
 
-            /**
-            if (ret != header.message_len)
+            if (total_bytes_uploaded != header.message_len)
             {
-                printf("Failiure to get entire message");
+                printf("Failiure to get entire message: %d\n", header.message_len);
                 // Let message pass
                 // Wait 1 second
                 usleep(1000000);
@@ -152,9 +154,9 @@ void uart_ipc_consume_thread(void *params)
                 // Will run all callbacks related to a specific
                 // Enumerated message!
                 ipc_run_all_sub_cb(header, content_buffer_arr);
-                printf("parse message!");
+                printf("All callbacks ran!\n");
+
             }
-            */
            tcflush(uart_fd, TCIOFLUSH);
         }
 

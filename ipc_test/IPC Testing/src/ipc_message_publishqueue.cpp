@@ -106,7 +106,7 @@ ipc_message_publish_module_t *_ipc_message_queue_init(void)
 
     ipc_message_publish_module_t *module =  new ipc_message_publish_module_t;
     module->max_size = IPC_QUEUE_MAX_NUM_ELEMENTS;
-    module->node_list =  new ipc_message_node_t;
+    module->node_list =  new ipc_message_node_t[20];
     module->current_size = 0;
     module->head_pos = 0;
     module->tail_pos = 0;

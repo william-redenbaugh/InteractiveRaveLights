@@ -5,7 +5,7 @@
 
 static ipc_message_node_t node;
 
-char test[] = "helloworld\n";
+char test[] = "hellojkdkjjkj;lkj;lkjq'wepori[qpwoei[qwpoeir;lkj;asdf]];aslkdj;alslkj;lkj;lkj;lkjdksdfkjkj;lkj;alskda;lsdklaksjdf;alskdj;awer[qpwqkljas;ldkfja;sldkja;lskdfj;alksdjf;alskdjf;alpowierpqowieuqweasdnfb,amsndfa';lk';lk';lk';lk';lka's;dfka's;dlkewrqwer/.,moeir[pasoAJS;dlkjsaD;FLKAJS;OEIRUworld\n";
 void test_thread(void *param){
    for(;;){
 

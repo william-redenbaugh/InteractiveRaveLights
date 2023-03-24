@@ -3,7 +3,7 @@
 #include "ipc.h"
 #include "pthread.h"
 
-#define IPC_QUEUE_MAX_NUM_ELEMENTS 128
+#define IPC_QUEUE_MAX_NUM_ELEMENTS 32
 
 typedef enum ipc_message_callback_status
 {
@@ -33,9 +33,12 @@ typedef struct ipc_message_publish_module
     int head_pos;
     int tail_pos;
 
-    bool waiting;
-    pthread_mutex_t ipc_message_node_muttx;
     sem_t new_msg_mp;
+    bool waiting;
+
+    sem_t ack_msg_mp;
+    bool ack_waiting;
+    pthread_mutex_t ipc_message_node_muttx;
 } ipc_message_publish_module_t;
 
 extern ipc_message_publish_module_t *ipc_publush_queue_module;
@@ -95,6 +98,28 @@ void ipc_msg_queue_wait_new_event(void);
 bool _ipc_publish_message(ipc_message_publish_module_t *module, ipc_message_node_t node);
 
 /**
+ * @brief Signals that we have recieved our ack from the IPC layer that message was recieved
+ * @note internal call only
+*/
+int  _ipc_msg_ack_cmd_recv(ipc_message_publish_module_t *module);
+
+/**
+ * @brief Signals that we have recieved our ack from the IPC layer that message was recieved
+*/
+void ipc_msg_ack_cmd_recv(void);
+
+/**
+ * @brief Blocks until we recieve the call that our messsage ack has been recieved
+ * @note internal call only
+*/
+void _ipc_msg_wait_recieve_cmd_ack(ipc_message_publish_module_t *module);
+
+/**
+ * @brief Blocks until we recieve the call that our messsage ack has been recieved
+*/
+void ipc_msg_wait_recieve_cmd_ack(void);
+
+/**
  * @brief submits a new event to the message publish mmodule
  * @param ipc_message_node_t pointer *message that we are consuming
  */
@@ -106,6 +131,11 @@ bool ipc_publish_message(ipc_message_node_t node);
  * @note internal call only!
  */
 ipc_message_node_t _ipc_block_consume_new_event(ipc_message_publish_module_t *module);
+
+/**
+ * @brief Blocks until we recieve an ACK back from the 
+*/
+void ipc_msg_wait_recieve_cmd_ack(void);
 
 /**
  * @brief Blocks until there's an event in queue, then consumes that event

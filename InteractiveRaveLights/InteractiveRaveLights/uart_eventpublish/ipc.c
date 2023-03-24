@@ -20,7 +20,7 @@ ipc_message_header_t ipc_get_header_from_uart(int uart_fd)
     while(total_bytes_uploaded < 9){
         int ret = read(uart_fd, &header_arr[total_bytes_uploaded], 9 - total_bytes_uploaded);
         total_bytes_uploaded += ret;
-        usleep(500);
+        usleep(1000);
     }
     // Deserialize
     header = deserialize_message_header(header_arr, sizeof(header_arr));
@@ -34,16 +34,16 @@ ipc_message_header_t deserialize_message_header(uint8_t *buffer, size_t len)
     msg.message_len = -1;
 
     msg.message_len =
-        (buffer[0]) |
-        (buffer[1] << 8) |
-        (buffer[2] << 16) |
-        (buffer[3]  << 24);
+        (int32_t)(buffer[0]) |
+        (int32_t)(buffer[1] << 8) |
+        (int32_t)(buffer[2] << 16) |
+        (int32_t)(buffer[3] << 24);
 
     msg.message_id =
-        (buffer[4]) |
-        ((buffer[5] ) << 8) |
-        ((buffer[6] ) << 16) |
-        (buffer[7] << 24);
+        (int32_t)(buffer[4]) |
+        (int32_t)((buffer[5] ) << 8) |
+        (int32_t)((buffer[6] ) << 16) |
+        (int32_t)(buffer[7] << 24);
 
     // What type of message are we sending/receiving
     msg.message_type_enum = buffer[8];
@@ -59,15 +59,15 @@ bool serialize_message_header(ipc_message_header_t msg, uint8_t *buffer, size_t 
         return false;
     }
 
-    buffer[0] = msg.message_len;
-    buffer[1] = (msg.message_len >> 8);
-    buffer[2] = (msg.message_len >> 16);
-    buffer[3] = (msg.message_len >> 24);
+    buffer[0] = (uint8_t)msg.message_len;
+    buffer[1] = (uint8_t)(msg.message_len >> 8);
+    buffer[2] = (uint8_t)(msg.message_len >> 16);
+    buffer[3] = (uint8_t)(msg.message_len >> 24);
 
-    buffer[4] = msg.message_id;
-    buffer[5] = msg.message_id >> 8;
-    buffer[6] = msg.message_id >> 16;
-    buffer[7] = msg.message_id >> 24;
+    buffer[4] = (uint8_t)msg.message_id;
+    buffer[5] = (uint8_t)msg.message_id >> 8;
+    buffer[6] = (uint8_t)msg.message_id >> 16;
+    buffer[7] = (uint8_t)msg.message_id >> 24;
 
     buffer[8] = msg.message_type_enum;
     return true;

@@ -35,6 +35,7 @@ bool _ipc_push_message_queue(ipc_message_publish_module_t *module, ipc_message_n
 
 bool _ipc_pop_message_queue(ipc_message_publish_module_t *module, ipc_message_node_t *node)
 {
+    
     pthread_mutex_lock(&module->ipc_message_node_muttx);
     if (module->current_size == 0)
         return false;
@@ -52,6 +53,7 @@ bool _ipc_pop_message_queue(ipc_message_publish_module_t *module, ipc_message_no
     if (module->tail_pos == module->max_size)
         module->tail_pos = 0;
     pthread_mutex_unlock(&module->ipc_message_node_muttx);
+    
 }
 
 int _signal_new_event(ipc_message_publish_module_t *module)
@@ -61,7 +63,7 @@ int _signal_new_event(ipc_message_publish_module_t *module)
     pthread_mutex_lock(&module->ipc_message_node_muttx);
     if(module->waiting){
         module->waiting = false;
-        ret = sem_post(&module->new_msg_mp);
+       ret = sem_post(&module->new_msg_mp);
     }
     pthread_mutex_unlock(&module->ipc_message_node_muttx);
     return ret;
@@ -103,21 +105,53 @@ void ipc_msg_queue_wait_new_event(void)
     _ipc_msg_queue_wait_new_event(ipc_publish_queue_module);
 }
 
-/***/
+int  _ipc_msg_ack_cmd_recv(ipc_message_publish_module_t *module){
+    int ret = 0;
+    if(module->ack_waiting){
+        module->waiting = false;
+        ret = sem_post(&module->ack_msg_mp);
+    }
+    return ret;
+}
+
+void ipc_msg_ack_cmd_recv(void){
+    _ipc_msg_ack_cmd_recv(ipc_publish_queue_module);
+}
+
+void _ipc_msg_wait_recieve_cmd_ack(ipc_message_publish_module_t *module){
+    while(module->ack_waiting){
+        int ret = sem_wait(&module->ack_msg_mp);
+    }
+}
+
+void ipc_msg_wait_recieve_cmd_ack(void){
+    _ipc_msg_wait_recieve_cmd_ack(ipc_publush_queue_module);
+}
+
 ipc_message_publish_module_t *_ipc_message_queue_init(void)
 {
-    ipc_message_publish_module_t *module = malloc(sizeof(ipc_message_publish_module_t));
+    ipc_message_publish_module_t *module = (ipc_message_publish_module_t*)malloc(sizeof(ipc_message_publish_module_t));
+
     module->max_size = IPC_QUEUE_MAX_NUM_ELEMENTS;
-    module->node_list = malloc(sizeof(ipc_message_node_t) * module->max_size);
+    module->node_list = (ipc_message_node_t*)malloc(sizeof(ipc_message_node_t) * module->max_size);
     module->current_size = 0;
     module->head_pos = 0;
     module->tail_pos = 0;
+    module->waiting = false;
+    module->ack_waiting = false;
 
     // Initialize synchro mutex
     pthread_mutex_init(&module->ipc_message_node_muttx, NULL);
 
+    // Initialize our flag to send messages to queue
     sem_init(&module->new_msg_mp, 0, 0);
     sem_setprotocol(&module->new_msg_mp, SEM_PRIO_NONE);
+
+    // Initialize our IPC ack flag
+    sem_init(&module->ack_msg_mp, 0, 0);
+    sem_setprotocol(&module->ack_msg_mp, SEM_PRIO_NONE);
+
+    return module;
 }
 
 void init_ipc_message_queue(void)
