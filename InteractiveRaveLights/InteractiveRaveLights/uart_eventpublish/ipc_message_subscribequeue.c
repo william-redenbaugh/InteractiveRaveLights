@@ -24,7 +24,7 @@ bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscru
     if (header.message_id < 0 || header.message_id >= IPC_TYPE_ENUM_LEN)
     {
         return false;
-    }      
+    }
 
     // If the message we received is an ACK, then we want to let the publish module know the message has been recieved
     // If the message we received isn't an ACK, then we have to send an ACK back through the IPC layer
@@ -39,7 +39,7 @@ bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscru
         ipc_publish_message(message);
     }
     else{
-
+        ipc_msg_ack_cmd_recv();
     }
 
     // Hash index based off the message id.
@@ -56,14 +56,14 @@ bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscru
 
         // Header of data
         ret_cb.msg_header = header;
-        
+
         if(node->sub_cb != NULL){
             // Run callback
             node->sub_cb(ret_cb);
         }
         node = node->next;
     }
-    
+
     pthread_mutex_unlock(&list.ipc_message_node_muttx);
 }
 

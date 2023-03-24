@@ -133,11 +133,6 @@ bool ipc_publish_message(ipc_message_node_t node);
 ipc_message_node_t _ipc_block_consume_new_event(ipc_message_publish_module_t *module);
 
 /**
- * @brief Blocks until we recieve an ACK back from the 
-*/
-void ipc_msg_wait_recieve_cmd_ack(void);
-
-/**
  * @brief Blocks until there's an event in queue, then consumes that event
  */
 ipc_message_node_t ipc_block_consume_new_event(void);

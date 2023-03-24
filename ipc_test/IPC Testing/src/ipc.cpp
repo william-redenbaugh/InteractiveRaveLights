@@ -17,11 +17,11 @@ ipc_message_header_t ipc_get_header_from_uart(int uart_fd)
     header.message_id = -1;
 
     while(Serial.available() < sizeof(header_arr))
-        os_thread_delay_ms(1);
+        os_thread_delay_ms(10);
+
     int ret = Serial.readBytes(header_arr, sizeof(header_arr));
     if (ret < 0)
     {
-        printf("Uart Reading error when getting header...\n");
         return header;
     }
     // Deserialize

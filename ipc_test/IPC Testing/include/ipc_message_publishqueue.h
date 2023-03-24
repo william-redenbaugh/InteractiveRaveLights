@@ -36,6 +36,7 @@ typedef struct ipc_message_publish_module
 
     // Signal handler detecting new message
     OSSignal new_msg_cv;
+    OSSignal ack_msg_mp;
     MutexLock new_msg_mp;
 } ipc_message_publish_module_t;
 
@@ -100,6 +101,28 @@ bool _ipc_publish_message(ipc_message_publish_module_t *module, ipc_message_node
  * @param ipc_message_node_t pointer *message that we are consuming
  */
 bool ipc_publish_message(ipc_message_node_t node);
+
+/**
+ * @brief Signals that we have recieved our ack from the IPC layer that message was recieved
+ * @note internal call only
+*/
+int  _ipc_msg_ack_cmd_recv(ipc_message_publish_module_t *module);
+
+/**
+ * @brief Signals that we have recieved our ack from the IPC layer that message was recieved
+*/
+void ipc_msg_ack_cmd_recv(void);
+
+/**
+ * @brief Blocks until we recieve the call that our messsage ack has been recieved
+ * @note internal call only
+*/
+void _ipc_msg_wait_recieve_cmd_ack(ipc_message_publish_module_t *module);
+
+/**
+ * @brief Blocks until we recieve the call that our messsage ack has been recieved
+*/
+void ipc_msg_wait_recieve_cmd_ack(void);
 
 /**
  * @brief Blocks until there's an event in queue, then consumes that event

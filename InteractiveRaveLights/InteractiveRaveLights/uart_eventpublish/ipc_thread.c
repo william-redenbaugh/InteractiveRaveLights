@@ -54,8 +54,9 @@ void uart_ipc_publish_thread(void *params)
                 callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL;
             }
         }
-        
-        
+
+        ipc_msg_wait_recieve_cmd_ack();
+
         if (event_node.callback_func != NULL)
             // Any cleanup needed for the published event!
             event_node.callback_func(callback_ret);

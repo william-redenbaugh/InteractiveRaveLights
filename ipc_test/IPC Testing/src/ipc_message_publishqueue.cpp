@@ -100,7 +100,25 @@ void ipc_msg_queue_wait_new_event(void)
     _ipc_msg_queue_wait_new_event(ipc_publish_queue_module);
 }
 
-/***/
+int  _ipc_msg_ack_cmd_recv(ipc_message_publish_module_t *module){
+    int ret = 0;
+    module->ack_msg_mp.signal(THREAD_SIGNAL_0);
+
+    return ret;
+}
+
+void ipc_msg_ack_cmd_recv(void){
+    _ipc_msg_ack_cmd_recv(ipc_publish_queue_module);
+}
+
+void _ipc_msg_wait_recieve_cmd_ack(ipc_message_publish_module_t *module){
+    module->ack_msg_mp.wait_notimeout(THREAD_SIGNAL_0);
+}
+
+void ipc_msg_wait_recieve_cmd_ack(void){
+    _ipc_msg_wait_recieve_cmd_ack(ipc_publish_queue_module);
+}
+
 ipc_message_publish_module_t *_ipc_message_queue_init(void)
 {
 

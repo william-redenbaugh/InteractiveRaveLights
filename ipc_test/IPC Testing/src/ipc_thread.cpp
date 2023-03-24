@@ -53,6 +53,7 @@ void uart_ipc_publish_thread(void *params)
                 callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL;
             }
         }
+        ipc_msg_wait_recieve_cmd_ack();
 
         if (event_node.callback_func != NULL)
             // Any cleanup needed for the published event!
@@ -67,6 +68,8 @@ void uart_ipc_consume_thread_init(void *params)
     //uart_fd = open("/dev/ttyS2", O_RDWR);
     // String buffer array for us to
     content_buffer_arr = (uint8_t*)malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
+
+    init_ipc_module();
 }
 
 void uart_ipc_consume_thread(void *params)
@@ -78,7 +81,6 @@ void uart_ipc_consume_thread(void *params)
         // If string is larger than buffer we can't accept the string
         if (header.message_len > BUFF_ARR_MAX_SIZE)
         {
-            printf("Requested Packet Buffer Overflow detection\n");
             // Let message pass
             // Wait 1 second
             os_thread_delay_s(1);
@@ -96,7 +98,6 @@ void uart_ipc_consume_thread(void *params)
             //int ret = read(uart_fd, content_buffer_arr, header.message_len);
             if (ret != header.message_len)
             {
-                printf("Failiure to get entire message");
                 // Let message pass
                 // Wait 1 second
                 os_thread_delay_s(1);
@@ -109,7 +110,6 @@ void uart_ipc_consume_thread(void *params)
                 // Will run all callbacks related to a specific
                 // Enumerated message!
                 ipc_run_all_sub_cb(header, content_buffer_arr);
-                printf("parse message!");
             }
         }
 

@@ -6,10 +6,10 @@ ipc_subscrube_module_t *ipc_subscribe_module_main;
 
 ipc_subscrube_module_t *new_ipc_module(void)
 {
-    ipc_subscrube_module_t *mod = (ipc_subscrube_module_t*)malloc(sizeof(ipc_subscrube_module_t));
-    //for(int n = 0; n < IPC_TYPE_ENUM_LEN; n++){
-    //    mod->msg_sub_heads_list[n].ipc_message_node_muttx = xSemaphoreCreateBinary();
-    //}
+    ipc_subscrube_module_t *mod = new ipc_subscrube_module_t;
+    for(int n = 0; n < IPC_TYPE_ENUM_LEN; n++){
+        mod->msg_sub_heads_list[n].head = NULL;
+    }
     return mod;
 }
 
@@ -20,15 +20,14 @@ void init_ipc_module(void)
 
 bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscrube_module_t *mod)
 {
-    if (header.message_id < 0)
+    if (header.message_id < 0 || header.message_id >= IPC_TYPE_ENUM_LEN)
     {
         return false;
     }
-    // No need to send an ack if the message we just received isn't an ack
-    if (IPC_TYPE_ACK == header.message_id)
+    // If the message we received is an ACK, then we want to let the publish module know the message has been recieved
+    // If the message we received isn't an ACK, then we have to send an ACK back through the IPC layer
+    if (IPC_TYPE_ACK != header.message_type_enum)
     {
-        // If we just recieved any other message though
-        // We need to send an ACK back
         ipc_message_node_t message;
         message.buffer_ptr = NULL;
         message.callback_func = NULL;
@@ -37,10 +36,13 @@ bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscru
         message.message_header.message_type_enum = IPC_MESSAGE_ACK;
         ipc_publish_message(message);
     }
+    else{
+        ipc_msg_ack_cmd_recv();
+    }
 
     // Hash index based off the message id.
     ipc_subscribe_cb_list_t list = mod->msg_sub_heads_list[header.message_id];
-    
+
     list.ipc_message_node_muttx.lockWaitIndefinite();
 
     ipc_subscribe_cb_node_t *node = list.head;
@@ -53,8 +55,11 @@ bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscru
 
         // Header of data
         ret_cb.msg_header = header;
-        // Run callback
-        node->sub_cb(ret_cb);
+        if(node->sub_cb != NULL){
+            // Run callback
+            node->sub_cb(ret_cb);
+        }
+
         node = node->next;
     }
 
