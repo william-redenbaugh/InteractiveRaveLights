@@ -114,18 +114,24 @@ int  _ipc_msg_ack_cmd_recv(ipc_message_publish_module_t *module){
     return ret;
 }
 
-void ipc_msg_ack_cmd_recv(void){
+int ipc_msg_ack_cmd_recv(void){
     _ipc_msg_ack_cmd_recv(ipc_publish_queue_module);
 }
 
-void _ipc_msg_wait_recieve_cmd_ack(ipc_message_publish_module_t *module){
-    while(module->ack_waiting){
-        int ret = sem_wait(&module->ack_msg_mp);
+int _ipc_msg_wait_recieve_cmd_ack(ipc_message_publish_module_t *module){
+    int ret = 0;
+    if(module->ack_waiting){
+        struct timespec timeout; 
+        timeout.tv_nsec = 0; 
+        timeout.tv_sec = 5;
+        ret = sem_timedwait(&module->ack_msg_mp, &timeout);
     }
+
+    return ret;
 }
 
-void ipc_msg_wait_recieve_cmd_ack(void){
-    _ipc_msg_wait_recieve_cmd_ack(ipc_publush_queue_module);
+int ipc_msg_wait_recieve_cmd_ack(void){
+    _ipc_msg_wait_recieve_cmd_ack(ipc_publish_queue_module);
 }
 
 ipc_message_publish_module_t *_ipc_message_queue_init(void)

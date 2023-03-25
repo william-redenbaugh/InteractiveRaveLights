@@ -55,7 +55,16 @@ void uart_ipc_publish_thread(void *params)
             }
         }
 
-        ipc_msg_wait_recieve_cmd_ack();
+        int k = ipc_msg_wait_recieve_cmd_ack();
+        switch(k){
+            case 0:
+                callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_SUCCESS;
+            break;
+            case ETIMEDOUT:
+                callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL_TIMEOUT;
+                printf("Timeout upon message!\n");
+            break;
+        }
 
         if (event_node.callback_func != NULL)
             // Any cleanup needed for the published event!

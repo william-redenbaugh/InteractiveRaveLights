@@ -26,7 +26,7 @@ bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscru
     }
     // If the message we received is an ACK, then we want to let the publish module know the message has been recieved
     // If the message we received isn't an ACK, then we have to send an ACK back through the IPC layer
-    if (IPC_TYPE_ACK != header.message_type_enum)
+    if (IPC_MESSAGE_ACK != header.message_type_enum)
     {
         ipc_message_node_t message;
         message.buffer_ptr = NULL;

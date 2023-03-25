@@ -33,7 +33,7 @@ void uart_ipc_publish_thread(void *params)
 
         // Writes the message header to UART first!
 
-        //int write_size = write(uart_fd, (void *)&event_node.message_header, sizeof(ipc_message_header_t));
+        // int write_size = write(uart_fd, (void *)&event_node.message_header, sizeof(ipc_message_header_t));
         uint8_t output_buffer[9];
         serialize_message_header(event_node.message_header, output_buffer, sizeof(output_buffer));
         int write_size = Serial.write(output_buffer, sizeof(output_buffer));
@@ -53,21 +53,29 @@ void uart_ipc_publish_thread(void *params)
                 callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL;
             }
         }
-        ipc_msg_wait_recieve_cmd_ack();
+
+        int k = ipc_msg_wait_recieve_cmd_ack();
+        switch(k){
+            case true:
+                callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_SUCCESS;
+            break;
+            case false:
+                callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL_TIMEOUT;
+            break;
+        }
 
         if (event_node.callback_func != NULL)
             // Any cleanup needed for the published event!
             event_node.callback_func(callback_ret);
-
     }
 }
 
 void uart_ipc_consume_thread_init(void *params)
 {
     Serial.begin(115200);
-    //uart_fd = open("/dev/ttyS2", O_RDWR);
-    // String buffer array for us to
-    content_buffer_arr = (uint8_t*)malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
+    // uart_fd = open("/dev/ttyS2", O_RDWR);
+    //  String buffer array for us to
+    content_buffer_arr = (uint8_t *)malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
 
     init_ipc_module();
 }
@@ -84,9 +92,9 @@ void uart_ipc_consume_thread(void *params)
             // Let message pass
             // Wait 1 second
             os_thread_delay_s(1);
-            //usleep(1000000);
-            // Flush buffer
-            while(Serial.available())
+            // usleep(1000000);
+            //  Flush buffer
+            while (Serial.available())
                 Serial.read();
 
             // Send error
@@ -94,16 +102,16 @@ void uart_ipc_consume_thread(void *params)
         else
         {
             // Get
-            int ret = 0;
-            //int ret = read(uart_fd, content_buffer_arr, header.message_len);
+            int ret = Serial.readBytes(content_buffer_arr, header.message_len);
+            // int ret = read(uart_fd, content_buffer_arr, header.message_len);
             if (ret != header.message_len)
             {
                 // Let message pass
                 // Wait 1 second
                 os_thread_delay_s(1);
                 // Flush buffer
-                while(Serial.available())
-                Serial.read();
+                while (Serial.available())
+                    Serial.read();
             }
             else
             {
@@ -112,6 +120,5 @@ void uart_ipc_consume_thread(void *params)
                 ipc_run_all_sub_cb(header, content_buffer_arr);
             }
         }
-
     }
 }

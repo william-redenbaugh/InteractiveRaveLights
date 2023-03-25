@@ -9,6 +9,7 @@ typedef enum ipc_message_callback_status
 {
     IPC_MESSAGE_COMPLETE_SUCCESS,
     IPC_MESSAGE_COMPLETE_FAIL,
+    IPC_MESSAGE_COMPLETE_FAIL_TIMEOUT,
 } ipc_message_callback_status_t;
 
 typedef struct ipc_message_callback
@@ -111,18 +112,18 @@ int  _ipc_msg_ack_cmd_recv(ipc_message_publish_module_t *module);
 /**
  * @brief Signals that we have recieved our ack from the IPC layer that message was recieved
 */
-void ipc_msg_ack_cmd_recv(void);
+int ipc_msg_ack_cmd_recv(void);
 
 /**
  * @brief Blocks until we recieve the call that our messsage ack has been recieved
  * @note internal call only
 */
-void _ipc_msg_wait_recieve_cmd_ack(ipc_message_publish_module_t *module);
+bool _ipc_msg_wait_recieve_cmd_ack(ipc_message_publish_module_t *module);
 
 /**
  * @brief Blocks until we recieve the call that our messsage ack has been recieved
 */
-void ipc_msg_wait_recieve_cmd_ack(void);
+bool ipc_msg_wait_recieve_cmd_ack(void);
 
 /**
  * @brief Blocks until there's an event in queue, then consumes that event
