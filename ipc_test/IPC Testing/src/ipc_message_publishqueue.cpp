@@ -1,6 +1,6 @@
 #include "ipc_message_publishqueue.h"
 
-ipc_message_publish_module_t *ipc_publish_queue_module;
+ipc_message_publish_module_t *ipc_publish_queue_module = NULL;
 
 bool ipc_publish_message(ipc_message_node_t node)
 {
@@ -62,7 +62,7 @@ bool _ipc_pop_message_queue(ipc_message_publish_module_t *module, ipc_message_no
 int _signal_new_event(ipc_message_publish_module_t *module)
 {
     module->new_msg_cv.signal(THREAD_SIGNAL_0);
-    return 9;
+    return 0;
 }
 
 void _ipc_msg_queue_wait_new_event(ipc_message_publish_module_t *module)
@@ -112,16 +112,18 @@ int ipc_msg_ack_cmd_recv(void){
 }
 
 bool _ipc_msg_wait_recieve_cmd_ack(ipc_message_publish_module_t *module){
-    return module->ack_msg_mp.wait_n_clear(THREAD_SIGNAL_0, 5000);
+    module->ack_msg_mp.wait_notimeout(THREAD_SIGNAL_0);
+    return true;
 }
 
 bool ipc_msg_wait_recieve_cmd_ack(void){
-    _ipc_msg_wait_recieve_cmd_ack(ipc_publish_queue_module);
+    return _ipc_msg_wait_recieve_cmd_ack(ipc_publish_queue_module);
 }
 
 ipc_message_publish_module_t *_ipc_message_queue_init(void)
 {
-
+    if(ipc_publish_queue_module != NULL)
+        return NULL;
     ipc_message_publish_module_t *module =  new ipc_message_publish_module_t;
     module->max_size = IPC_QUEUE_MAX_NUM_ELEMENTS;
     module->node_list =  new ipc_message_node_t[20];

@@ -54,6 +54,7 @@ void uart_ipc_publish_thread(void *params)
             }
         }
 
+        
         int k = ipc_msg_wait_recieve_cmd_ack();
         switch(k){
             case true:
@@ -63,6 +64,7 @@ void uart_ipc_publish_thread(void *params)
                 callback_ret.ipc_status = IPC_MESSAGE_COMPLETE_FAIL_TIMEOUT;
             break;
         }
+        
 
         if (event_node.callback_func != NULL)
             // Any cleanup needed for the published event!
