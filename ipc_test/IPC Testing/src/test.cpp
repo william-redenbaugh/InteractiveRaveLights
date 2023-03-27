@@ -1,7 +1,7 @@
 
 #include "OS/OSThreadKernel.h"
 #include <Arduino.h>
-#include "ipc_message_publishqueue.h"
+#include "MODULES/TeensyOSIPC/ipc_message_publishqueue.h"
 
 static ipc_message_node_t node;
 

@@ -1,12 +1,16 @@
 #include <Arduino.h>
 #include "OS/OSThreadKernel.h"
-#include "ipc_message_publishqueue.h"
+#include "MODULES/TeensyOSIPC/ipc_message_publishqueue.h"
 #include "STATEMACHINE/statemachine.h"
 #include "UNIT_TESTS/OS_UNIT_TESTS/os_unit_test.h"
 #include "THREAD_INIT/threads_init.h"
+
+#include "OS/OSSemaphoreKernel.h"
+
 /// 4086459573
 // Man Myth Legend Vinh
 
+SemaphoreLock lock(5);
 
 void setup(){
   os_init();

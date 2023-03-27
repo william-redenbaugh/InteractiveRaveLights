@@ -1,5 +1,5 @@
-#include "ipc_message_publishqueue.h"
-#include "ipc_thread.h"
+#include "MODULES/TeensyOSIPC/ipc_message_publishqueue.h"
+#include "MODULES/TeensyOSIPC/ipc_thread.h"
 #include "test.h"
 
 #include "THREAD_INIT/threads_init.h"
