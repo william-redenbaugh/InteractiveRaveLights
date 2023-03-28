@@ -5,6 +5,8 @@
 #include "UNIT_TESTS/OS_UNIT_TESTS/os_unit_test.h"
 #include "THREAD_INIT/threads_init.h"
 
+#include "CSAL/os_queue.h"
+
 #include "OS/OSSemaphoreKernel.h"
 
 /// 4086459573

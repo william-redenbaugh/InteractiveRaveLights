@@ -19,6 +19,32 @@ void init_ipc_module(void)
     ipc_subscribe_module_main = new_ipc_module();
 }
 
+bool _ipc_attach_ipc_cb(ipc_subscrube_module_t *mod, ipc_sub_cb cb, int32_t message_id){
+    if(message_id >= IPC_TYPE_ENUM_LEN || message_id < 0){
+        return false;
+    }
+
+    ipc_subscribe_cb_node_t *node = NULL;
+    if(mod->msg_sub_heads_list[message_id].head == NULL){
+        mod->msg_sub_heads_list[message_id].head = (ipc_subscribe_cb_node_t*)malloc(sizeof(ipc_subscribe_cb_node_t));
+        node = mod->msg_sub_heads_list[message_id].head;
+    }
+    else{
+        // Append to end of node
+        node = mod->msg_sub_heads_list[message_id].head;
+        while(node->next != NULL){
+            node = node->next;
+        }
+    }
+
+    node->sub_cb = cb;
+}
+
+bool ipc_attach_ipc_cb(ipc_sub_cb cb, int32_t message_id){
+    _ipc_attach_ipc_cb(ipc_subscribe_module_main, cb, message_id);
+}
+
+
 bool _ipc_run_all_sub_cb(ipc_message_header_t header, uint8_t *data, ipc_subscrube_module_t *mod)
 {
     if (header.message_id < 0 || header.message_id >= IPC_TYPE_ENUM_LEN)

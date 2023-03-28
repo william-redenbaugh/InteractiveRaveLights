@@ -12,7 +12,7 @@ void test_thread(void *param){
         node.message_header.message_len = sizeof(test);
         node.message_header.message_type_enum = IPCM_MESSAGE_NONE;
         node.callback_func = NULL;
-        node.message_header.message_id = IPC_TYPE_ACK;
+        node.message_header.message_id = IPC_TYPE_LED_ANIMATION_TYPE;
 
         ipc_publish_message(node);
         os_thread_delay_ms(1000);
