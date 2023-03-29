@@ -16,3 +16,9 @@
 [submodule "ipc_test/IPC Testing/lib/TeensyOS"]
 	path = ipc_test/IPC Testing/lib/TeensyOS
 	url = git@github.com:william-redenbaugh/TeensyOS.git
+[submodule "ipc_test/IPC Testing/lib/Arduino-LiquidCrystal-I2C-library"]
+	path = ipc_test/IPC Testing/lib/Arduino-LiquidCrystal-I2C-library
+	url = git@github.com:fdebrabander/Arduino-LiquidCrystal-I2C-library.git
+[submodule "InteractiveRaveLights/InteractiveRaveLights/SpresesnseLiquidCrystalI2C"]
+	path = InteractiveRaveLights/InteractiveRaveLights/SpresesnseLiquidCrystalI2C
+	url = git@github.com:william-redenbaugh/SpresesnseLiquidCrystalI2C.git
