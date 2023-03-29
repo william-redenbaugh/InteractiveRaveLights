@@ -65,6 +65,7 @@
  * @returns When we don't own the resources that we are trying to access
 */
 #define OS_RET_NOT_OWNED (-13)
+
 /**
  * @brief Converts POSIX Error messages to our OS Error messages
 */

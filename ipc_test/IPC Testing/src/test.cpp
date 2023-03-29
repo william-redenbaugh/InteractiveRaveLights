@@ -24,7 +24,7 @@ void test_thread(void *param){
     // initialize the LCD
 	lcd.begin();
 
-   ipc_attach_cb(update_text, IPC_TYPE_TEST);
+   ipc_attach_cb(IPC_TYPE_TEST, update_text);
    for(;;){
         node.buffer_ptr = (uint8_t*)test;
         node.message_header.message_len = sizeof(test);
