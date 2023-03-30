@@ -26,7 +26,7 @@ int os_clearbits(os_setbits_t * mod, uint8_t bit){
     if(bit >= 32)
         return OS_RET_INVALID_PARAM;
 
-    mod->bits &= (1 << bit);
+    mod->bits &= (0 << bit);
         
     if(mod->sem_wait){
         mod->sem_wait = false;
