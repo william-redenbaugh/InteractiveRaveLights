@@ -1,10 +1,10 @@
 #ifndef _SEM_H
 #define _SEM_H
 
-#include "OS/OSSemaphoreKernel.h"
+#include "pthread.h"
 
 typedef struct os_sem_t{
-    SemaphoreLock lock;
+    sem_t sem;
 }os_sem_t;
 
 /**

@@ -66,6 +66,12 @@
 */
 #define OS_RET_NOT_OWNED (-13)
 
+
+/**
+ * @returns when we have an unsupported feature
+*/
+#define OS_RET_UNSUPPORTED_FEATURES (-14)
+
 /**
  * @brief Converts POSIX Error messages to our OS Error messages
 */

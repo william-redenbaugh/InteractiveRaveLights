@@ -47,7 +47,7 @@ int os_waitbits(os_setbits_t *mod, uint8_t bit, uint32_t timeout_ms){
     struct timespec ts;
     ts.tv_sec = timeout_ms / 1000;
     ts.tv_nsec = (timeout_ms % 1000) * 1000000;
-
+    
     while(mod->bits && (1 << bit) == 0){
         mod->sem_wait = true;
         int ret = sem_timedwait(&mod->bit_sem, &ts);

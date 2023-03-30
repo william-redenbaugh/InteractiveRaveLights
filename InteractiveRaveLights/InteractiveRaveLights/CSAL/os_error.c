@@ -20,6 +20,9 @@ int posix_os_ret_error_conv(int ret){
 
     case EPERM:
         return OS_RET_NOT_OWNED;
+    
+    case ENOSYS: 
+        return OS_RET_UNSUPPORTED_FEATURES;
         
     case 0:
         return OS_RET_OK;
