@@ -3,12 +3,13 @@
 
 #include "stdint.h"
 #include "stdbool.h"
+#include "pthread.h"
 
 /*!
 * @brief  Thread id value
 * @note
 */
-typedef int os_thread_id_t;
+typedef pthread_t os_thread_id_t;
 
 /*!
 * @brief Redeclaration of thread function
@@ -54,7 +55,7 @@ os_thread_id_t os_kill_thread(os_thread_id_t target_thread_id);
 /*!
 * @returns The current thread's ID.
 */
-os_thread_id_t os_current_id(void);
+#define os_current_id() pthread_self()
 
 /*!
  * @brief Kills and closes out current thread
@@ -67,7 +68,7 @@ void os_kill_self_thread(void);
 * @param int milliseconds since last system tick
 * @returns none
 */
-void os_thread_sleep_ms(int millisecond);
+#define os_thread_sleep_ms(millisecond) usleep(1000000 * millisecond)
 
 /*!
 * @brief Sleeps the thread through a hypervisor call.
@@ -81,5 +82,5 @@ void os_thread_sleep_ms(int millisecond);
 *   @brief allows our program to "yield" out of current subroutine
 *   @note Call's hypervisor command to look into something else.
 */
-void _os_yield(void);
+#define _os_yield() pthread_yield()
 #endif
