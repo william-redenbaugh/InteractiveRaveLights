@@ -19,10 +19,21 @@ int os_i2c_begin(os_i2c_t *i2c){
     if (i2c->fd< 0){
         return OS_RET_IO_ERROR;
     }
+
+    return OS_RET_OK;
+
 }
 
 int os_i2c_end(os_i2c_t *i2c){
-    return OS_RET_INVALID_PARAM;
+    if(i2c == NULL)
+        return OS_RET_NULL_PTR;
+
+    if (i2c->fd <= 0){
+        return OS_RET_INT_ERR;
+    }
+    
+    close(i2c->fd);
+    return OS_RET_OK;
 }
 
 int os_i2c_setbus(os_i2c_t *i2c, uint32_t freq_hz){
@@ -54,6 +65,8 @@ int os_i2c_send(os_i2c_t *i2c, uint8_t addr, uint8_t *buf, size_t size){
   
     if(ret < 0)
         return OS_RET_IO_ERROR;
+
+    return OS_RET_OK;
 }
 
 int os_i2c_recieve(os_i2c_t *i2c, uint8_t addr, uint8_t *buf, size_t size){
@@ -78,4 +91,6 @@ int os_i2c_recieve(os_i2c_t *i2c, uint8_t addr, uint8_t *buf, size_t size){
   
     if(ret < 0)
         return OS_RET_IO_ERROR;
+
+    return OS_RET_OK;
 }
