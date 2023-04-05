@@ -73,6 +73,11 @@
 #define OS_RET_UNSUPPORTED_FEATURES (-14)
 
 /**
+ * @returns when the OS is null
+*/
+#define OS_RET_NULL_PTR (-15)
+
+/**
  * @brief Converts POSIX Error messages to our OS Error messages
 */
 int posix_os_ret_error_conv(int ret);
