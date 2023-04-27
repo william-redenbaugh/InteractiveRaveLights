@@ -57,7 +57,7 @@ int os_i2c_send(os_i2c_t *i2c, uint8_t addr, uint8_t *buf, size_t size){
     msg.length    = size;
     msg.flags     = 0;
 
-    xfer.msgv = &xfer;
+    xfer.msgv = &msg;
 
     xfer.msgc = 1;
 
@@ -83,7 +83,7 @@ int os_i2c_recieve(os_i2c_t *i2c, uint8_t addr, uint8_t *buf, size_t size){
     msg.length    = size;
     msg.flags     = I2C_M_READ;
 
-    xfer.msgv = &xfer;
+    xfer.msgv = &msg;
 
     xfer.msgc = 1;
 

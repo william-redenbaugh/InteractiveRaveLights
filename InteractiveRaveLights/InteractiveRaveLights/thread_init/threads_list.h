@@ -9,9 +9,11 @@
 #include "led_strip_threads/strip_modules.h"
 #include "uart_eventpublish/ipc_thread.h"
 #include "test.h"
+#include "i2s_mic/i2s_mic.h"
 
 #define THREAD_LIST                                                                                     \
     {                                                                                                   \
+        {i2s_mic_thread, i2s_mic_init, "I2S Mic Init", NULL},                                           \
         {adc_runtime_thread, adc_init_func, "ADC Runtime Main", NULL},                                  \
         {uart_ipc_consume_thread, uart_ipc_consume_thread_init, "UART IPC consume runtime", NULL},      \
         {uart_ipc_publish_thread, uart_ipc_publish_init, "UART IPC publish runtime", NULL},             \
@@ -25,6 +27,6 @@
         {test_thread_init, test_thread_init, "Test Thread", NULL},                                      \
     }
 
-#define NUM_THREADS 11
+#define NUM_THREADS 12
 
 #endif

@@ -1,5 +1,5 @@
 #include "strip_update_module.h"
-
+#include "stdlib.h"
 void strip_set_leds(strip_update_thread_t *strip, int n, uint8_t r, uint8_t g, uint8_t b)
 {
     if (strip->num_leds < n)
@@ -33,12 +33,10 @@ rgb_color strip_get_leds_rgb(strip_update_thread_t *strip, int n)
     return strip->strip_cols[n];
 }
 
-static strip_update_mod_thread_runtime(strip_update_thread_t *mod)
+static int strip_update_mod_thread_runtime(strip_update_thread_t *mod)
 {
-
     for (;;)
     {
-
         pthread_mutex_lock(&mod->muttx);
         for (int n = 0; n < mod->num_leds; n++)
         {
@@ -54,15 +52,15 @@ static strip_update_mod_thread_runtime(strip_update_thread_t *mod)
 strip_update_thread_t *new_strip_update_thread(int num_leds, char *spi_path)
 {
     // Allocoate space for our strip modulese
-    strip_update_thread_t *head = malloc(sizeof(strip_update_thread_t));
+    strip_update_thread_t *head = (strip_update_thread_t*)malloc(sizeof(strip_update_thread_t));
 
     // Setup LED strip
     head->strip = setup_ws2812b_strip(num_leds, spi_path);
     head->num_leds = num_leds;
-    head->strip_cols = malloc(sizeof(rgb_color) * num_leds);
+    head->strip_cols = (rgb_color*)malloc(sizeof(rgb_color) * num_leds);
     // Zero out the data.
     memset(head->strip_cols, 0, sizeof(rgb_color) * num_leds);
-    head->runtime_func = strip_update_mod_thread_runtime;
+    head->runtime_func = (void(*)(struct strip_update_thread *))strip_update_mod_thread_runtime;
 
     // Initialize the mutex.
     pthread_mutex_init(&head->muttx, NULL);

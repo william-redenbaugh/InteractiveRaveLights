@@ -37,12 +37,12 @@ static uint8_t get_protocol_eq(uint8_t data, int pos);
 
 WS2812B_t *setup_ws2812b_strip(int num_leds, const char *bus)
 {
-    WS2812B_t *strip = malloc(sizeof(WS2812B_t));
+    WS2812B_t *strip = (WS2812B_t*)malloc(sizeof(WS2812B_t));
 
     strip->num_leds = num_leds;
     strip->txbuff_len = RESET_SIZE + BYTES_FOR_LED * num_leds;
 
-    strip->txbuff = malloc(sizeof(uint8_t) * (RESET_SIZE + BYTES_FOR_LED * num_leds));
+    strip->txbuff = (uint8_t*)malloc(sizeof(uint8_t) * (RESET_SIZE + BYTES_FOR_LED * num_leds));
     if (strip->txbuff == NULL)
     {
         printf("LED strip buffer pool not able to be allocated properly\n");
@@ -161,18 +161,4 @@ static uint8_t get_protocol_eq(uint8_t data, int pos)
     else
         eq += 0b10000000;
     return eq;
-}
-
-/*
- * If you want to set a LED's color in the HSV color space, simply call this
- * function with a hsv_color containing the desired color and the index of the
- * led on the LED strip (starting from 0, the first one being the closest the
- * first plugged to the board)
- *
- * Only set the color of the LEDs through the functions given by this API
- * (unless you really know what you are doing)
- */
-void set_led_color_hsv(hsv_color color, int pos)
-{
-    set_led_color_rgb(hsv2rgb(color), pos);
 }

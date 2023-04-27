@@ -4,8 +4,7 @@
 #include <fcntl.h>
 #include <sched.h>
 #include <errno.h>
-#include "nuttx/fs/ioctl.h"
-#include "nuttx/serial/tioctl.h"
+#include "sys/ioctl.h"
 #include "termios.h"
 #include "stdint.h"
 
@@ -93,6 +92,9 @@ int os_uart_transfer(os_uart_t *uart, uint8_t *rx, uint8_t*tx, size_t size){
     if(uart == NULL)
         return OS_RET_NULL_PTR;
 
+    // Consecutive read and write operation...
+    write(uart->fd, tx, size);
+    read(uart->fd, rx, size);
     return OS_RET_OK;
 }
 

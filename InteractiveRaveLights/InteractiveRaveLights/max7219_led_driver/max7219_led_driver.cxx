@@ -50,7 +50,7 @@ int init_led_matrix(led_matrix_t *matrix, int num_deivces)
 {
     int fd = init_spi_device();
     matrix->fd = fd;
-    matrix->cols = malloc(num_deivces * 8 * sizeof(uint8_t));
+    matrix->cols = (uint8_t*)malloc(num_deivces * 8 * sizeof(uint8_t));
 
     SETUP_PIN_OUTPUT(MAX7219_SPI_CS);
     init_matrix(matrix);

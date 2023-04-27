@@ -2,7 +2,9 @@
 #define THREADS_INIT_H
 #include "sys/_stdint.h"
 #include "pthread.h"
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
  * @brief Structure that manages task initialization.
  * @note Designed to help intiailize lists of tasks all at once.
@@ -18,6 +20,9 @@ typedef struct {
  * @brief Initialize all the threads that we put into our list.
  *
  */
-void threads_list_init(void);
+extern void threads_list_init(void);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

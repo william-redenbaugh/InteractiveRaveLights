@@ -6,7 +6,7 @@ ipc_subscrube_module_t *ipc_subscribe_module_main;
 
 ipc_subscrube_module_t *new_ipc_module(void)
 {
-    ipc_subscrube_module_t *mod = malloc(sizeof(ipc_subscrube_module_t));
+    ipc_subscrube_module_t *mod = (ipc_subscrube_module_t*)malloc(sizeof(ipc_subscrube_module_t));
     for(int n = 0; n < IPC_TYPE_ENUM_LEN; n++){
         mod->msg_sub_heads_list[n].head = NULL;
         pthread_mutex_init(&mod->msg_sub_heads_list[n].ipc_message_node_muttx, NULL);

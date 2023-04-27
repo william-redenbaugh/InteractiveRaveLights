@@ -1,4 +1,5 @@
 #include "ipc_message_publishqueue.h"
+#include "stdlib.h"
 
 ipc_message_publish_module_t *ipc_publish_queue_module;
 

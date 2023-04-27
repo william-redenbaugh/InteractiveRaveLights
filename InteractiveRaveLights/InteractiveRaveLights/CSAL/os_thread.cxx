@@ -4,7 +4,7 @@
 
 os_thread_id_t os_add_thread(thread_func_t p, void * arg, int stack_size, void *stack){
     pthread_t t;
-    pthread_create(NULL, &t, p, arg);
+    pthread_create(&t, NULL, (pthread_startroutine_t)p, arg);
 
     return(os_thread_id_t)t;
 }

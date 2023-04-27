@@ -15,36 +15,37 @@
 #include <arch/chip/scu.h>
 #include <arch/chip/adc.h>
 #include "nuttx/wqueue.h"
+#include <sys/ioctl.h>
 
 os_adc_t adc_one = {
     .bus = 1, 
-    .num_bits = 16,
-    .fifosize = 128
+    .fifosize = 128, 
+    .num_bits = 16
 };
 os_adc_t adc_two = {
     .bus = 2, 
-    .num_bits = 16,
-    .fifosize = 128
+    .fifosize = 128, 
+    .num_bits = 16
 };
 os_adc_t adc_three = {
     .bus = 3, 
-    .num_bits = 16,
-    .fifosize = 128
+    .fifosize = 128,
+    .num_bits = 16
 };
 os_adc_t adc_four = {
     .bus = 4, 
-    .num_bits = 16,
-    .fifosize = 128
+    .fifosize = 128, 
+    .num_bits = 16
 };
 os_adc_t adc_five = {
     .bus = 5, 
-    .num_bits = 16,
-    .fifosize = 128
+    .fifosize = 128, 
+    .num_bits = 16
 };
 os_adc_t adc_size = {
     .bus = 6, 
-    .num_bits = 16,
-    .fifosize = 128
+    .fifosize = 128, 
+    .num_bits = 16
 };
 
 int os_adc_begin(os_adc_t *adc){

@@ -16,6 +16,8 @@
 #include "nuttx/wqueue.h"
 #include "shared_constants/shared_constants.h"
 #include "matrix_animation_thread/led_matrix_runtime.h"
+#include "nuttx/arch.h"
+#include "sys/ioctl.h"
 
 #define TARGET_BASELINE_AMPLITUDE 800
 #define INTRO_MIC_OFFSET 30000
@@ -48,10 +50,10 @@ static adc_struct_t *adc;
  */
 adc_struct_t *new_adc_struct(size_t data_size)
 {
-    adc_struct_t *adc = malloc(sizeof(adc_struct_t));
+    adc_struct_t *adc = (adc_struct_t*)malloc(sizeof(adc_struct_t));
     adc->data_size = data_size;
-    adc->data = malloc(sizeof(uint16_t) * data_size);
-    adc->filtered_data = malloc(sizeof(float) * data_size);
+    adc->data = (uint16_t*)malloc(sizeof(uint16_t) * data_size);
+    adc->filtered_data = (uint16_t*)malloc(sizeof(float) * data_size);
     printf("Data size: %d\n", adc->data_size);
 
     pthread_mutex_init(&adc->lock, NULL);
@@ -182,7 +184,7 @@ void read_adc_data(adc_struct_t *adc)
     {
         errval = errno;
         printf("read failed:%d\n", errval);
-        return errval;
+        return;
     }
     else if (nbytes == 0)
     {

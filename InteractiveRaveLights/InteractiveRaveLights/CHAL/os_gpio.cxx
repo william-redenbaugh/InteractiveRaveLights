@@ -1,9 +1,11 @@
 #include "os_gpio.h"
 #include "CSAL/os_error.h"
-#include "nuttx/board.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
+#include <arch/board/board.h>
+#include <arch/chip/pin.h>
+
 
 int os_gpio_config(os_gpio_conf_t *conf){
     if(conf == NULL){
@@ -38,7 +40,7 @@ int os_gpio_config(os_gpio_conf_t *conf){
         break;
     }
 
-    if (board_gpio_config(conf->gpio_pin, input, high_drive, pull) < 0){
+    if (board_gpio_config(conf->gpio_pin, 0, input, high_drive, pull) < 0){
         return OS_RET_INT_ERR;
     }
 
@@ -125,7 +127,7 @@ int os_gpio_isr_config(os_gpio_isr_conf_t *conf){
         break;
     }
 
-    if(board_gpio_intconfig(conf->gpio_pin, mode, conf->isr_fun) < 0){
+    if(board_gpio_intconfig(conf->gpio_pin, mode, FALSE, (xcpt_t)conf->isr_fun) < 0){
         return OS_RET_INT_ERR;
     }
 

@@ -23,7 +23,7 @@ int os_sem_entry_wait_indefinite(os_sem_t *sem){
 }
 
 int os_sem_entry_try(os_sem_t *sem){
-    return posix_os_ret_error_conv(sem_trywait(&sem));
+    return posix_os_ret_error_conv(sem_trywait(&sem->sem));
 }
 
 int os_sem_count(os_sem_t *sem){

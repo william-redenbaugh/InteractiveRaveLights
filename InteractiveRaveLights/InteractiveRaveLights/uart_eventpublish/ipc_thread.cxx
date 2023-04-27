@@ -1,6 +1,5 @@
 #include "ipc_thread.h"
 #include "pthread.h"
-#include "tiny-json/tiny-json.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -10,6 +9,7 @@
 #include "ipc.h"
 #include "nuttx/fs/ioctl.h"
 #include "nuttx/serial/tioctl.h"
+#include "sys/ioctl.h"
 #include "termios.h"
 #include "stdint.h"
 #include "ipc_message_publishqueue.h"
@@ -105,7 +105,7 @@ void uart_ipc_consume_thread_init(void *params)
     int ret = ioctl(uart_fd, TIOCMBIS, (unsigned long)&bits);
 
     // String buffer array for us to
-    content_buffer_arr = malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
+    content_buffer_arr = (uint8_t*)malloc(sizeof(uint8_t) * BUFF_ARR_MAX_SIZE);
 
     if (uart_fd < 0)
     {

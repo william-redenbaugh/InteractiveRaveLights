@@ -56,7 +56,7 @@ void fft_primary_task(void *ptr)
     {
 
         // Copy data into our own buffer
-        adc_copy_filtered_data(input_buffer, ADC_FFT_BUFFER_SIZE);
+        adc_copy_filtered_data((int16_t*)input_buffer, ADC_FFT_BUFFER_SIZE);
 
         // CMSIS FFT copy
         pthread_mutex_lock(&fft_mt);

@@ -33,15 +33,15 @@ static void setup_animation_variables(strip_animation_mod_t *mod)
     case STRIP_ANIMATION_OFF:
 
     case STRIP_ANIMATION_TYPE_ONE:
-        mod->values_matrix = malloc(mod->num_intervals * sizeof(int));
-        mod->peaks_matrix = malloc(mod->num_intervals * sizeof(int));
+        mod->values_matrix = (int*)malloc(mod->num_intervals * sizeof(int));
+        mod->peaks_matrix = (int*)malloc(mod->num_intervals * sizeof(int));
         memset(mod->values_matrix, 0, sizeof(int) * mod->num_intervals);
         memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_intervals);
         break;
 
     case STRIP_ANIMATION_TYPE_TWO:
-        mod->values_matrix = malloc(mod->num_intervals * sizeof(int));
-        mod->peaks_matrix = malloc(mod->num_intervals * sizeof(int));
+        mod->values_matrix = (int*)malloc(mod->num_intervals * sizeof(int));
+        mod->peaks_matrix = (int*)malloc(mod->num_intervals * sizeof(int));
         memset(mod->values_matrix, 0, sizeof(int) * mod->num_intervals);
         memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_intervals);
         break;
@@ -50,7 +50,7 @@ static void setup_animation_variables(strip_animation_mod_t *mod)
         printf("Re displaying array\n");
         free(mod->peaks_matrix);
         mod->num_intervals = mod->num_leds;
-        mod->peaks_matrix = malloc(mod->num_leds * sizeof(int));
+        mod->peaks_matrix = (int*)malloc(mod->num_leds * sizeof(int));
         memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_leds);
         break;
 
@@ -66,7 +66,7 @@ static void setup_animation_variables(strip_animation_mod_t *mod)
 
 strip_animation_mod_t *new_strip_processing_mod(strip_animation_mod_init_t init)
 {
-    strip_animation_mod_t *mod = malloc(sizeof(strip_animation_mod_t));
+    strip_animation_mod_t *mod = (strip_animation_mod_t*)malloc(sizeof(strip_animation_mod_t));
     memset(mod, 0, sizeof(strip_animation_mod_t));
     // Setup mutex
     pthread_mutex_init(&mod->animation_mttx, NULL);
@@ -80,14 +80,14 @@ strip_animation_mod_t *new_strip_processing_mod(strip_animation_mod_init_t init)
     // FFT copy buffer for dealing with animations!
     mod->fft_copy_buffer = init.fft_copy_buffer;
     mod->fft_data_size = init.fft_data_size;
-    mod->fft_data = malloc(sizeof(q15_t) * mod->fft_data_size);
+    mod->fft_data = (q15_t*)malloc(sizeof(q15_t) * mod->fft_data_size);
 
     // How many bars are we using?
     mod->num_intervals = init.num_intervals;
 
     // Peaks matrix and peaks divider( apply divider across entire spectrum)
-    mod->values_matrix = malloc(mod->num_intervals * sizeof(int));
-    mod->peaks_matrix = malloc(mod->num_intervals * sizeof(int));
+    mod->values_matrix = (int*)malloc(mod->num_intervals * sizeof(int));
+    mod->peaks_matrix = (int*)malloc(mod->num_intervals * sizeof(int));
     memset(mod->values_matrix, 0, sizeof(int) * mod->num_intervals);
     memset(mod->peaks_matrix, 0, sizeof(int) * mod->num_intervals);
 
