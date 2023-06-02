@@ -22,3 +22,9 @@
 [submodule "InteractiveRaveLights/InteractiveRaveLights/SpresesnseLiquidCrystalI2C"]
 	path = InteractiveRaveLights/InteractiveRaveLights/SpresesnseLiquidCrystalI2C
 	url = git@github.com:william-redenbaugh/SpresesnseLiquidCrystalI2C.git
+[submodule "V2/musicviz/PosixCSAL"]
+	path = V2/musicviz/PosixCSAL
+	url = https://github.com/william-redenbaugh/PosixCSAL.git
+[submodule "V2/musicviz/CSAL_SHARED"]
+	path = V2/musicviz/CSAL_SHARED
+	url = https://github.com/william-redenbaugh/CSAL_SHARED.git

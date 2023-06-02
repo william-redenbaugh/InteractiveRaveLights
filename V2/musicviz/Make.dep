@@ -1,0 +1,364 @@
+musicviz_main.c.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ musicviz_main.c \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/stdio.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/spresenseenv/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdarg.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/fs/fs.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mutex.h \
+ /home/wredenba/git/spresense/nuttx/include/errno.h \
+ /home/wredenba/git/spresense/nuttx/include/assert.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/semaphore.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/clock.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/strings.h \
+ /home/wredenba/git/spresense/nuttx/include/string.h \
+ /home/wredenba/git/spresense/nuttx/include/stddef.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/nvicpri.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/chip.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/wdog.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/shm.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/gran.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/net/net.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/socket.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/uio.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/arch.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/pgalloc.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/addrenv.h \
+ CSAL_SHARED/threads_init.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/_stdint.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/machine/_default_types.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/features.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/_newlib_version.h \
+ hal_includes.hpp PosixCSAL/os_mutx.h PosixCSAL/os_queue.h \
+ PosixCSAL/os_mutx.h PosixCSAL/os_sem.h PosixCSAL/os_setbits.h \
+ CSAL_SHARED/os_error.hpp PosixCSAL/os_thread.h PosixCSAL/os_misc.h \
+ /home/wredenba/git/spresense/nuttx/include/stdlib.h
+# No files specified for dependency generation
+event_management.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ CSAL_SHARED/event_management.cxx CSAL_SHARED/event_management.hpp \
+ event_type_list.h CSAL_SHARED/safe_circular_queue.hpp hal_includes.hpp \
+ PosixCSAL/os_mutx.h /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h \
+ PosixCSAL/os_queue.h PosixCSAL/os_mutx.h PosixCSAL/os_sem.h \
+ PosixCSAL/os_setbits.h CSAL_SHARED/os_error.hpp PosixCSAL/os_thread.h \
+ PosixCSAL/os_misc.h /home/wredenba/git/spresense/nuttx/include/stdlib.h \
+ /home/wredenba/git/spresense/nuttx/include/stdio.h \
+ /home/wredenba/spresenseenv/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdarg.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/fs/fs.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mutex.h \
+ /home/wredenba/git/spresense/nuttx/include/errno.h \
+ /home/wredenba/git/spresense/nuttx/include/assert.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/semaphore.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/clock.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/strings.h \
+ /home/wredenba/git/spresense/nuttx/include/string.h \
+ /home/wredenba/git/spresense/nuttx/include/stddef.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/nvicpri.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/chip.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/wdog.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/shm.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/gran.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/net/net.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/socket.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/uio.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/arch.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/pgalloc.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/addrenv.h \
+ CSAL_SHARED/os_status.h CSAL_SHARED/os_shared_macros.hpp \
+ CSAL_SHARED/os_status.h threads_list.h CSAL_SHARED/event_management.hpp \
+ CSAL_SHARED/os_error.hpp CSAL_SHARED/general_includes.hpp \
+ CSAL_SHARED/threads_init.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/_stdint.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/machine/_default_types.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/features.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/_newlib_version.h \
+ CSAL_SHARED/unit_check.hpp enabled_modules.h
+safe_circular_queue.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ CSAL_SHARED/safe_circular_queue.cxx CSAL_SHARED/safe_circular_queue.hpp \
+ hal_includes.hpp PosixCSAL/os_mutx.h \
+ /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h \
+ PosixCSAL/os_queue.h PosixCSAL/os_mutx.h PosixCSAL/os_sem.h \
+ PosixCSAL/os_setbits.h CSAL_SHARED/os_error.hpp PosixCSAL/os_thread.h \
+ PosixCSAL/os_misc.h /home/wredenba/git/spresense/nuttx/include/stdlib.h \
+ /home/wredenba/git/spresense/nuttx/include/stdio.h \
+ /home/wredenba/spresenseenv/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdarg.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/fs/fs.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mutex.h \
+ /home/wredenba/git/spresense/nuttx/include/errno.h \
+ /home/wredenba/git/spresense/nuttx/include/assert.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/semaphore.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/clock.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/strings.h \
+ /home/wredenba/git/spresense/nuttx/include/string.h \
+ /home/wredenba/git/spresense/nuttx/include/stddef.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/nvicpri.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/chip.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/wdog.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/shm.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/gran.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/net/net.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/socket.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/uio.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/arch.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/pgalloc.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/addrenv.h \
+ CSAL_SHARED/os_status.h CSAL_SHARED/unit_check.hpp enabled_modules.h \
+ CSAL_SHARED/os_shared_macros.hpp
+thread_init.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ CSAL_SHARED/thread_init.cxx CSAL_SHARED/threads_init.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/_stdint.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/machine/_default_types.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/sys/features.h \
+ /home/wredenba/spresenseenv/usr/arm-none-eabi/include/_newlib_version.h \
+ hal_includes.hpp PosixCSAL/os_mutx.h \
+ /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h \
+ PosixCSAL/os_queue.h PosixCSAL/os_mutx.h PosixCSAL/os_sem.h \
+ PosixCSAL/os_setbits.h CSAL_SHARED/os_error.hpp PosixCSAL/os_thread.h \
+ PosixCSAL/os_misc.h /home/wredenba/git/spresense/nuttx/include/stdlib.h \
+ /home/wredenba/git/spresense/nuttx/include/stdio.h \
+ /home/wredenba/spresenseenv/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdarg.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/fs/fs.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mutex.h \
+ /home/wredenba/git/spresense/nuttx/include/errno.h \
+ /home/wredenba/git/spresense/nuttx/include/assert.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/semaphore.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/clock.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/strings.h \
+ /home/wredenba/git/spresense/nuttx/include/string.h \
+ /home/wredenba/git/spresense/nuttx/include/stddef.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/nvicpri.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/chip.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/wdog.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/shm.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/gran.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/net/net.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/socket.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/uio.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/arch.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/pgalloc.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/addrenv.h \
+ threads_list.h CSAL_SHARED/event_management.hpp event_type_list.h \
+ CSAL_SHARED/safe_circular_queue.hpp CSAL_SHARED/os_status.h \
+ CSAL_SHARED/os_shared_macros.hpp CSAL_SHARED/os_status.h
+unit_check.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ CSAL_SHARED/unit_check.cxx CSAL_SHARED/unit_check.hpp enabled_modules.h \
+ hal_includes.hpp PosixCSAL/os_mutx.h \
+ /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h \
+ PosixCSAL/os_queue.h PosixCSAL/os_mutx.h PosixCSAL/os_sem.h \
+ PosixCSAL/os_setbits.h CSAL_SHARED/os_error.hpp PosixCSAL/os_thread.h \
+ PosixCSAL/os_misc.h /home/wredenba/git/spresense/nuttx/include/stdlib.h \
+ /home/wredenba/git/spresense/nuttx/include/stdio.h \
+ /home/wredenba/spresenseenv/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdarg.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/fs/fs.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mutex.h \
+ /home/wredenba/git/spresense/nuttx/include/errno.h \
+ /home/wredenba/git/spresense/nuttx/include/assert.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/semaphore.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/clock.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/sched.h \
+ /home/wredenba/git/spresense/nuttx/include/strings.h \
+ /home/wredenba/git/spresense/nuttx/include/string.h \
+ /home/wredenba/git/spresense/nuttx/include/stddef.h \
+ /home/wredenba/git/spresense/nuttx/include/queue.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/irq.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/armv7-m/nvicpri.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/chip/chip.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/wdog.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/shm.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/mm/gran.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/net/net.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/socket.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/uio.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/arch.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/pgalloc.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/addrenv.h
+os_error.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ PosixCSAL/os_error.cxx CSAL_SHARED/os_error.hpp \
+ /home/wredenba/git/spresense/nuttx/include/errno.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h
+os_mutx.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ PosixCSAL/os_mutx.cxx \
+ /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h \
+ PosixCSAL/os_mutx.h CSAL_SHARED/os_error.hpp
+os_queue.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ PosixCSAL/os_queue.cxx PosixCSAL/os_queue.h PosixCSAL/os_mutx.h \
+ /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h \
+ CSAL_SHARED/os_error.hpp \
+ /home/wredenba/git/spresense/nuttx/include/stdlib.h
+os_sem.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ PosixCSAL/os_sem.cxx PosixCSAL/os_sem.h \
+ /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h \
+ CSAL_SHARED/os_error.hpp
+os_setbits.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ PosixCSAL/os_setbits.cxx PosixCSAL/os_setbits.h CSAL_SHARED/os_error.hpp \
+ /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h
+os_thread.cxx.home.wredenba.git.InteractiveRaveLights.V2.musicviz.o: \
+ PosixCSAL/os_thread.cxx PosixCSAL/os_thread.h \
+ /home/wredenba/git/spresense/nuttx/include/stdint.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/config.h \
+ /home/wredenba/git/spresense/nuttx/include/nuttx/compiler.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/types.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/inttypes.h \
+ /home/wredenba/git/spresense/nuttx/include/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/arch/limits.h \
+ /home/wredenba/git/spresense/nuttx/include/stdbool.h \
+ /home/wredenba/git/spresense/nuttx/include/pthread.h \
+ /home/wredenba/git/spresense/nuttx/include/sys/types.h \
+ /home/wredenba/git/spresense/nuttx/include/unistd.h \
+ /home/wredenba/git/spresense/nuttx/include/signal.h \
+ /home/wredenba/git/spresense/nuttx/include/time.h \
+ /home/wredenba/git/spresense/nuttx/include/semaphore.h \
+ /home/wredenba/git/spresense/nuttx/include/errno.h
